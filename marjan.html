@@ -686,12 +686,23 @@
 			  	},
 			  	projection: view.getProjection(),
 			});
-			
-			document.getElementById('location-tracking').addEventListener('click', function () {		
-				console.log("Ide geolocoation tracking");
-				console.log(this.checked);
-				geolocation.setTracking(this.checked);
-				console.log(this.checked);
+			let isTrackingEnabled=false;
+			document.getElementById('location-tracking').addEventListener('click', function () {	
+				if (isTrackingEnabled==false){
+					isTrackingEnabled=true;
+					console.log("Ide geolocoation tracking");
+					console.log(this.checked);
+					geolocation.setTracking(true);
+					console.log(this.checked);					
+				}	
+				else{
+					isTrackingEnabled=false;
+					console.log("Gasim geolocation");
+					console.log(this.checked);
+					geolocation.setTracking(true);
+					console.log(this.checked);
+					
+				}
 			});
 			
 			geolocation.on('change', function () {
