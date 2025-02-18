@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Geoportal - Park šuma Marjan</title>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v10.3.1/ol.css">
+		<style>
+			body, html { margin: 0; padding: 0; }
+			#map { position: relative; width: 100%; height: 100vh; }
+			
+    </style>
+  </head>
+  <body>
+    <div id="map" class="map"></div>
+
+
+
+	<script src="https://cdn.jsdelivr.net/npm/ol@v10.3.1/dist/ol.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.15.0/proj4.js"></script>
+	<script>
+		function createWmsLayer(url) {
+				if (url === "https://tile.openstreetmap.org/") {
+					return new ol.layer.Tile({
+						source: new ol.source.OSM(), // OpenStreetMap Tile Layer
+					});
+				}
+			
+				var layername="OI.OrthoimageCoverage";
+				if (url=='https://geoportal.dgu.hr/services/auth/inspire/orthophoto_2011/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d')
+				{
+				layername='OrthoImagery';
+				}
+				if (url=='https://geoportal.dgu.hr/services/auth/inspire/orthophoto_2014-2016/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d')
+				{
+				layername='OI.OrthoImagery';
+				}
+				if (url=='https://geoportal.dgu.hr/services/auth/tk/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d')
+				{
+				layername='tk:TK25';
+				}
+				if (url=='https://geoportal.dgu.hr/services/auth/hok/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d')
+				{
+				layername='HOK5';
+				}
+				return new ol.layer.Tile({
+					source: new ol.source.TileWMS({
+						attributions: '<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>',
+						minZoom: 8,      // Minimum zoom level for the layer to be visible
+						maxZoom: 14, 
+						url: url,
+						params: {
+							'LAYERS': layername, // Correct layer name from GetCapabilities
+							'TILED': false,
+							'CRS': 'EPSG:3765'
+						},
+						serverType: 'geoserver'
+					})
+				});
+			}
+			
+			
+			
+			const view= new ol.View({
+				projection:'EPSG:3765',
+				center: [492721, 4817790], // Centered near Croatia
+				//minZoom: 12,
+				zoom: 15, 
+				
+			});
+			map = new ol.Map({
+			  layers: [
+				new ol.layer.Tile({
+				  source: new ol.source.OSM(),
+				  opacity: 0.7,
+				})
+			  ],
+			  target: 'map',
+			  view: view
+			});
+    </script>
+  </body>
+</html>

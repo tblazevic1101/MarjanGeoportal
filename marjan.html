@@ -1,0 +1,1823 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Geoportal - Park šuma Marjan</title>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v10.3.1/ol.css">
+		<style>
+			body, html { margin: 0; padding: 0; }
+			#map { position: relative; width: 100%; height: 100vh; }
+			
+			#layers-panel {
+				position: absolute;
+				top: 50px;
+				right: 10px;
+				background: white;
+				padding: 10px;
+				border-radius: 5px;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+				display: none;
+			}
+
+			#swipe1 {
+				position: absolute;
+				bottom: 30px; /* Keeps it at the bottom */
+				left: 0;
+				right: 0; /* Ensures full width without overflow */
+				width: auto; /* Prevents forcing an exact width */
+				
+				padding: 5px 0;
+				border-radius: 0;
+				z-index: 1000;
+				overflow: hidden; /* Prevents scrollbars */
+			}
+			
+			#swipe{
+			position: absolute;
+				bottom: 30px; /* Keeps it at the bottom */
+				left: 0;
+				right: 0; /* Ensures full width without overflow */
+				width: auto;
+			}
+			
+			#basemap-menu p, #overbasemap-menu p {
+				margin-bottom: 0; /* Remove whitespace below the <p> */
+			}
+
+			#basemap-menu {
+				margin-bottom: 15px; /* Add space between the two menus */
+			}		
+
+			#bottom-panel {
+				position: fixed;
+				bottom: 2px;
+				left: 50%;
+				transform: translateX(-50%);
+				background: rgba(255, 255, 255, 0.75);
+				foreground: #666666;
+				/*padding: 10px 20px;*/
+				border-radius: 5px;
+				text-align: center;
+				
+				display: flex; /* Use flexbox */
+				align-items: center; /* Vertically center items */
+				justify-content: center; /* Horizontally center items (optional) */
+			}
+			
+			#bottom-panel img { /* Target the image directly */
+				margin: 5px; /* Add 5px margin on all sides */
+			}
+
+			#bottom-panel a { /* Target the link */
+				margin: 0 5px; /* Add horizontal margin to the link */
+			}
+			
+			#map-link {
+				color: #fff;
+				text-decoration: none;
+				font-size: 10px;
+			}
+
+			#map-link:hover {
+				text-decoration: underline;
+			}
+			a{
+				color: #666666;
+			}
+			a:active {
+				color: #666666;
+			}
+			a:visited {
+				color:#666666;
+			}
+			
+			label{
+				color: #666666;
+			}
+			.ol-control button {
+				height:1.6em;
+				width:1.6em
+			}
+			
+			:fullscreen::backdrop { /* Or :not(:root):fullscreen::backdrop for more specificity */
+				z-index: 1000; /* Adjust as needed - lower than your controls */
+			}
+
+			/* Ensure your controls have a higher z-index */
+			.ol-control, #bottom-panel, #swipe, #layers-panel, #measure-tools-panel {
+				z-index: 2000; /* Or higher */
+			}
+			
+			.ol-zoom {top: 3.5em;}
+			
+			.ol-control button {
+				color:#62ba46;
+				width:2em;
+				height:2em
+			}
+			ol-control button:hoover {color:#62ba46}
+			
+			
+			input[type='radio'] {
+				accent-color: #62ba46;
+			}	
+			
+			input[type='range'] {
+				accent-color: #62ba46;
+			}
+			
+			
+			input[type='checkbox'] {
+				accent-color: #62ba46;
+			}
+			p{margin:0px; padding:0px;}
+			
+			.toc-layer{
+				margin-left:1em;
+			}
+			
+			
+			#report-problem-Div {
+				display: none; /* Initially hidden */
+				position: absolute; /* Cover the entire viewport */
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				width: 80%;
+				height: 80%;
+				background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent backdrop */
+				z-index: 3000; /* Ensure it's on top of everything */
+				overflow: hidden; /* Prevent scrollbars on the iframe */
+				
+			}
+
+			#report-problem-iframe {
+				border: none; /* Remove iframe border */
+				position:relative;
+				width:100%;
+				height:100%
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div id="report-problem-Div">
+			<iframe id="report-problem-iframe" src=""></iframe> 
+		</div>
+		<div id="map">			
+			<input id="swipe" type="range" min="0" max="100" value="95">
+			<!--<div id="basemap-selector">
+				<label for="basemaps">Choose a basemap:</label>
+				<select id="basemaps">
+					<option value="https://geoportal.dgu.hr/services/inspire/orthophoto_2011/wms">Ortofoto 2011</option>
+					<option value="https://geoportal.dgu.hr/services/inspire/orthophoto_2014-2016/wms">Ortofoto 2014-2016</option>
+					<option value="https://geoportal.dgu.hr/services/inspire/orthophoto_2017_2018/wms">Ortofoto 2017-2018</option>
+					<option value="https://geoportal.dgu.hr/services/inspire/orthophoto_2019_2020/wms">Ortofoto 2019-2020</option>
+					<option value="https://geoportal.dgu.hr/services/inspire/orthophoto_2021_2022/wms">Ortofoto 2021-2022</option>
+				</select>
+			</div>-->
+			<div class="ol-control" style="top:0.5em; left: 3.5em;">  
+				<button id="report-problem" class="ol-control-button">  
+					<img src="icons/file-signature-solid.svg" alt="Praćenje" width="20" height="20" />
+				</button>
+			</div>
+			
+			<div class="ol-control" style="top:8em; left: 0.5em;">  
+				<button id="location-tracking" class="ol-control-button">  
+					<img src="icons/location-crosshairs-solid.svg" alt="Praćenje" width="20" height="20" />
+				</button>
+			</div>
+
+			<div style=" position:absolute; top:0.5em; right:50px" class="ol-full-screen ol-unselectable ol-control" style="pointer-events: auto;">
+				<button id="full-extent-button">
+					<img src="icons/arrows-to-circle-solid.svg" alt="Početni prikaz" width="20" height="20" />
+				</button>
+			</div>
+			
+			<div style=" position:absolute; top:0.5em; right:90px" class="ol-unselectable ol-control" style="pointer-events: auto;">
+				<button id="layer-menu-button">
+					<img src="icons/layer-group-solid.svg" alt="Slojevi" width="20" height="20" />
+				</button>
+			</div>
+			
+			<div style="position:absolute; top:0.5em; right:130px" class="ol-full-screen ol-unselectable ol-control">
+				<button id="measure-tools-button">
+					<img src="icons/pencil-solid.svg" alt="Crtanje" width="20" height="20" />
+				</button>
+			</div>
+			
+			<div style="position:absolute; top:0.5em; right:170px" class="ol-full-screen ol-unselectable ol-control">
+				<button id="upload-KML-button">
+					<img src="icons/file-arrow-up-solid.svg" alt="Dodaj KML" width="20" height="20" />
+				</button>
+			</div>
+			
+			
+
+			<!-- Meni sa dugmadima za slojeve -->
+			<!-- <div id="layer-menu2">
+				<button data-url="https://geoportal.dgu.hr/services/inspire/orthophoto_2011/wms">Ortofoto 2011</button>
+				<button data-url="https://geoportal.dgu.hr/services/inspire/orthophoto_2014-2016/wms">Ortofoto 2014-2016</button>
+				<button data-url="https://geoportal.dgu.hr/services/inspire/orthophoto_2017_2018/wms">Ortofoto 2017-2018</button>
+				<button data-url="https://geoportal.dgu.hr/services/inspire/orthophoto_2019_2020/wms">Ortofoto 2019-2020</button>
+				<button data-url="https://geoportal.dgu.hr/services/inspire/orthophoto_2021_2022/wms">Ortofoto 2021-2022</button>
+			</div> -->
+			
+			<div id="layers-panel" style="display: none;">
+				<div id="basemap-menu">
+					<p style="color: #666666;">Pozadinski sloj:</p>
+					<label><input type="radio" name="basemap" class="toc-layer" data-url="https://tile.openstreetmap.org/">OSM</label><br>
+					<label><input type="radio" name="basemap" class="toc-layer" data-url="https://geoportal.dgu.hr/services/auth/tk/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d">TK25</label><br>
+					<label><input type="radio" name="basemap" class="toc-layer" data-url="https://geoportal.dgu.hr/services/auth/hok/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d">HOK</label><br>
+					<label><input type="radio" name="basemap" class="toc-layer" data-url="https://geoportal.dgu.hr/services/auth/inspire/orthophoto_2011/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d">Ortofoto 2011</label><br>
+					<label><input type="radio" name="basemap" class="toc-layer" data-url="https://geoportal.dgu.hr/services/auth/inspire/orthophoto_2014-2016/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d">Ortofoto 2014-2016</label><br>
+					<label><input type="radio" name="basemap" class="toc-layer" data-url="https://geoportal.dgu.hr/services/auth/inspire/orthophoto_2017_2018/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d">Ortofoto 2017-2018</label><br>
+					<label><input type="radio" name="basemap" class="toc-layer" data-url="https://geoportal.dgu.hr/services/auth/inspire/orthophoto_2019_2020/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d">Ortofoto 2019-2020</label><br>
+					<label><input type="radio" name="basemap" class="toc-layer" data-url="https://geoportal.dgu.hr/services/auth/inspire/orthophoto_2021_2022/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d">Ortofoto 2021-2022</label><br>
+				</div>
+				<div id="overbasemap-menu">
+				
+					<div style="display: flex; align-items: center;"><label>Dodatni sloj:</label><input type="range" id="overbasemapVisibility-slider" min="0" max="1" step="0.1" value="1"></div>
+					<label><input type="radio" name="overbasemap" class="toc-layer" data-url="https://geoportal.dgu.hr/services/auth/inspire/orthophoto_2011/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d">Ortofoto 2011</label><br>
+					<label><input type="radio" name="overbasemap" class="toc-layer" data-url="https://geoportal.dgu.hr/services/auth/inspire/orthophoto_2014-2016/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d">Ortofoto 2014-2016</label><br>
+					<label><input type="radio" name="overbasemap" class="toc-layer" data-url="https://geoportal.dgu.hr/services/auth/inspire/orthophoto_2017_2018/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d">Ortofoto 2017-2018</label><br>
+					<label><input type="radio" name="overbasemap" class="toc-layer" data-url="https://geoportal.dgu.hr/services/auth/inspire/orthophoto_2019_2020/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d">Ortofoto 2019-2020</label><br>
+					<label><input type="radio" name="overbasemap" class="toc-layer" data-url="https://geoportal.dgu.hr/services/auth/inspire/orthophoto_2021_2022/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d">Ortofoto 2021-2022</label><br>
+					<label><input type="radio" name="overbasemap" class="toc-layer" data-url="https://geoportal.dgu.hr/services/auth/inspire/orthophoto_lidar_2022_2023/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d">LiDAR Ortofoto 2021-2022</label><br>
+				</div>
+				<br/>
+				<div id="measureLayer-controls" style="display: flex; align-items: center;">  
+					<label for="grafika-checkbox" style="display: flex; align-items: center;"><input type="checkbox" id="measureLayerVisibility-checkbox" checked> Grafika</label>
+					<input type="range" id="measureLayerVisibility-slider" style="margin-left: auto;" min="0" max="1" step="0.1" value="1">
+				</div>
+			</div>
+			
+
+			<div id="measure-tools-panel" style="display: none; position:absolute; top:2.5em; right:10px; background:white; padding:5px; border:1px solid #ccc; border-radius:5px;">
+				<div style="display: flex; gap: 5px;">
+					<button id="measure-points"><img src="icons/thumbtack-solid.svg" alt="Point" width="20" height="20"/></button>
+					<button id="measure-lines"><img src="icons/slash-solid.svg" alt="Line" width="20" height="20" /></button>
+					<button id="measure-polygons"><img src="icons/draw-polygon-solid.svg" alt="Polygon" width="20" height="20" /></button>
+					<button id="measure-delete-selected"><img src="icons/eraser-solid.svg" alt="Delete Selected" width="20" height="20" /></button>
+					<button id="measure-delete-all"><img src="icons/trash-solid.svg" alt="Delete All" width="20" height="20" /></button>
+					<button id="measure-download-KML"><img src="icons/download-solid.svg" alt="Delete All" width="20" height="20" /></button>
+				</div>
+				<div style="margin-top: 5px;">
+					<label>
+						<input type="checkbox" id="show-segment-lengths" checked/>
+						Prikaži duljine segmenata
+					</label>
+				</div>
+				<div style="margin-top: 5px;">
+					<label>
+						<input type="checkbox" id="show-measurements" checked/>
+						Prikaži izmjere
+					</label>
+				</div>
+			</div>
+			
+			
+			
+			
+			<!-- Bottom Panel -->
+			<div id="bottom-panel">
+				<img id="change-crs" src="icons/globe-solid.svg" alt="Promijeni koordinativni sustav" width="20" height="20" />
+				<a id="pointercoordinates-link" href="#" target="_blank">WGS84:</a>
+			</div>
+
+					
+					<!--<div id="basemap-selector">
+						<label for="basemaps">Pozadinski sloj:</label>
+						<select id="basemaps">
+							<option value="https://geoportal.dgu.hr/services/inspire/orthophoto_2011/wms">Ortofoto 2011</option>
+							<option value="https://geoportal.dgu.hr/services/inspire/orthophoto_2014-2016/wms">Ortofoto 2014-2016</option>
+							<option value="https://geoportal.dgu.hr/services/inspire/orthophoto_2017_2018/wms">Ortofoto 2017-2018</option>
+							<option value="https://geoportal.dgu.hr/services/inspire/orthophoto_2019_2020/wms">Ortofoto 2019-2020</option>
+							<option value="https://geoportal.dgu.hr/services/inspire/orthophoto_2021_2022/wms">Ortofoto 2021-2022</option>
+						</select>
+					</div>
+					<div id="overbasemap-selector">
+						<label for="overbasemaps">Dodatni sloj:</label>
+						<select id="overbasemaps">
+							<option value="https://geoportal.dgu.hr/services/inspire/orthophoto_2011/wms">Ortofoto 2011</option>
+							<option value="https://geoportal.dgu.hr/services/inspire/orthophoto_2014-2016/wms">Ortofoto 2014-2016</option>
+							<option value="https://geoportal.dgu.hr/services/inspire/orthophoto_2017_2018/wms">Ortofoto 2017-2018</option>
+							<option value="https://geoportal.dgu.hr/services/inspire/orthophoto_2019_2020/wms">Ortofoto 2019-2020</option>
+							<option value="https://geoportal.dgu.hr/services/inspire/orthophoto_2021_2022/wms">Ortofoto 2021-2022</option>
+						</select>
+					</div>-->	
+				
+					<!--<div id="basemap-selector">
+						<label for="basemaps">Pozadinski sloj:</label>
+						<select id="basemaps">
+							<option value="https://geoportal.dgu.hr/services/inspire/orthophoto_2011/wms">Ortofoto 2011</option>
+							<option value="https://geoportal.dgu.hr/services/inspire/orthophoto_2014-2016/wms">Ortofoto 2014-2016</option>
+							<option value="https://geoportal.dgu.hr/services/inspire/orthophoto_2017_2018/wms">Ortofoto 2017-2018</option>
+							<option value="https://geoportal.dgu.hr/services/inspire/orthophoto_2019_2020/wms">Ortofoto 2019-2020</option>
+							<option value="https://geoportal.dgu.hr/services/inspire/orthophoto_2021_2022/wms">Ortofoto 2021-2022</option>
+						</select>
+					</div>
+					<div id="overbasemap-selector">
+						<label for="overbasemaps">Dodatni sloj:</label>
+						<select id="overbasemaps">
+							<option value="https://geoportal.dgu.hr/services/inspire/orthophoto_2011/wms">Ortofoto 2011</option>
+							<option value="https://geoportal.dgu.hr/services/inspire/orthophoto_2014-2016/wms">Ortofoto 2014-2016</option>
+							<option value="https://geoportal.dgu.hr/services/inspire/orthophoto_2017_2018/wms">Ortofoto 2017-2018</option>
+							<option value="https://geoportal.dgu.hr/services/inspire/orthophoto_2019_2020/wms">Ortofoto 2019-2020</option>
+							<option value="https://geoportal.dgu.hr/services/inspire/orthophoto_2021_2022/wms">Ortofoto 2021-2022</option>
+						</select>
+					</div>-->
+				
+			<div style="position:absolute; top:0px; left:0px; z-index:5000; background:white" id="comp-l61ukxrf" class="comp-l61ukxrf wixui-vector-image">
+				<a data-testid="linkElement" href="https://www.marjan-parksuma.hr" target="_blank">
+					<div data-testid="svgRoot-comp-l61ukxrf" style="display: flex; align-items: center; justify-content: center; height: 100%;"><!--?xml version="1.0" encoding="UTF-8"?-->
+						<svg preserveAspectRatio="xMidYMid meet" data-bbox="0 0 49 49" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 49 49" height="49" width="49" data-type="color" role="presentation" aria-hidden="true" aria-label="">
+							<g>
+								<path fill="#62BA46" d="M49.044 0H0v49h49.044V0Z" data-color="1"></path>								
+								<path fill="#ffffff" d="M24.55 11.618h-.771v3.921h.77v-3.921Z" data-color="3"></path>
+								<path fill="#ffffff" d="M23.779 11.85V9.244l3.175-.703v2.604l-3.175.703Zm.77-1.991v1.03l1.635-.361V9.497l-1.635.362Z" data-color="3"></path>
+								<path fill="#ffffff" d="M38.869 31.605h-.77v-2.718l-1.214-1.284-1.116 1.275v1.713h-2.653v-1.717l-2.123-1.498-1.95 1.49v1.342h-.77v-1.725l2.703-2.058 2.91 2.05v1.346h1.112v-1.233l1.862-2.125 2.009 2.12v3.022Z" data-color="3"></path>
+								<path fill="#ffffff" d="M22.532 29.745h-.766v-2.302h-3.13v.96h-.77v-1.73h4.666v3.072Z" data-color="3"></path>
+								<path fill="#ffffff" d="M24.933 29.358H20.77v.77h4.162v-.77Z" data-color="3"></path>
+								<path fill="#ffffff" d="M27.54 30.191h-.767v-1.88h-1.836v1.43h-.77v-2.2h3.373v2.65Z" data-color="3"></path>
+								<path fill="#ffffff" d="M38.486 32.8H10.108v.77h28.378v-.77Z" data-color="3"></path>
+								<path fill="#ffffff" d="M38.793 25.369c-2.594-.93-5.091-3.164-7.505-5.327-2.573-2.306-5.007-4.482-6.995-4.482-2.077 0-5 2.571-7.821 5.054-2.085 1.839-4.246 3.737-6.191 4.734l-.35-.686c1.862-.951 3.984-2.82 6.035-4.624 3.066-2.698 5.964-5.248 8.331-5.248 2.283 0 4.822 2.273 7.51 4.675 2.358 2.113 4.8 4.297 7.252 5.176l-.266.728Z" data-color="3"></path>
+								<path fill="#ffffff" d="M33.752 37.525c-.724 0-1.461-.252-2.24-.521-.809-.278-1.647-.569-2.49-.569-.686 0-1.41.249-2.177.514-.821.282-1.676.576-2.552.576-.876 0-1.727-.294-2.552-.576-.767-.265-1.491-.514-2.178-.514-.842 0-1.676.287-2.489.569-.779.269-1.52.521-2.24.521a11.25 11.25 0 0 1-4.646-1.026c-.084-.038-.139-.064-.172-.076.004 0 .037.012.088.012v-.77c.105 0 .177.034.392.127.598.265 2.186.963 4.333.963.594 0 1.272-.231 1.993-.48.867-.298 1.768-.61 2.737-.61.817 0 1.634.282 2.43.556.763.26 1.554.534 2.3.534.75 0 1.537-.273 2.3-.534.791-.274 1.612-.556 2.43-.556.968 0 1.87.312 2.737.61.716.249 1.394.48 1.992.48 2.696 0 4.026-.513 4.043-.517l.287.715c-.055.025-1.458.572-4.326.572Z" data-color="3"></path>
+								<path fill="#ffffff" d="M33.752 40.458c-.724 0-1.461-.252-2.24-.522-.809-.277-1.647-.568-2.49-.568-.686 0-1.41.249-2.177.514-.821.282-1.676.576-2.552.576-.876 0-1.727-.294-2.552-.576-.767-.265-1.491-.514-2.178-.514-.842 0-1.676.286-2.489.568-.779.27-1.52.522-2.24.522-2.313 0-4.01-.745-4.646-1.027-.084-.037-.139-.063-.172-.075.004 0 .037.012.088.012v-.77c.105 0 .177.034.392.127.598.265 2.186.963 4.333.963.594 0 1.272-.231 1.993-.48.867-.298 1.768-.61 2.737-.61.817 0 1.634.282 2.43.556.763.26 1.554.534 2.3.534.75 0 1.537-.273 2.3-.534.791-.274 1.612-.556 2.43-.556.968 0 1.87.312 2.737.61.716.249 1.394.48 1.992.48 2.746 0 5.168-.53 5.193-.534l.168.749c-.1.025-2.522.555-5.357.555Z" data-color="3"></path>
+								<path fill="#ffffff" d="M25.75 27.927h-.767V25.23l-1.617-1.182-1.554 1.132v1.72h-.771v-2.116l2.329-1.687 2.38 1.746v3.084Z" data-color="3"></path>
+								<path fill="#ffffff" d="M29.945 28.15h-.771v-1.615H26.98v1.392h-.771v-2.163h3.736v2.386Z" data-color="3"></path>
+								<path fill="#ffffff" d="M17.386 31.42h-2.843v-1.292h-4.435v-.77h5.201v1.292h1.306v-2.634h2.632v.77h-1.861v2.634Z" data-color="3"></path>
+							</g>
+						</svg>
+					</div>
+				</a>
+			</div>
+		</div>
+		<script src="https://cdn.jsdelivr.net/npm/ol@v10.3.1/dist/ol.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.15.0/proj4.js"></script>
+		<script>
+		
+			proj4.defs("EPSG:3765","+proj=tmerc +lat_0=0 +lon_0=16.5 +k=0.9999 +x_0=500000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs");
+			ol.proj.proj4.register(proj4);
+			
+			
+			document.getElementById('layer-menu-button').addEventListener('click', function () {
+				const layerMenu = document.getElementById('layers-panel');
+				const measureToolsPanel = document.getElementById('measure-tools-panel');
+
+				// Check if the measure tools panel is open and close it if it is
+				if (measureToolsPanel.style.display === 'block') {
+					measureToolsPanel.style.display = 'none';
+				}
+
+				// Toggle the layer menu
+				layerMenu.style.display = (layerMenu.style.display === 'block') ? 'none' : 'block';
+			});
+
+			document.getElementById('measure-tools-button').addEventListener('click', function () {
+				const layerMenu = document.getElementById('layers-panel');
+				const measureToolsPanel = document.getElementById('measure-tools-panel');
+
+				// Check if the layer menu is open and close it if it is
+				if (layerMenu.style.display === 'block') {
+					layerMenu.style.display = 'none';
+				}
+
+				// Toggle the measure tools panel
+				measureToolsPanel.style.display = (measureToolsPanel.style.display === 'block' || measureToolsPanel.style.display === '') ? 'none' : 'block';
+			});
+		
+		
+			// Create a function to create a WMS layer
+			function createWmsLayer(url) {
+				if (url === "https://tile.openstreetmap.org/") {
+					return new ol.layer.Tile({
+						source: new ol.source.OSM(), // OpenStreetMap Tile Layer
+					});
+				}
+			
+				var layername="OI.OrthoimageCoverage";
+				if (url=='https://geoportal.dgu.hr/services/auth/inspire/orthophoto_2011/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d')
+				{
+				layername='OrthoImagery';
+				}
+				if (url=='https://geoportal.dgu.hr/services/auth/inspire/orthophoto_2014-2016/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d')
+				{
+				layername='OI.OrthoImagery';
+				}
+				if (url=='https://geoportal.dgu.hr/services/auth/tk/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d')
+				{
+				layername='tk:TK25';
+				}
+				if (url=='https://geoportal.dgu.hr/services/auth/hok/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d')
+				{
+				layername='HOK5';
+				}
+				return new ol.layer.Tile({
+					source: new ol.source.TileWMS({
+						attributions: '<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>',
+						minZoom: 8,      // Minimum zoom level for the layer to be visible
+						maxZoom: 14, 
+						url: url,
+						params: {
+							'LAYERS': layername, // Correct layer name from GetCapabilities
+							'TILED': false,
+							'CRS': 'EPSG:3765'
+						},
+						serverType: 'geoserver'
+					})
+				});
+			}
+			
+			const attributions = new ol.control.Attribution({
+			  collapsible: false,
+			});
+			
+			const view= new ol.View({
+				projection:'EPSG:3857',
+				center: ol.proj.fromLonLat([16.40964, 43.50973]), // Centered near Croatia
+				//minZoom: 12,
+				zoom: 15, 
+				
+			});
+			
+			// Initialize the map
+			const map = new ol.Map({
+				target: 'map',
+				//interactions: ol.interaction.defaults.defaults().extend([new ol.interaction.DragRotateAndZoom()]),
+				controls: ol.control.defaults.defaults({ attribution: false }).extend([attributions]),
+				view:view
+			});
+
+			// Add initial layer
+			let basemapLayer = createWmsLayer('https://geoportal.dgu.hr/services/auth/tk/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d');
+			basemapLayer.setZIndex(0);
+			map.addLayer(basemapLayer);
+			console.log(map.getView().getProjection().getCode());
+			let overbasemapLayer = createWmsLayer('https://geoportal.dgu.hr/services/auth/inspire/orthophoto_lidar_2022_2023/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d');
+			overbasemapLayer.setZIndex(1);
+			map.addLayer(overbasemapLayer);
+			
+			
+			
+			/*const projection = map.getView().getProjection();
+			const projectionExtent = projection.getExtent();
+			const size = ol.extent.getWidth(projectionExtent) / 256;
+			const resolutions = new Array(19);
+			const matrixIds = new Array(19);
+			for (let z = 0; z < 19; ++z) {
+			  // generate resolutions and matrixIds arrays for this WMTS
+			  resolutions[z] = size / Math.pow(2, z);
+			  matrixIds[z] = z;
+			}
+			console.log(matrixIds);
+			console.log(resolutions);
+			
+			const wmtsLayerTK25 = new ol.layer.Tile({
+				source: new ol.source.WMTS({
+					url: 'https://geoportal.dgu.hr/services/auth/dof_hok_tk/wmts?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d&', // Your WMTS URL
+					layer: 'TK25', // Layer identifier
+					matrixSet: 'EPSG:900913', // Matrix set identifier
+					format: 'image/jpeg',
+					projection: projection,
+					tileGrid: new ol.tilegrid.TileGrid({
+						extent: map.getView().getProjection().getExtent(),
+						resolutions: [ // Resolutions for EPSG:900913 (from your capabilities document)
+        5.590822639508929E8, 2.7954113197544646E8, 1.3977056598772323E8, 6.988528299386162E7,
+        3.494264149693081E7, 1.7471320748465404E7, 8735660.374232702, 4367830.187116351,
+        2183915.0935581755, 1091957.5467790877, 545978.7733895439, 272989.38669477194,
+        136494.69334738597, 68247.34667369298, 34123.67333684649, 17061.836668423246,
+        8530.918334211623, 4265.4591671058115, 2132.7295835529058, 1066.3647917764529,
+        533.1823958882264, 266.5911979441132, 133.2955989720566, 66.6477994860283,
+        33.32389974301415, 16.661949871507076, 8.330974935753538, 4.165487467876769,
+        2.0827437339383845, 1.0413718669691923, 0.5206859334845961
+      ],
+      matrixIds: [ // Matrix IDs must be strings
+        "EPSG:900913:0", "EPSG:900913:1", "EPSG:900913:2", "EPSG:900913:3",
+        "EPSG:900913:4", "EPSG:900913:5", "EPSG:900913:6", "EPSG:900913:7",
+        "EPSG:900913:8", "EPSG:900913:9", "EPSG:900913:10", "EPSG:900913:11",
+        "EPSG:900913:12", "EPSG:900913:13", "EPSG:900913:14", "EPSG:900913:15",
+        "EPSG:900913:16", "EPSG:900913:17", "EPSG:900913:18", "EPSG:900913:19",
+        "EPSG:900913:20", "EPSG:900913:21", "EPSG:900913:22", "EPSG:900913:23",
+        "EPSG:900913:24", "EPSG:900913:25", "EPSG:900913:26", "EPSG:900913:27",
+        "EPSG:900913:28", "EPSG:900913:29", "EPSG:900913:30"
+      ],
+					}),
+					style: 'default',
+				}),
+			});
+			
+			map.addLayer(wmtsLayerTK25);*/
+			
+			
+			
+			
+			let katastar=new ol.layer.Tile({
+					
+				source: new ol.source.TileWMS({
+					attributions: '<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>',
+					
+					//maxZoom:8,
+					url: "https://api.uredjenazemlja.hr/services/inspire/cp_wms/wms",						
+					params: {
+						'LAYERS': 'CP.CadastralParcel', // Correct layer name from GetCapabilities
+						'TILED': false,
+						'CRS': 'EPSG:3765'
+					},
+					serverType: 'geoserver'
+				}),
+				maxResolution: 0.5,
+				//minZoom:13,
+			});
+			katastar.setZIndex(10);
+			map.addLayer(katastar);
+			
+			// Handle basemap changes
+			/*document.getElementById('basemaps').addEventListener('change', function(event) {
+				const selectedUrl = event.target.value;
+				map.removeLayer(basemapLayer); // Remove the existing layer
+				basemapLayer = createWmsLayer(selectedUrl); // Create a new layer
+				basemapLayer.setZIndex(0)
+				map.addLayer(basemapLayer); // Add the new layer
+			});*/
+			
+			/*document.getElementById('overbasemaps').addEventListener('change', function(event) {
+				const selectedUrl = event.target.value;
+				map.removeLayer(overbasemapLayer); // Remove the existing layer
+				overbasemapLayer = createWmsLayer(selectedUrl); // Create a new layer
+				overbasemapLayer.setZIndex(1)
+				map.addLayer(overbasemapLayer); // Add the new layer
+			});*/
+
+			// Optional: Add a scale line
+			const scaleLineControl = new ol.control.ScaleLine();
+			map.addControl(scaleLineControl);
+
+			// Optional: Add a full-screen control
+			const fullScreenControl = new ol.control.FullScreen();
+			map.addControl(fullScreenControl);
+			
+			
+			
+			/*document.querySelectorAll('#layer-menu button').forEach(button => {
+			   button.addEventListener('click', function () {
+					const selectedUrl = this.getAttribute('data-url');
+					const layerName = this.innerHTML;
+					console.log(layerName)
+					//const attributionText = basemapAttributions[selectedUrl];
+
+					if (layerName) {
+						map.removeLayer(basemapLayer);
+						basemapLayer = createWmsLayer(selectedUrl);
+						map.addLayer(basemapLayer);
+					}
+					
+					// Remove active class from all buttons
+					document.querySelectorAll('#layer-menu button').forEach(btn => {
+						btn.style.backgroundColor = ''; // Reset color
+					});
+
+					// Highlight the selected button
+					this.style.backgroundColor = 'lightblue';
+
+					// Sakrij meni nakon izbora sloja
+					document.getElementById('layer-menu').style.display = 'none';
+				});
+			});*/
+			
+			// Set the first radio as checked by default
+			const basemapSecondRadio = document.querySelectorAll('#basemap-menu input[type="radio"]')[1];
+			if (basemapSecondRadio) {
+				basemapSecondRadio.checked = true;
+			}
+			const overbasemapFirstRadio = document.querySelector('#overbasemap-menu input[type="radio"]');
+			if (overbasemapFirstRadio) {
+				overbasemapFirstRadio.checked = true;
+			}
+			
+			document.querySelectorAll('#basemap-menu input[type="radio"]').forEach(radio => {
+				radio.addEventListener('change', function () {
+					const selectedUrl = this.getAttribute('data-url');
+					if (selectedUrl) {
+						map.removeLayer(basemapLayer);
+						basemapLayer = createWmsLayer(selectedUrl);
+						basemapLayer.setZIndex(0);
+						map.addLayer(basemapLayer);
+						basemapLayer.setZIndex(0);
+					}
+				});
+			});
+
+			// Handle radio button change for overlay basemap
+			document.querySelectorAll('#overbasemap-menu input[type="radio"]').forEach(radio => {
+				radio.addEventListener('change', function () {
+					const selectedUrl = this.getAttribute('data-url');
+					if (selectedUrl) {
+						map.removeLayer(overbasemapLayer);
+						overbasemapLayer = createWmsLayer(selectedUrl);
+						overbasemapLayer.on('prerender', clipLayer);
+						overbasemapLayer.on('postrender', restoreLayer);
+						overbasemapLayer.setZIndex(1);
+						map.addLayer(overbasemapLayer);
+						overbasemapLayer.setZIndex(1);
+						const opacity=Number(document.getElementById('overbasemapVisibility-slider').value);
+						if (!isNaN(opacity) && opacity >= 0 && opacity <= 1) { // Check if it's a valid number and within range.
+							overbasemapLayer.setOpacity(opacity);
+						} 
+					}
+				});
+			});
+				
+			document.getElementById('overbasemapVisibility-slider').addEventListener('input', function () {
+				const opacity = Number(this.value);
+
+				if (!isNaN(opacity) && opacity >= 0 && opacity <= 1) { // Check if it's a valid number and within range.
+					overbasemapLayer.setOpacity(opacity);
+				} else {
+					console.error("Invalid opacity value:", this.value); // Debugging
+				}
+			});
+			
+			
+			const swipe = document.getElementById('swipe');
+			swipe.addEventListener('input', function () {
+			  map.render();
+			});
+			
+			function clipLayer(event) {
+				const ctx = event.context;
+				const mapSize = map.getSize();
+				const width = mapSize[0] * (swipe.value / 100);
+				const tl = ol.render.getRenderPixel(event, [width, 0]);
+				const tr = ol.render.getRenderPixel(event, [mapSize[0], 0]);
+				const bl = ol.render.getRenderPixel(event, [width, mapSize[1]]);
+				const br = ol.render.getRenderPixel(event, mapSize);
+
+				ctx.save();
+				ctx.beginPath();
+				ctx.moveTo(tl[0], tl[1]);
+				ctx.lineTo(bl[0], bl[1]);
+				ctx.lineTo(br[0], br[1]);
+				ctx.lineTo(tr[0], tr[1]);
+				ctx.closePath();
+				ctx.clip();
+			}
+
+			function restoreLayer(event) {
+				event.context.restore();
+			}
+			
+			overbasemapLayer.on('prerender', clipLayer);
+			overbasemapLayer.on('postrender', restoreLayer);
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			const geolocation = new ol.Geolocation({
+			  // enableHighAccuracy must be set to true to have the heading value.
+			  trackingOptions: {
+				enableHighAccuracy: true,
+			  },
+			  projection: view.getProjection(),
+			});
+			
+			document.getElementById('location-tracking').addEventListener('click', function () {				
+				geolocation.setTracking(this.checked);
+			});
+			
+			geolocation.on('change', function () {
+			  /*el('accuracy').innerText = geolocation.getAccuracy() + ' [m]';
+			  el('altitude').innerText = geolocation.getAltitude() + ' [m]';
+			  el('altitudeAccuracy').innerText = geolocation.getAltitudeAccuracy() + ' [m]';
+			  el('heading').innerText = geolocation.getHeading() + ' [rad]';
+			  el('speed').innerText = geolocation.getSpeed() + ' [m/s]';*/
+			  //alert("AFAFQ");
+			});
+
+			// handle geolocation error.
+			geolocation.on('error', function (error) {
+			  /*const info = document.getElementById('info');
+			  info.innerHTML = error.message;
+			  info.style.display = '';*/
+			  //alert("NE MOZEMO DO LOKACIJE");
+			});
+
+			const accuracyFeature = new ol.Feature();
+			
+			geolocation.on('change:accuracyGeometry', function () {
+			  accuracyFeature.setGeometry(geolocation.getAccuracyGeometry());
+			});
+
+			const positionFeature = new ol.Feature();
+			positionFeature.setStyle(
+			  new ol.style.Style({
+				image: new ol.style.Circle({
+				  radius: 6,
+				  fill: new ol.style.Fill({
+					color: '#3399CC',
+				  }),
+				  stroke: new ol.style.Stroke({
+					color: '#fff',
+					width: 2,
+				  }),
+				}),
+			  }),
+			);
+
+			geolocation.on('change:position', function () {
+			  const coordinates = geolocation.getPosition();
+			  positionFeature.setGeometry(coordinates ? new ol.geom.Point(coordinates) : null);
+			});
+
+
+
+
+
+
+
+
+
+			new ol.layer.Vector({
+			  map: map,
+			  source: new ol.source.Vector({
+				features: [accuracyFeature, positionFeature],
+			  }),
+			});
+			
+			
+			
+			
+			
+
+
+			//measure
+			const measureSource = new ol.source.Vector();
+
+			const measureLayer = new ol.layer.Vector({
+				source: measureSource,
+				style: function (feature) {
+					return styleFunction(feature, document.getElementById('show-segment-lengths').checked);
+				},
+			});
+			measureLayer.setZIndex(20);
+			map.addLayer(measureLayer);
+			
+			//measureStyle sluzi za iscrtavanje featurea dok je u fazi crtanja, a i nakon sto bude gotov. to je stil mjerenja
+			const measureStyle = new ol.style.Style({
+				fill: new ol.style.Fill({
+					color: 'rgba(255, 255, 255, 0.2)',
+				}),
+				stroke: new ol.style.Stroke({
+					color: 'rgba(0, 0, 0, 0.5)',
+					lineDash: [10, 10],
+					width: 2,
+				}),
+				image: new ol.style.Circle({
+					radius: 5,
+					stroke: new ol.style.Stroke({
+						color: 'rgba(0, 0, 0, 0.7)',
+					}),
+					fill: new ol.style.Fill({
+						color: 'rgba(255, 255, 255, 0.2)',
+					}),
+				}),
+			});
+			
+			//measureLabelStyle sluzi za iscrtavanje zadnjeg tooltipa s konacnom mjerom
+			const measureLabelStyle = new ol.style.Style({
+				text: new ol.style.Text({
+					font: '14px Calibri,sans-serif',
+					fill: new ol.style.Fill({
+						color: 'rgba(255, 255, 255, 1)',
+					}),
+					backgroundFill: new ol.style.Fill({
+						color: 'rgba(0, 0, 0, 0.7)',
+					}),
+					padding: [3, 3, 3, 3],
+					textBaseline: 'bottom',
+					offsetY: -15,
+				}),
+				image: new ol.style.RegularShape({
+					radius: 6,
+					points: 3,
+					angle: Math.PI,
+					displacement: [0, 8],
+					fill: new ol.style.Fill({
+						color: 'rgba(0, 0, 0, 0.7)',
+					}),
+				}),
+			});
+			
+			//measureTipStyle sluzi da ispise Klikinte za pocetak crtanja ili Kliknite za nastavak crtanja
+			const measureTipStyle = new ol.style.Style({
+				text: new ol.style.Text({
+					font: '12px Calibri,sans-serif',
+					fill: new ol.style.Fill({
+						color: 'rgba(255, 255, 255, 1)',
+					}),
+					backgroundFill: new ol.style.Fill({
+						color: 'rgba(0, 0, 0, 0.4)',
+					}),
+					padding: [2, 2, 2, 2],
+					textAlign: 'left',
+					offsetX: 15,
+				}),
+			});
+			
+			
+			//measureModifyStyle sluzi za stil za modify tj. koristi se kad se priblizi nekoj grafici
+			const measureModifyStyle = new ol.style.Style({
+				image: new ol.style.Circle({
+					radius: 5,
+					stroke: new ol.style.Stroke({
+						color: 'rgba(0, 0, 0, 0.7)',
+					}),
+					fill: new ol.style.Fill({
+						color: 'rgba(0, 0, 0, 0.4)',
+					}),
+				}),
+				text: new ol.style.Text({
+					text: 'Povucite za promjenu',
+					font: '12px Calibri,sans-serif',
+					fill: new ol.style.Fill({
+						color: 'rgba(255, 255, 255, 1)',
+					}),
+					backgroundFill: new ol.style.Fill({
+						color: 'rgba(0, 0, 0, 0.7)',
+					}),
+					padding: [2, 2, 2, 2],
+					textAlign: 'left',
+					offsetX: 15,
+				}),
+			});
+	
+			//measureSegmentStyle sluzi za stil za medju tooltipove tj. one koji se nalaze na sredini linije
+			const measureSegmentStyle = new ol.style.Style({
+				text: new ol.style.Text({
+					font: '12px Calibri,sans-serif',
+					fill: new ol.style.Fill({
+						color: 'rgba(255, 255, 255, 1)',
+					}),
+					backgroundFill: new ol.style.Fill({
+						color: 'rgba(0, 0, 0, 0.4)',
+					}),
+					padding: [2, 2, 2, 2],
+					textBaseline: 'bottom',
+					offsetY: -12,
+				}),
+				image: new ol.style.RegularShape({
+					radius: 6,
+					points: 3,
+					angle: Math.PI,
+					displacement: [0, 8],
+					fill: new ol.style.Fill({
+						color: 'rgba(0, 0, 0, 0.4)',
+					}),
+				}),
+			});
+			
+			//measurePointWithLabelStyle sluzi za stil za dodavanje tocaka
+			const measurePointWithLabelStyle = new ol.style.Style({
+				text: new ol.style.Text({
+					font: '14px Calibri,sans-serif',
+					fill: new ol.style.Fill({
+						color: 'rgba(255, 255, 255, 1)',
+					}),
+					backgroundFill: new ol.style.Fill({
+						color: 'rgba(0, 0, 0, 0.7)',
+					}),
+					padding: [3, 3, 3, 3],
+					textBaseline: 'bottom',
+					offsetY: -8,
+				}),				
+				image: new ol.style.Circle({
+					radius: 5,
+					stroke: new ol.style.Stroke({
+						color: 'rgba(0, 0, 0, 0.7)',
+					}),
+					fill: new ol.style.Fill({
+						color: 'rgba(0, 0, 0, 0.4)',
+					}),
+				}),			
+			});
+
+
+			const formatLength = function (line) {
+				const length = ol.sphere.getLength(line);
+				let output;
+				if (length > 100) {
+				output = Math.round((length / 1000) * 100) / 100 + ' km';
+				} else {
+					output = Math.round(length * 100) / 100 + ' m';
+				}
+				return output;
+			};
+
+			const formatArea = function (polygon) {
+				const area = ol.sphere.getArea(polygon);
+				let output;
+				if (area > 10000) {
+					output = Math.round((area / 1000000) * 100) / 100 + ' km\xB2';
+				} else {
+					output = Math.round(area * 100) / 100 + ' m\xB2';
+				}
+				return output;
+			};
+			
+			
+			
+			
+			const segmentStyles = [measureSegmentStyle];
+			let measureTipPoint;
+			
+			const measureModify = new ol.interaction.Modify({source: measureSource, style: measureModifyStyle});
+			map.addInteraction(measureModify);
+			let measureDraw; // global so we can remove it later
+			let currentDrawType;
+
+			function styleFunction(feature, showSegmentLengthLabel,drawType, tip) {
+			
+				const styles = [];
+				const geometry = feature.getGeometry();
+				const type = geometry.getType();
+				let point, label, line;
+				
+				//za svaku geometriju, bila ona linija ili poligon, kreira se line. to je bitno jer se inace ne bi mogla izracunati duljina stranice poligona
+				if (!drawType || drawType === type) {					
+					styles.push(measureStyle);
+					if (type === 'Polygon') {
+						point = geometry.getInteriorPoint();
+						label = formatArea(geometry);
+						line = new ol.geom.LineString(geometry.getCoordinates()[0]);
+					} else if (type === 'LineString') {
+						point = new ol.geom.Point(geometry.getLastCoordinate());
+						label = formatLength(geometry);
+						line = geometry;
+					}
+				}
+
+				if (showSegmentLengthLabel && line) {
+					//ovaj dio funkcije iscrtava samo vrijednosti duljine segmenta na pola udaljenosti izmedju krajnjih tocaka segmenta i to samo ako je checkbox oznacen
+					//zato tu mozemo maknuti provjeru za showText jer izvrsavanjem ovog koda upravlja varijabla showSegmentLengthLabel
+					let count = 0;
+					line.forEachSegment(function (a, b) {
+						const segment = new ol.geom.LineString([a, b]);
+						const label = formatLength(segment);
+						if (segmentStyles.length - 1 < count) {
+							segmentStyles.push(measureSegmentStyle.clone());
+						}
+						const segmentPoint = new ol.geom.Point(segment.getCoordinateAt(0.5));
+						segmentStyles[count].setGeometry(segmentPoint);
+						
+						segmentStyles[count].getText().setText(label);
+						
+						styles.push(segmentStyles[count]);
+						count++;
+					});
+				}
+				
+				if (label) {
+					measureLabelStyle.setGeometry(point); // Correctly set geometry for all types					
+					if (showText){
+						measureLabelStyle.getText().setText(label);
+					}
+					else{
+						measureLabelStyle.getText().setText("");
+					}
+					styles.push(measureLabelStyle);
+				}
+
+				if (tip && type === 'Point' && !measureModify.getOverlay().getSource().getFeatures().length) {					
+					measureTipPoint = geometry;
+					if (showText){
+						measureTipStyle.getText().setText(tip);
+					}
+					//ovo aluzi samo za draw tocaka kada se pomice pointer a prije nego se doda tocka
+					else{
+						measureTipStyle.getText().setText("");
+					}
+					styles.push(measureTipStyle);
+				}
+				
+				if (type === 'Point' && feature.get('isPoint')) {
+					const coordinates = feature.getGeometry().getCoordinates();
+					const lonLat = ol.proj.toLonLat(coordinates);
+					const labelText = lonLat[0].toFixed(6) + " " + lonLat[1].toFixed(6);
+
+					let pointLabelStyle = feature.getStyle();
+
+					if (!pointLabelStyle) {
+						pointLabelStyle = measurePointWithLabelStyle.clone();
+						//feature.setStyle(pointLabelStyle);
+					}
+
+					const textStyle = pointLabelStyle.getText();
+					if (textStyle) {
+						textStyle.setText(labelText);
+						textStyle.setGeometry(geometry);
+					}
+
+					styles.push(pointLabelStyle);
+				}
+				
+				return styles;
+			}
+
+			function clearMeasureLayer() {
+				measureSource.clear();
+			}
+
+			function addMeasureInteraction(drawType) {
+				const activeTip = 'Kliknite za nastavak crtanja ';
+				const idleTip = 'Kliknite za početak crtanja';
+				let tip = idleTip;
+
+				if (measureDraw) {
+					map.removeInteraction(measureDraw);
+				}
+				currentDrawType = drawType;
+				measureDraw = new ol.interaction.Draw({
+					source: measureSource,
+					type: drawType,
+					style: function (feature) {
+						return styleFunction(feature, document.getElementById('show-segment-lengths').checked, drawType, tip);
+					},
+				});
+
+				measureDraw.on('drawstart', function () {
+					measureModify.setActive(false);
+					tip = activeTip;
+				});
+
+				measureDraw.on('drawend', function (event) {
+					measureModifyStyle.setGeometry(measureTipPoint);
+					measureModify.setActive(true);
+
+					const feature = event.feature; // Get the feature from the event
+					const coordinates = feature.getGeometry().getCoordinates();
+					const lonLat = ol.proj.toLonLat(coordinates);
+
+					if (drawType === 'Point') {
+						feature.set('isPoint', true);
+
+						const coordinates = feature.getGeometry().getCoordinates();
+						const lonLat = ol.proj.toLonLat(coordinates);
+						const labelText = lonLat[0].toFixed(6) + "\n" + lonLat[1].toFixed(6);
+						let pointLabelStyle = feature.getStyle();
+						//console.log(pointLabelStyle);
+						if (!pointLabelStyle) {
+							pointLabelStyle = measurePointWithLabelStyle.clone();
+							feature.setStyle(pointLabelStyle);
+						}
+						
+						pointLabelStyle.setGeometry(feature.getGeometry());
+						
+						const textStyle = pointLabelStyle.getText();
+						
+						if (textStyle) {
+							if (showText){
+								textStyle.setText(labelText);		
+							}							
+						}
+					}
+
+					map.once('pointermove', function () {
+						measureModifyStyle.setGeometry();
+					});
+					tip = idleTip;
+				});
+
+				measureModify.setActive(true);
+				map.addInteraction(measureDraw);
+			}
+
+			measureModify.on('modifyend', function (event) {
+				const feature = event.features.getArray()[0];
+				if (feature.getGeometry().getType() === 'Point' && feature.get('isPoint')) {
+					const coordinates = feature.getGeometry().getCoordinates();
+					const lonLat = ol.proj.toLonLat(coordinates);
+					const labelText = lonLat[0].toFixed(6) + "\n" + lonLat[1].toFixed(6);
+
+					let pointLabelStyle = feature.getStyle();
+
+					if (!pointLabelStyle) {
+						pointLabelStyle = measurePointWithLabelStyle.clone();
+						feature.setStyle(pointLabelStyle);
+					}
+					
+					pointLabelStyle.setGeometry(feature.getGeometry());
+					
+					const textStyle = pointLabelStyle.getText();
+					if (textStyle) {
+						if (showText){
+							textStyle.setText(labelText);		
+						}
+												
+					}
+					console.log(coordinatesPanelEPSG);
+					if (coordinatesPanelEPSG!='4326'){
+						const newCoords = ol.proj.transform([lonLat[0],lonLat[1]], 'EPSG:4326', 'EPSG:3765');	
+						transformAndWriteCoordsInPanel(newCoords[0], newCoords[1], '3765');
+					}
+					else{
+						transformAndWriteCoordsInPanel(lonLat[0], lonLat[1], '4326');
+					}
+					measureLayer.changed();
+				}
+			});
+			
+			
+			
+			let measureSelectInteraction = new ol.interaction.Select(); // Separate select interaction for measure layer
+			measureSelectInteraction.on('select', function (event) {
+				console.log("IPAK IMAMO SELECT");
+				const selectedFeatures = event.target.getFeatures();
+
+				selectedFeatures.forEach(feature => {
+					measureSource.removeFeature(feature); // Remove the selected feature from measureSource
+				});
+				selectedFeatures.clear(); // Clear selection after deletion
+			});
+
+			let measureSelectInteractionActive = null;
+
+			function enableMeasureDeleteMode() {
+				//prvo provjeravamo da nije ukljucen neki draw i ako je onda ga maknemo
+				if (currentDrawType !=""){
+					map.removeInteraction(measureDraw);
+					currentDrawType ="";
+				}
+			
+				if (measureSelectInteractionActive) {
+					document.body.style.cursor = "default";
+					map.removeInteraction(measureSelectInteraction);
+					measureSelectInteractionActive = null;
+					map.addInteraction(measureModify); // Re-enable modify interaction if needed
+					return;
+				}
+
+				measureSelectInteractionActive = "active";
+				map.removeInteraction(measureModify); // Disable modify interaction while in delete mode
+
+				// Disable draw interaction if active (similar to your existing logic)
+				/*if (measureDraw) { // Assuming measureDraw is your measure draw interaction
+					map.removeInteraction(measureDraw);
+					// ... any other cleanup related to measure drawing
+				}*/
+
+				map.addInteraction(measureSelectInteraction);
+				//document.body.style.cursor = "no-drop";
+			}
+			
+			
+			
+			let showText = true;
+			function updateTextStyle(ugasi) {
+				console.log("IMAMO UGASI");
+				measureSource.getFeatures().forEach(feature => {
+					if (ugasi){
+						if (feature.getStyle())
+						{
+							if (feature.getStyle().getText()){
+								if (feature.getGeometry().getType()==="Point"){feature.getStyle().getText().setText("");}
+							}
+						}
+					}
+					else
+					{
+						if (feature.getStyle())
+						{
+							if (feature.getStyle().getText()){
+								if (feature.getGeometry().getType()==="Point"){
+									const coordinates = feature.getGeometry().getCoordinates();
+									const lonLat = ol.proj.toLonLat(coordinates);
+									const labelText = lonLat[0].toFixed(6) + "\n" + lonLat[1].toFixed(6);
+									feature.getStyle().getText().setText(labelText);
+								}
+							}
+						}
+					}
+					console.log(feature.text); // Apply the updated style
+				});
+
+				measureLayer.changed(); 
+			}
+			
+			
+			document.getElementById('show-segment-lengths').addEventListener("change", function () {
+			  measureLayer.changed();
+			  measureDraw.getOverlay().changed();
+			});
+			
+			document.getElementById('show-measurements').addEventListener("change", function () {				
+				updateTextStyle(showText);
+				showText = !showText;
+				//measureLayer.changed(); // Essential: Force layer redraw
+				//measureDraw.getOverlay().changed();
+			});
+			
+			document.getElementById("measure-points").addEventListener("click", function () {
+				if (map.getInteractions().getArray().some(interaction => interaction === measureSelectInteraction)) {
+					map.removeInteraction(measureSelectInteraction);
+				}
+				if (currentDrawType == "Point")
+				{
+					if (measureDraw) {
+						map.removeInteraction(measureDraw);
+						currentDrawType =""
+					}
+				}
+				else
+				{
+					addMeasureInteraction("Point");
+				}
+				map.addInteraction(measureModify);
+			});
+
+			document.getElementById("measure-lines").addEventListener("click", function () {
+				if (map.getInteractions().getArray().some(interaction => interaction === measureSelectInteraction)) {
+					map.removeInteraction(measureSelectInteraction);
+				}
+				if (currentDrawType == "LineString")
+				{
+					if (measureDraw) {
+						map.removeInteraction(measureDraw);
+						currentDrawType =""
+					}
+				}
+				else
+				{
+					addMeasureInteraction("LineString");
+				}
+				map.addInteraction(measureModify);
+			});
+			
+
+			document.getElementById("measure-polygons").addEventListener("click", function () {
+				if (map.getInteractions().getArray().some(interaction => interaction === measureSelectInteraction)) {
+					map.removeInteraction(measureSelectInteraction);
+				}
+				if (currentDrawType == "Polygon")
+				{
+					if (measureDraw) {
+						map.removeInteraction(measureDraw);
+						currentDrawType =""
+					}
+				}
+				else
+				{
+					addMeasureInteraction("Polygon");
+				}
+				map.addInteraction(measureModify);
+			});
+
+			function enableDissableMeasureDeleteMode() {
+				//prvo micemo measureDraw ako je dodan
+				if (measureDraw) {
+					map.removeInteraction(measureDraw);
+					currentDrawType =""
+				}
+				if (!map.getInteractions().getArray().some(interaction => interaction === measureSelectInteraction)) {					
+					map.removeInteraction(measureModify);
+					map.addInteraction(measureSelectInteraction);					
+					map.on('pointermove', changePointerOnTopOfFeature);
+				}
+				else
+				{
+					document.body.style.cursor = "default";
+					map.removeInteraction(measureSelectInteraction);
+					map.un('pointermove', changePointerOnTopOfFeature);
+					map.addInteraction(measureModify); // Re-enable modify interaction
+				}	
+			}
+
+			
+			function changePointerOnTopOfFeature(event){
+				const pixel = event.pixel;
+				const features = [];
+
+				map.forEachFeatureAtPixel(pixel, function (feature) {
+					if (measureSource.getFeatures().indexOf(feature) !== -1) { // Check if feature is in measureSource
+						features.push(feature);
+					}
+				});
+
+				if (features.length > 0) {
+					map.getViewport().style.cursor = 'no-drop'; // Change cursor to pointer
+				} else {
+					map.getViewport().style.cursor = ''; // Reset cursor to default
+				}			
+			}
+
+			document.getElementById("measure-delete-selected").addEventListener("click", enableDissableMeasureDeleteMode);
+			
+			document.getElementById("measure-delete-all").addEventListener("click", function () {
+				if (map.getInteractions().getArray().some(interaction => interaction === measureSelectInteraction)) {
+					map.removeInteraction(measureSelectInteraction);
+				}
+				if (map.getInteractions().getArray().some(interaction => interaction === measureDraw)) {
+					map.removeInteraction(measureDraw);
+					currentDrawType =""
+				}
+				clearMeasureLayer();
+				map.addInteraction(measureModify);
+			});
+			
+			
+			document.getElementById('measureLayerVisibility-checkbox').addEventListener("change", function () {				
+				measureLayer.setVisible(this.checked);
+			});
+			
+			document.getElementById('measureLayerVisibility-slider').addEventListener('input', function () {
+				const opacity = Number(this.value);
+
+				if (!isNaN(opacity) && opacity >= 0 && opacity <= 1) { // Check if it's a valid number and within range.
+					measureLayer.setOpacity(opacity);
+				} else {
+					console.error("Invalid opacity value:", this.value); // Debugging
+				}
+			});
+			
+			document.getElementById('upload-KML-button').addEventListener('click', function () {
+				const fileInput = document.createElement('input');
+				fileInput.type = 'file';
+				fileInput.accept = '.kml, .kmz';
+
+				fileInput.addEventListener('change', function (event) {
+					const file = event.target.files[0];
+					if (file) {
+						const reader = new FileReader();
+						reader.onload = function (e) {
+							const kmlData = e.target.result;
+
+							const kmlFormat = new ol.format.KML({ extractStyles: true });
+							const features = kmlFormat.readFeatures(kmlData);
+
+							const transformedFeatures = [];
+
+							features.forEach(feature => {
+								const geometry = feature.getGeometry();
+								if (geometry) {
+									const transformedGeometry = geometry.clone().transform('EPSG:4326', map.getView().getProjection());
+									feature.setGeometry(transformedGeometry);
+									transformedFeatures.push(feature);
+								}
+							});
+
+							const vectorSource = new ol.source.Vector({
+								features: transformedFeatures,
+							});
+
+							const kmlLayer = new ol.layer.Vector({
+								source: vectorSource,
+								style: feature => {
+									return feature.getStyle() || new ol.style.Style({ /* your default style */ });
+								}
+							});
+
+							map.addLayer(kmlLayer);
+
+							vectorSource.once('change', () => {
+								if (vectorSource.getState() === 'ready') {
+									map.getView().fit(vectorSource.getExtent());
+								}
+							});
+
+
+							// *** NEW: Create controls for EACH layer ***
+							const controlsDiv = document.createElement('div');
+							controlsDiv.id = 'kml-layer-controls-' + kmlLayer.ol_uid; // Unique ID
+
+							const checkboxLabel = document.createElement('label');
+							checkboxLabel.for = 'kml-layer-visibility-' + kmlLayer.ol_uid;
+							const checkbox = document.createElement('input');
+							checkbox.type = 'checkbox';
+							checkbox.id = 'kml-layer-visibility-' + kmlLayer.ol_uid;
+							checkbox.checked = true;
+							checkboxLabel.appendChild(checkbox);
+							checkboxLabel.appendChild(document.createTextNode(file.name));
+							controlsDiv.appendChild(checkboxLabel);
+
+							const slider = document.createElement('input');
+							slider.type = 'range';
+							slider.id = 'kml-layer-opacity-' + kmlLayer.ol_uid;
+							slider.min = '0';
+							slider.max = '1';
+							slider.step = '0.1';
+							slider.value = '1';
+							controlsDiv.appendChild(slider);
+
+							const zoomToExtentButton = document.createElement('button');
+							zoomToExtentButton.className = 'kml-zoom-button';
+							zoomToExtentButton.innerHTML = '<img src="icons/arrows-to-circle-solid.svg" alt="Zoom to Extent" width="15" height="15">';
+							zoomToExtentButton.addEventListener('click', () => {
+								map.getView().fit(kmlLayer.getSource().getExtent());
+							});
+							controlsDiv.appendChild(zoomToExtentButton);
+
+							const deleteButton = document.createElement('button');
+							deleteButton.className = 'kml-delete-button';
+							deleteButton.innerHTML = '<img src="icons/trash-solid.svg" alt="Delete KML" width="15" height="15">';
+							deleteButton.addEventListener('click', () => {
+								map.removeLayer(kmlLayer);
+								controlsDiv.remove(); // Remove controls for this layer
+							});
+							controlsDiv.appendChild(deleteButton);
+
+
+							document.getElementById('layers-panel').appendChild(controlsDiv);
+
+
+							// *** NEW: Event listeners for EACH layer ***
+							checkbox.addEventListener('change', () => {
+								kmlLayer.setVisible(checkbox.checked);
+							});
+
+							slider.addEventListener('input', () => {
+								const opacity = parseFloat(slider.value);
+								if (!isNaN(opacity)) {
+									kmlLayer.setOpacity(opacity);
+								}
+							});
+
+						};
+						reader.readAsText(file);
+					}
+				});
+
+				fileInput.click(); // Open file dialog
+			});
+			
+			
+			document.getElementById('full-extent-button').addEventListener('click', function () {
+				console.log(map.getView().getProjection().getCode());
+				const view= new ol.View({
+					projection:'EPSG:3857',
+					center: ol.proj.fromLonLat([16.40964, 43.50973]), // Centered near Croatia
+					minZoom: 12,
+					zoom: 15,
+				});
+				map.setView(view);
+			});
+			
+			
+			let coordinatesPanelEPSG="4326";
+			
+			document.getElementById('change-crs').addEventListener('click', function () {
+				let coordsText = document.getElementById('pointercoordinates-link').innerHTML;
+				coordsText = coordsText.replace('WGS84:', '').replace('HTRS96TM:','').trim();
+				// Split into coordinates
+				const coordsArray = coordsText.split(',');
+				console.log(ol.proj.get('EPSG:3765'));
+				console.log(typeof(coordsArray[0]));
+				console.log(coordsArray[0]+"    "+coordsArray[1]);
+				if (coordsArray.length === 2) {
+					const x = parseFloat(coordsArray[0]);
+					const y = parseFloat(coordsArray[1].trim());
+					console.log(x+"   "+y);
+					let transformedCoords;
+					if (coordinatesPanelEPSG=="4326"){					
+						const newCoords = ol.proj.transform([x,y], 'EPSG:4326', ol.proj.get('EPSG:3765'));					
+						coordinatesPanelEPSG="3765";
+						transformAndWriteCoordsInPanel(newCoords[0], newCoords[1], coordinatesPanelEPSG);
+						//writeCoordsInPanel(newCoords[0], newCoords[1], coordinatesPanelEPSG);
+					}
+					else if (coordinatesPanelEPSG=="3765"){
+						const newCoords = ol.proj.transform([x,y], 'EPSG:3765', 'EPSG:4326');	
+						coordinatesPanelEPSG="4326";						
+						transformAndWriteCoordsInPanel(newCoords[0], newCoords[1], coordinatesPanelEPSG);
+						//writeCoordsInPanel(newCoords[0], newCoords[1], coordinatesPanelEPSG);
+					}	
+					else{}
+				}
+				else{
+					if (coordinatesPanelEPSG=="4326"){					
+						document.getElementById('pointercoordinates-link').innerHTML="HTRS96TM:";					
+						coordinatesPanelEPSG="3765";						
+					}
+					else if (coordinatesPanelEPSG=="3765"){
+						document.getElementById('pointercoordinates-link').innerHTML="WGS84:";		
+						coordinatesPanelEPSG="4326";		
+					}	
+				}
+				
+				
+			});			
+			
+			
+			function writeCoordsInPanel(x, y, crs) {
+				let sourceProj, destProj;
+
+				if (crs === '4326') { // Input is 4326 (lon/lat), convert to 3765
+					document.getElementById("pointercoordinates-link").innerHTML= "WGS84: "+x.toFixed(6)+", "+y.toFixed(6);
+				}
+				else if (crs === '3765') {
+					document.getElementById("pointercoordinates-link").innerHTML= "HTRS96TM: "+x.toFixed(2)+", "+y.toFixed(2);
+				}
+			}
+			
+			function transformAndWriteCoordsInPanel(x, y, crs) {
+				if (crs === '4326') { // Input is 4326 (lon/lat), convert to 3765
+					document.getElementById("pointercoordinates-link").innerHTML= "WGS84: "+x.toFixed(6)+", "+y.toFixed(6);
+					document.getElementById("pointercoordinates-link").href="http://maps.google.com/maps?q="+y.toFixed(6)+","+x.toFixed(6);
+				}
+				else if (crs === '3765') {
+					const newCoords = ol.proj.transform([x,y], 'EPSG:3765', 'EPSG:4326');
+					document.getElementById("pointercoordinates-link").innerHTML= "HTRS96TM: "+x.toFixed(2)+", "+y.toFixed(2);
+					document.getElementById("pointercoordinates-link").href="http://maps.google.com/maps?q="+newCoords[1].toFixed(6)+","+newCoords[0].toFixed(6);
+				}
+			}
+			
+			map.on('click', function(event) {
+				var point = map.getCoordinateFromPixel(event.pixel);				
+			  	var lonLat = ol.proj.toLonLat(point); 
+				if (coordinatesPanelEPSG=="4326"){
+					transformAndWriteCoordsInPanel(lonLat[0],lonLat[1], coordinatesPanelEPSG);
+					//writeCoordsInPanel(newCoords[0], newCoords[1], coordinatesPanelEPSG);
+				}
+				else if (coordinatesPanelEPSG=="3765"){
+					const newCoords = ol.proj.transform([lonLat[0],lonLat[1]], 'EPSG:4326', 'EPSG:3765');					
+					transformAndWriteCoordsInPanel(newCoords[0], newCoords[1], coordinatesPanelEPSG);
+					//writeCoordsInPanel(newCoords[0], newCoords[1], coordinatesPanelEPSG);
+				}						
+			});
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			function exportFeaturesToKML(vectorLayer, filename = 'features.kml') {
+				console.log("Exporting KML..."); // Confirmation message
+
+				const features = vectorLayer.getSource().getFeatures();
+				console.log("Number of features:", features.length); // Check number of features
+
+				if (features.length === 0) {
+					console.warn("No features to export.");
+					return;
+				}
+
+				const kmlFormat = new ol.format.KML({
+				
+					extractStyles:true,
+					writeStyles: true
+				});
+
+				const getKMLStyle = (feature) => {
+					let olStyle = feature.getStyle();
+
+					if (!olStyle) {
+						olStyle = measureStyle;
+					}
+
+					if (olStyle) {
+						console.log("Feature with style:", feature); // Check if getKMLStyle is called
+
+						const kmlStyle = {};
+
+						const fill = olStyle.getFill();
+						if (fill) {
+							kmlStyle.fill = rgbToHex(fill.getColor());
+						}
+
+						const stroke = olStyle.getStroke();
+						if (stroke) {
+							kmlStyle.stroke = rgbToHex(stroke.getColor());
+							kmlStyle.width = stroke.getWidth();
+						}
+
+						const image = olStyle.getImage();
+						if (image && image instanceof ol.style.Circle) {
+							kmlStyle.radius = image.getRadius();
+							const circleFill = image.getFill();
+							if (circleFill) {
+								kmlStyle.fill = rgbToHex(circleFill.getColor());
+							}
+							const circleStroke = image.getStroke();
+							if (circleStroke) {
+								kmlStyle.stroke = rgbToHex(circleStroke.getColor());
+								kmlStyle.width = circleStroke.getWidth();
+							}
+						}
+
+						if (image && image instanceof ol.style.Icon) {
+							kmlStyle.icon = image.getSrc();
+						}
+
+						const text = olStyle.getText();
+						if (text) {
+							kmlStyle.text = text.getText();
+							const textFill = text.getFill();
+							if (textFill) {
+								kmlStyle.textColor = rgbToHex(textFill.getColor());
+							}
+						}
+
+						console.log("KML Style:", kmlStyle); // Log the converted style
+						return kmlStyle;
+					}
+
+					return null;
+				};
+
+				function rgbToHex(color) {
+					if (!color) return null;
+
+					if (typeof color === 'string' && color.startsWith('rgb')) {
+						const parts = color.substring(color.indexOf('(') + 1, color.lastIndexOf(')')).split(',');
+						const r = parseInt(parts[0].trim());
+						const g = parseInt(parts[1].trim());
+						const b = parseInt(parts[2].trim());
+						return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+					} else if (typeof color === 'string') {
+						return color;
+					}
+					return null;
+				}
+
+
+
+				try {  // Add a try-catch block
+					const kmlFormat = new ol.format.KML({
+						defaultStyle:measureStyle,
+						writeStyles: true
+					});
+					const features = vectorLayer.getSource().getFeatures();
+					features.forEach(feature => {
+						feature.setStyle(measureStyle);
+						//getKMLStyle(feature));
+					});
+					const kml = kmlFormat.writeFeatures(features, { featureProjection: map.getView().getProjection()       });
+
+					console.log("Generated KML:", kml); // Log the KML string
+
+					const kmlBlob = new Blob([kml], { type: 'application/vnd.google-earth.kml+xml' });
+					const kmlUrl = URL.createObjectURL(kmlBlob);
+
+					const link = document.createElement('a');
+					link.href = kmlUrl;
+					link.download = filename;
+					link.style.display = 'none';
+					document.body.appendChild(link);
+					link.click();
+					document.body.removeChild(link);
+					URL.revokeObjectURL(kmlUrl);
+
+				} catch (error) {
+					console.error("Error during KML export:", error); // Log any errors
+				}
+			}
+
+
+			// Example usage:  Call this function when you want to export.
+			// For example, attach it to a button's click event:
+			const exportButton = document.getElementById('measure-download-KML'); // Replace with your button's ID
+			exportButton.addEventListener('click', () => {
+				exportFeaturesToKML(measureLayer); // Pass your vector layer
+			});
+			
+			const iframeDiv=document.getElementById('report-problem-Div');
+			const iframe=document.getElementById('report-problem-iframe');
+			const reportProblemButton = document.getElementById('report-problem'); // Replace with your button's ID
+			
+			
+			reportProblemButton.addEventListener('click', () => {	
+				if (iframeDiv.style.display === 'block'){
+					iframeDiv.style.display = 'none'; 			
+				}
+				else{
+					iframeDiv.style.display = 'block'; 
+					iframe.src="https://www.marjan-parksuma.hr/prijava";
+				}
+			});
+			
+			function closeIframe() {
+				iframeDiv.style.display = 'none';
+			}
+			
+			iframe.onload = function() { // Attach onload event handler
+				const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+				if (iframeDoc) { // Check if iframeDoc is available
+					const input = iframeDoc.getElementById('textarea_comp-l6ouy886'); // ID of input in iframe
+					input.focus();
+					if (input) {
+						input.innerHTML = 'UPISITE NEKU VRIJEDNOST';
+					} else {
+						console.error("Input not found");
+					}
+				} else {
+					console.error("Iframe document not accessible");
+				}
+			};
+			
+			
+			
+			/*async function getToken(username, password) {
+			  const soapRequest = '<?xml version="1.0" encoding="UTF-8"?>'+
+			'<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:aut="http://oss.authentication.hr">'+
+			 ' <soapenv:Header/>'+
+			 ' <soapenv:Body>'+
+				'<aut:authenticationRequest>'+
+				  '<aut:username>wspsmarjan</aut:username>'+
+				  '<aut:password>SLT5432G</aut:password>'+
+				'</aut:authenticationRequest>'+
+			  '</soapenv:Body>'+
+			'</soapenv:Envelope>';
+
+			  try {
+				const response = await fetch('https://oss.uredjenazemlja.hr/OssWebServices/services/', {
+				  method: 'POST',
+				  headers: {
+					'Content-Type': 'text/xml;charset=UTF-8', // Important for SOAP
+					'SOAPAction': '', // Often empty, but check the WSDL if needed.
+				  },
+				  body: soapRequest,
+				});
+
+				if (!response.ok) {
+				  const errorText = await response.text(); // Get error details from the server
+				  throw new Error(`SOAP request failed with status ${response.status}: ${errorText}`);
+				}
+
+				const xmlText = await response.text();
+				// Parse the XML response (using DOMParser or a library)
+				const parser = new DOMParser();
+				const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+
+				const authTokenElement = xmlDoc.querySelector('authToken'); // Use querySelector
+				if (authTokenElement) {
+				  const token = authTokenElement.textContent;
+				  return token;
+				} else {
+				  console.error("authToken element not found in the response.");
+				  console.log(xmlText); // Log the full XML for debugging
+				  return null;
+				}
+			  } catch (error) {
+				console.error('Error fetching token:', error);
+				return null;
+			  }
+			}
+
+
+
+			// Example usage:
+			async function authenticate() {
+			  const username = 'your_username'; // Replace with your username
+			  const password = 'your_password'; // Replace with your password
+
+			  const token = await getToken(username, password);
+
+			  if (token) {
+				console.log('Token:', token);
+				// Store the token (e.g., in localStorage or a variable)
+				localStorage.setItem('authToken', token);
+			  } else {
+				console.log('Authentication failed.');
+			  }
+			}
+
+			authenticate(); // Call the async function to start authentication*/
+			
+			map.getView().on('change:resolution', function() {
+			
+			/*const currentResolution = map.getView().getResolution();
+  const dpi = 25.4 / 0.28; // Standard DPI value (dots per inch) for map scale calculation. Adjust if needed.
+  const metersPerUnit = map.getView().getProjection().getMetersPerUnit(); //Meters per unit of projection
+  const currentScale = currentResolution * metersPerUnit * dpi;
+
+  const targetScale = 100; // Your target scale (1:100)
+
+  if (currentScale< 100) { // Tolerance (adjust as needed)
+    katastar.setVisible(true); // Show the layer
+  } else {
+    katastar.setVisible(false); // Hide the layer
+  }
+
+    console.log("Current scale:", currentScale);*/console.log(map.getView().getResolution());
+});
+			
+		</script>
+	</body>
+</html>
