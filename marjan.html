@@ -691,7 +691,7 @@
 				if (isTrackingEnabled==false){
 					isTrackingEnabled=true;
 					console.log("Ide geolocoation tracking");
-					console.log(this.checked);
+					console.log(geolocation);
 					geolocation.setTracking(true);
 					console.log(this.checked);					
 				}	
@@ -711,7 +711,7 @@
 			  el('altitudeAccuracy').innerText = geolocation.getAltitudeAccuracy() + ' [m]';
 			  el('heading').innerText = geolocation.getHeading() + ' [rad]';
 			  el('speed').innerText = geolocation.getSpeed() + ' [m/s]';*/
-			  //alert("AFAFQ");
+			  alert("AFAFQ");
 			});
 
 			// handle geolocation error.
