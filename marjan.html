@@ -689,19 +689,12 @@
 			let isTrackingEnabled=false;
 			document.getElementById('location-tracking').addEventListener('click', function () {	
 				if (isTrackingEnabled==false){
-					isTrackingEnabled=true;
-					console.log("Ide geolocoation tracking");
-					console.log(geolocation);
-					geolocation.setTracking(true);
-					console.log(this.checked);					
+					isTrackingEnabled=true;					
+					geolocation.setTracking(true);				
 				}	
 				else{
 					isTrackingEnabled=false;
-					console.log("Gasim geolocation");
-					console.log(this.checked);
-					geolocation.setTracking(true);
-					console.log(this.checked);
-					
+					geolocation.setTracking(false);
 				}
 			});
 			
@@ -711,7 +704,7 @@
 			  el('altitudeAccuracy').innerText = geolocation.getAltitudeAccuracy() + ' [m]';
 			  el('heading').innerText = geolocation.getHeading() + ' [rad]';
 			  el('speed').innerText = geolocation.getSpeed() + ' [m/s]';*/
-			  alert("AFAFQ");
+			  //alert("AFAFQ");
 			});
 
 			// handle geolocation error.
@@ -729,39 +722,29 @@
 			});
 
 			const positionFeature = new ol.Feature();
-			positionFeature.setStyle(
-			  new ol.style.Style({
+			positionFeature.setStyle(new ol.style.Style({
 				image: new ol.style.Circle({
-				  radius: 6,
-				  fill: new ol.style.Fill({
-					color: '#3399CC',
-				  }),
-				  stroke: new ol.style.Stroke({
-					color: '#fff',
-					width: 2,
-				  }),
+				  	radius: 6,					  	
+					fill: new ol.style.Fill({
+						color: '#3399CC',
+					  }),
+					  stroke: new ol.style.Stroke({
+						color: '#fff',
+						width: 2,
+					  }),
 				}),
-			  }),
-			);
+			}));
 
 			geolocation.on('change:position', function () {
-			  const coordinates = geolocation.getPosition();
-			  positionFeature.setGeometry(coordinates ? new ol.geom.Point(coordinates) : null);
+			  	const coordinates = geolocation.getPosition();
+			  	positionFeature.setGeometry(coordinates ? new ol.geom.Point(coordinates) : null);
 			});
 
-
-
-
-
-
-
-
-
 			new ol.layer.Vector({
-			  map: map,
-			  source: new ol.source.Vector({
-				features: [accuracyFeature, positionFeature],
-			  }),
+			  	map: map,
+			  	source: new ol.source.Vector({
+					features: [accuracyFeature, positionFeature],
+			  	}),
 			});
 			
 			
