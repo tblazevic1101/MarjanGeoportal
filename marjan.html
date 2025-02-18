@@ -680,15 +680,18 @@
 			
 			
 			const geolocation = new ol.Geolocation({
-			  // enableHighAccuracy must be set to true to have the heading value.
-			  trackingOptions: {
-				enableHighAccuracy: true,
-			  },
-			  projection: view.getProjection(),
+			  	// enableHighAccuracy must be set to true to have the heading value.
+			  	trackingOptions: {
+					enableHighAccuracy: true,
+			  	},
+			  	projection: view.getProjection(),
 			});
 			
-			document.getElementById('location-tracking').addEventListener('click', function () {				
+			document.getElementById('location-tracking').addEventListener('click', function () {		
+				console.log("Ide geolocoation tracking");
+				console.log(this.checked);
 				geolocation.setTracking(this.checked);
+				console.log(this.checked);
 			});
 			
 			geolocation.on('change', function () {
