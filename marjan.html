@@ -451,11 +451,11 @@
 			});
 
 			// Add initial layer
-			let basemapLayer = createWmsLayer('https://geoportal.dgu.hr/services/auth/tk/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d');
+			let basemapLayer = createWmsLayer('https://geoportal.dgu.hr/services/tk/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d');
 			basemapLayer.setZIndex(0);
 			map.addLayer(basemapLayer);
 			console.log(map.getView().getProjection().getCode());
-			let overbasemapLayer = createWmsLayer('https://geoportal.dgu.hr/services/auth/inspire/orthophoto_lidar_2022_2023/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d');
+			let overbasemapLayer = createWmsLayer('https://geoportal.dgu.hr/services/inspire/orthophoto_lidar_2022_2023/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d');
 			overbasemapLayer.setZIndex(1);
 			map.addLayer(overbasemapLayer);
 			
