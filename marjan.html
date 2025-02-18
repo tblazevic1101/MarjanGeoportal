@@ -66,6 +66,23 @@
 				align-items: center; /* Vertically center items */
 				justify-content: center; /* Horizontally center items (optional) */
 			}
+
+			#bottom-panel_bigscreen {
+				position: fixed;
+				bottom: 20px;
+				left: 0;
+				right:0;
+				width:auto;
+				background: rgba(255, 255, 255, 0.75);
+				foreground: #666666;
+				/*padding: 10px 20px;*/
+				border-radius: 5px;
+				text-align: center;
+				
+				display: flex; /* Use flexbox */
+				align-items: center; /* Vertically center items */
+				justify-content: center; /* Horizontally center items (optional) */
+			}
 			
 			#bottom-panel img { /* Target the image directly */
 				margin: 5px; /* Add 5px margin on all sides */
@@ -296,7 +313,7 @@
 			
 			
 			<!-- Bottom Panel -->
-			<div id="bottom-panel">
+			<div id="bottom-panel_bigscreen">
 				<img id="change-crs" src="icons/globe-solid.svg" alt="Promijeni koordinativni sustav" width="20" height="20" />
 				<a id="pointercoordinates-link" href="#" target="_blank">WGS84:</a>
 			</div>
