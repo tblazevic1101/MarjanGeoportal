@@ -1278,9 +1278,13 @@
 					}
 
 					const textStyle = pointLabelStyle.getText();
-					if (textStyle) {
-						textStyle.setText(labelText);
-						textStyle.setGeometry(geometry);
+					try{
+						if (textStyle) {
+							textStyle.setText(labelText);
+							textStyle.setGeometry(geometry);
+						}
+					}catch{
+						console.log(geometry);						
 					}
 
 					styles.push(pointLabelStyle);
