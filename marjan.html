@@ -2014,8 +2014,8 @@
 				exportFeaturesToKML(measureLayer); // Pass your vector layer
 			});
 
-			const exportButton = document.getElementById('measure-upload-KML'); // Replace with your button's ID
-			exportButton.addEventListener('click', () => {
+			const uploadKMLToMeasureLayerButton = document.getElementById('measure-upload-KML'); // Replace with your button's ID
+			uploadKMLToMeasureLayerButton.addEventListener('click', () => {
 				const fileInput = document.createElement('input');
 				fileInput.type = 'file';
 				fileInput.accept = '.kml, .kmz';
