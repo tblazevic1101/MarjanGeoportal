@@ -2039,6 +2039,7 @@
 										const transformedGeometry = geometry.clone().transform('EPSG:4326', map.getView().getProjection());
 										feature.setGeometry(transformedGeometry);
 										transformedFeatures.push(feature);
+										console.log(feature.getGeometry());
 									}
 								});
 	
