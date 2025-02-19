@@ -2201,10 +2201,15 @@
 			authenticate(); // Call the async function to start authentication*/
 			document.getElementById('katastarLayer-controls').disabled = true;
 			map.getView().on('change:resolution', function() {
-				if (map.getView().getResolution()<katastarLayer.maxResolution){
-					document.getElementById('katastarLayer-controls').disabled = true;
+				const myDiv=document.getElementById('katastarLayer-controls');
+				if (map.getView().getResolution()<katastarLayer.maxResolution){					
+					myDiv.disabled = true; // For form elements (input, button, select, etc.)
+					myDiv.style.pointerEvents = "none"; // Prevent clicks
+					myDiv.style.opacity = "0.5"; // Make it appear visually disabled (greyed out)
 				}else{
-					document.getElementById('katastarLayer-controls').disabled = true;
+					myDiv.disabled = false;
+					myDiv.style.pointerEvents = "auto";
+					myDiv.style.opacity = "1";
 				}
 				console.log(map.getView().getResolution());
 			});
