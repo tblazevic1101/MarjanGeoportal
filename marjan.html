@@ -520,6 +520,24 @@
 					layername='DEM_25m';
 					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
 				}
+				if (layerType === "Adrese")
+				{
+					url='https://geoportal.dgu.hr/services/auth/inspire/ad/wms'+"?"+ak;
+					layername='AD.Address';
+					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
+				}
+				if (layerType === "Zgrade")
+				{
+					url='https://geoportal.dgu.hr/services/auth/inspire/bu/wms'+"?"+ak;
+					layername='BU.Building';
+					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
+				}
+				if (layerType === "CestovniPromet")
+				{
+					url='https://geoportal.dgu.hr/services/auth/inspire/tn/wms'+"?"+ak;
+					layername='TN.RoadTransportNetwork.RoadArea';
+					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
+				}
 				return new ol.layer.Tile({
 					source: new ol.source.TileWMS({
 						attributions: attrib,
