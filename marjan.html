@@ -413,7 +413,7 @@
 		
 			proj4.defs("EPSG:3765","+proj=tmerc +lat_0=0 +lon_0=16.5 +k=0.9999 +x_0=500000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs");
 			ol.proj.proj4.register(proj4);
-			
+			const projection = ol.proj.get('EPSG:3765');
 			
 			document.getElementById('layer-menu-button').addEventListener('click', function () {
 				const layerMenu = document.getElementById('layers-panel');
@@ -443,33 +443,69 @@
 		
 		
 			// Create a function to create a WMS layer
-			function createWmsLayer(url) {
+			function createWmsLayer(layerType) {
 				if (url === "https://tile.openstreetmap.org/") {
 					return new ol.layer.Tile({
 						source: new ol.source.OSM(), // OpenStreetMap Tile Layer
 					});
 				}
-			
+				const aK="authKey=fee6e8df-d92b-4413-bef0-e1900c88286d";
 				var layername="OI.OrthoimageCoverage";
-				if (url=='https://geoportal.dgu.hr/services/inspire/orthophoto_2011/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d')
+				let attrib='<a target="_blank" href="https://www.marjan-parksuma.hr/">Park šuma Marjan</a>';
+				
+				if (layerType === "TK25")
 				{
-				layername='OrthoImagery';
+					url=='https://geoportal.dgu.hr/services/auth/tk/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c88286d'+"?"+ak;
+					layername='tk:TK25';
+					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
 				}
-				if (url=='https://geoportal.dgu.hr/services/inspire/orthophoto_2014-2016/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d')
+				if (layerType === "HOK")
 				{
-				layername='OI.OrthoImagery';
+					url=='https://geoportal.dgu.hr/services/auth/hok/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c88286d'+"?"+ak;
+					layername='HOK5';
+					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
 				}
-				if (url=='https://geoportal.dgu.hr/services/tk/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d')
-				{
-				layername='tk:TK25';
+				if (layerType === "DOF_2011")
+				{	
+					url='https://geoportal.dgu.hr/services/auth/inspire/orthophoto_2011/wms'+"?"+ak;
+					layername='OrthoImagery';
+					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
 				}
-				if (url=='https://geoportal.dgu.hr/services/hok/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d')
+				if (layerType === "DOF_2014_2016")
 				{
-				layername='HOK5';
+					url=='https://geoportal.dgu.hr/services/auth/inspire/orthophoto_2014-2016/wms'+"?"+ak;
+					layername='OI.OrthoImagery';
+					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
+				}
+				if (layerType === "DOF_2017_2018") {
+					layername="OI.OrthoimageCoverage";
+					url='https://geoportal.dgu.hr/services/auth/inspire/orthophoto_2017_2018/wms'+"?"+ak;
+					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
+				}
+				if (layerType === "DOF_2019_2020") {
+					layername="OI.OrthoimageCoverage";
+					url='hhttps://geoportal.dgu.hr/services/auth/inspire/orthophoto_2019_2020/wms'+"?"+ak;
+					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
+				}
+				if (layerType === "DOF_2021_2022") {
+					layername="OI.OrthoimageCoverage";
+					url='https://geoportal.dgu.hr/services/auth/inspire/orthophoto_2021_2022/wms'+"?"+ak;
+					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
+				}
+				if (layerType === "DOF_Lidar_2023") {
+					layername="OI.OrthoimageCoverage";
+					url='https://geoportal.dgu.hr/services/auth/inspire/orthophoto_2023/wms'+"?"+ak;
+					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
+				}				
+				if (layerType === "DMR_COLOR")
+				{
+					url='https://geoportal.dgu.hr/services/sla/dmr/wms'+"?"+ak;
+					layername='DMR_COLOR';
+					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
 				}
 				return new ol.layer.Tile({
 					source: new ol.source.TileWMS({
-						attributions: '<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>',
+						attributions: attrib,
 						minZoom: 8,      // Minimum zoom level for the layer to be visible
 						maxZoom: 14, 
 						url: url,
@@ -482,35 +518,180 @@
 					})
 				});
 			}
+
+			async function getWMTSCapabilities(url) {
+				try {
+					const response = await fetch(url); // Use await here
+					if (!response.ok) {
+						const errorText = await response.text();
+						throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+					}
+
+					const text = await response.text();
+					const parser = new ol.format.WMTSCapabilities();
+					const capabilities = parser.read(text);
+
+					if (!capabilities) {
+						throw new Error("Invalid WMTS Capabilities document");
+					}
+
+					return capabilities; // Return the capabilities
+
+				} catch (error) {
+					//console.error("Error fetching or parsing WMTS Capabilities:", error);
+					return null;
+				}
+			}
+
+			async function createWmtsLayer(layerType) {
+				if (layerType === "OSM") {
+					return new ol.layer.Tile({
+						source: new ol.source.OSM(), // OpenStreetMap Tile Layer
+					});
+				}
+				const ak="authKey=fee6e8df-d92b-4413-bef0-e1900c88286d";
+				let layername;
+				let url;
+				let attrib='<a target="_blank" href="https://www.marjan-parksuma.hr/">Park šuma Marjan</a>';
+				if (layerType === "TK25") {
+					layername='TK25';
+					url='https://geoportal.dgu.hr/services/sla/dof_hok_tk/wmts'+"?"+ak;
+					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';				
+				}
+				if (layerType === "HOK") {
+					layername='HOK5';
+					url='https://geoportal.dgu.hr/services/sla/dof_hok_tk/wmts'+"?"+ak;
+					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
+				}
+				if (layerType === "DOF_2011") {
+					layername='DOF5_2011';
+					url='https://geoportal.dgu.hr/services/sla/dof_hok_tk/wmts'+"?"+ak;
+					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
+				}
+				if (layerType === "DOF_2014_2016") {
+					layername='DOF5_2014_2016';
+					url='https://geoportal.dgu.hr/services/sla/dof_hok_tk/wmts'+"?"+ak;
+					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
+				}
+				if (layerType === "DOF_2017_2018") {
+					layername='DOF5_2017_2018';
+					url='https://geoportal.dgu.hr/services/sla/orthophoto_2017_2018/wmts'+"?"+ak;
+					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
+				}
+				if (layerType === "DOF_2019_2020") {
+					layername='DOF5_2019_2020';
+					url='https://geoportal.dgu.hr/services/sla/orthophoto_2019_2020/wmts'+"?"+ak;
+					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
+				}
+				if (layerType === "DOF_2021_2022") {
+					layername='DOF5_2021_2022';
+					url='https://geoportal.dgu.hr/services/sla/orthophoto_2021_2022/wmts'+"?"+ak;
+					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
+				}
+				if (layerType === "DOF_Lidar_2023") {
+					layername='DOF5_2023';
+					url='https://geoportal.dgu.hr/services/sla/orthophoto_2023/wmts'+"?"+ak;
+					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
+				}
+				let wmtsCapabilities = await getWMTSCapabilities(url + "&request=GetCapabilities"); // Await here!
+
+				if (wmtsCapabilities) { // Check wmtsCapabilities *here*
+					const options = ol.source.WMTS.optionsFromCapabilities(wmtsCapabilities, { //Use wmtsCapabilities
+						layer: layername,
+						matrixSet: 'EPSG3765:1024x1024',
+					});
+					options.attributions= attrib;
+					const layer = new ol.layer.Tile({
+						source: new ol.source.WMTS(options),
+					});
+					//layer.setZIndex(0); // Set z-index here or later
+					return layer; // Return the layer
+				} else {
+					return null;
+				}
+			}
+			
+			async function initializeAndAddBasemapLayer(layerType, layerService) {
+				try {
+					if (layerService=='WMTS'){
+						bLayer = await createWmtsLayer(layerType); // Await here!
+						if (bLayer){
+							try{
+								if (basemapLayer)
+								{
+									map.removeLayer(basemapLayer);
+								}
+							}
+							catch{}
+							basemapLayer = bLayer;
+							basemapLayer.setZIndex(0);				
+							map.addLayer(basemapLayer);
+							basemapLayer.setZIndex(0);
+						}
+					}
+				}catch (error) {
+					console.error("Map initialization error:", error);
+				}
+			}
+
+			async function initializeAndAddOverbasemapLayer(layerType, layerService) {
+				try{
+					if (layerService=='WMTS'){
+						overLayer = await createWmtsLayer(layerType); // Await here!
+						if (overLayer) {
+							try{
+								if (overbasemapLayer)
+								{
+									map.removeLayer(overbasemapLayer);
+								}
+							}
+							catch{}
+							
+							overbasemapLayer = overLayer;
+							overbasemapLayer.on('prerender', clipLayer);
+							overbasemapLayer.on('postrender', restoreLayer);
+							overbasemapLayer.setZIndex(1);				
+							map.addLayer(overbasemapLayer);
+							overbasemapLayer.setZIndex(1);
+							const opacity=Number(document.getElementById('overbasemapVisibility-slider').value);
+							if (!isNaN(opacity) && opacity >= 0 && opacity <= 1) { // Check if it's a valid number and within range.
+								overbasemapLayer.setOpacity(opacity);
+							} 		
+						}
+					}
+				}catch (error) {
+					console.error("Map initialization error:", error);
+				}
+			}
 			
 			const attributions = new ol.control.Attribution({
 			  collapsible: false,
 			});
 			
-			const view= new ol.View({
-				projection:'EPSG:3857',
-				center: ol.proj.fromLonLat([16.40964, 43.50973]), // Centered near Croatia
-				//minZoom: 12,
-				zoom: 15, 
-				
-			});
+			const view = new ol.View({
+		                center: [492720, 4818800], // Example center in EPSG:3765
+		                zoom: 10,
+			        projection: projection, // Set the view projection
+		        });
+			
+			const initialExtent=[490570,4817800,494771,4819888];
 			
 			// Initialize the map
-			const map = new ol.Map({
-				target: 'map',
-				//interactions: ol.interaction.defaults.defaults().extend([new ol.interaction.DragRotateAndZoom()]),
-				controls: ol.control.defaults.defaults({ attribution: false }).extend([attributions]),
-				view:view
+			const map = new ol.Map({ // Make sure you have a map target
+					target: 'map',  // Replace 'map' with the id of your map div
+					controls: ol.control.defaults.defaults({ attribution: false }).extend([attributions]),
+					view:view
 			});
+			
+			map.getView().fit(initialExtent);
 
+			let basemapLayer;
+			let overbasemapLayer ;
+
+			
 			// Add initial layer
-			let basemapLayer = createWmsLayer('https://geoportal.dgu.hr/services/tk/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d');
-			basemapLayer.setZIndex(0);
-			map.addLayer(basemapLayer);
-			console.log(map.getView().getProjection().getCode());
-			let overbasemapLayer = createWmsLayer('https://geoportal.dgu.hr/services/inspire/orthophoto_lidar_2022_2023/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c882886d');
-			overbasemapLayer.setZIndex(1);
-			map.addLayer(overbasemapLayer);
+			initializeAndAddBasemapLayer('TK25','WMTS');
+			initializeAndAddOverbasemapLayer('DOF_Lidar_2023','WMTS');
 			
 			
 			
@@ -651,13 +832,10 @@
 			
 			document.querySelectorAll('#basemap-menu input[type="radio"]').forEach(radio => {
 				radio.addEventListener('change', function () {
-					const selectedUrl = this.getAttribute('data-url');
-					if (selectedUrl) {
-						map.removeLayer(basemapLayer);
-						basemapLayer = createWmsLayer(selectedUrl);
-						basemapLayer.setZIndex(0);
-						map.addLayer(basemapLayer);
-						basemapLayer.setZIndex(0);
+					const layerType = this.getAttribute('data-layer');
+					const layerService = this.getAttribute('data-layer-service');
+					if (layerType) {
+						initializeAndAddBasemapLayer(layerType,layerService);
 					}
 				});
 			});
@@ -665,19 +843,10 @@
 			// Handle radio button change for overlay basemap
 			document.querySelectorAll('#overbasemap-menu input[type="radio"]').forEach(radio => {
 				radio.addEventListener('change', function () {
-					const selectedUrl = this.getAttribute('data-url');
-					if (selectedUrl) {
-						map.removeLayer(overbasemapLayer);
-						overbasemapLayer = createWmsLayer(selectedUrl);
-						overbasemapLayer.on('prerender', clipLayer);
-						overbasemapLayer.on('postrender', restoreLayer);
-						overbasemapLayer.setZIndex(1);
-						map.addLayer(overbasemapLayer);
-						overbasemapLayer.setZIndex(1);
-						const opacity=Number(document.getElementById('overbasemapVisibility-slider').value);
-						if (!isNaN(opacity) && opacity >= 0 && opacity <= 1) { // Check if it's a valid number and within range.
-							overbasemapLayer.setOpacity(opacity);
-						} 
+					const layerType = this.getAttribute('data-layer');
+					const layerService = this.getAttribute('data-layer-service');
+					if (layerType) {
+						initializeAndAddOverbasemapLayer(layerType,layerService);
 					}
 				});
 			});
@@ -695,7 +864,7 @@
 			
 			const swipe = document.getElementById('swipe');
 			swipe.addEventListener('input', function () {
-			  map.render();
+				map.render();
 			});
 			
 			function clipLayer(event) {
@@ -721,9 +890,7 @@
 				event.context.restore();
 			}
 			
-			overbasemapLayer.on('prerender', clipLayer);
-			overbasemapLayer.on('postrender', restoreLayer);
-			
+						
 			
 			
 			
@@ -771,7 +938,7 @@
 			const accuracyFeature = new ol.Feature();
 			
 			geolocation.on('change:accuracyGeometry', function () {
-			  accuracyFeature.setGeometry(geolocation.getAccuracyGeometry());
+			  	accuracyFeature.setGeometry(geolocation.getAccuracyGeometry());
 			});
 
 			const positionFeature = new ol.Feature();
@@ -817,6 +984,7 @@
 			});
 			measureLayer.setZIndex(20);
 			map.addLayer(measureLayer);
+			measureLayer.setZIndex(20);
 			
 			//measureStyle sluzi za iscrtavanje featurea dok je u fazi crtanja, a i nakon sto bude gotov. to je stil mjerenja
 			const measureStyle = new ol.style.Style({
@@ -824,14 +992,14 @@
 					color: 'rgba(255, 255, 255, 0.2)',
 				}),
 				stroke: new ol.style.Stroke({
-					color: 'rgba(0, 0, 0, 0.5)',
-					lineDash: [10, 10],
+					color: 'red',
+					//lineDash: [10, 10],
 					width: 2,
 				}),
 				image: new ol.style.Circle({
 					radius: 5,
 					stroke: new ol.style.Stroke({
-						color: 'rgba(0, 0, 0, 0.7)',
+						color: 'red',
 					}),
 					fill: new ol.style.Fill({
 						color: 'rgba(255, 255, 255, 0.2)',
@@ -927,7 +1095,7 @@
 					angle: Math.PI,
 					displacement: [0, 8],
 					fill: new ol.style.Fill({
-						color: 'rgba(0, 0, 0, 0.4)',
+						color: 'rgba(0, 0, 0, 0.6)',
 					}),
 				}),
 			});
@@ -949,7 +1117,7 @@
 				image: new ol.style.Circle({
 					radius: 5,
 					stroke: new ol.style.Stroke({
-						color: 'rgba(0, 0, 0, 0.7)',
+						color: 'red',
 					}),
 					fill: new ol.style.Fill({
 						color: 'rgba(0, 0, 0, 0.4)',
@@ -1057,7 +1225,8 @@
 				
 				if (type === 'Point' && feature.get('isPoint')) {
 					const coordinates = feature.getGeometry().getCoordinates();
-					const lonLat = ol.proj.toLonLat(coordinates);
+					const lonLat=ol.proj.transform(coordinates, projection, 'EPSG:4326');
+					//const lonLat = ol.proj.toLonLat(coordinates);
 					const labelText = lonLat[0].toFixed(6) + " " + lonLat[1].toFixed(6);
 
 					let pointLabelStyle = feature.getStyle();
@@ -1110,14 +1279,13 @@
 					measureModify.setActive(true);
 
 					const feature = event.feature; // Get the feature from the event
-					const coordinates = feature.getGeometry().getCoordinates();
-					const lonLat = ol.proj.toLonLat(coordinates);
-
+					
 					if (drawType === 'Point') {
 						feature.set('isPoint', true);
 
 						const coordinates = feature.getGeometry().getCoordinates();
-						const lonLat = ol.proj.toLonLat(coordinates);
+						const lonLat=ol.proj.transform(coordinates, projection, 'EPSG:4326');
+						//const lonLat = ol.proj.toLonLat(coordinates);
 						const labelText = lonLat[0].toFixed(6) + "\n" + lonLat[1].toFixed(6);
 						let pointLabelStyle = feature.getStyle();
 						//console.log(pointLabelStyle);
@@ -1151,7 +1319,8 @@
 				const feature = event.features.getArray()[0];
 				if (feature.getGeometry().getType() === 'Point' && feature.get('isPoint')) {
 					const coordinates = feature.getGeometry().getCoordinates();
-					const lonLat = ol.proj.toLonLat(coordinates);
+					const lonLat=ol.proj.transform(coordinates, projection, 'EPSG:4326');
+					//const lonLat = ol.proj.toLonLat(coordinates);
 					const labelText = lonLat[0].toFixed(6) + "\n" + lonLat[1].toFixed(6);
 
 					let pointLabelStyle = feature.getStyle();
@@ -1170,9 +1339,9 @@
 						}
 												
 					}
-					console.log(coordinatesPanelEPSG);
+					//console.log(coordinatesPanelEPSG);
 					if (coordinatesPanelEPSG!='4326'){
-						const newCoords = ol.proj.transform([lonLat[0],lonLat[1]], 'EPSG:4326', 'EPSG:3765');	
+						//const newCoords = ol.proj.transform([lonLat[0],lonLat[1]], 'EPSG:4326', 'EPSG:3765');	
 						transformAndWriteCoordsInPanel(newCoords[0], newCoords[1], '3765');
 					}
 					else{
@@ -1186,7 +1355,7 @@
 			
 			let measureSelectInteraction = new ol.interaction.Select(); // Separate select interaction for measure layer
 			measureSelectInteraction.on('select', function (event) {
-				console.log("IPAK IMAMO SELECT");
+				//console.log("IPAK IMAMO SELECT");
 				const selectedFeatures = event.target.getFeatures();
 
 				selectedFeatures.forEach(feature => {
@@ -1229,7 +1398,7 @@
 			
 			let showText = true;
 			function updateTextStyle(ugasi) {
-				console.log("IMAMO UGASI");
+				//console.log("IMAMO UGASI");
 				measureSource.getFeatures().forEach(feature => {
 					if (ugasi){
 						if (feature.getStyle())
@@ -1430,8 +1599,9 @@
 									return feature.getStyle() || new ol.style.Style({ /* your default style */ });
 								}
 							});
-
+							kmlLayer.setZIndex(3);
 							map.addLayer(kmlLayer);
+							kmlLayer.setZIndex(3);
 
 							vectorSource.once('change', () => {
 								if (vectorSource.getState() === 'ready') {
@@ -1506,14 +1676,15 @@
 			
 			
 			document.getElementById('full-extent-button').addEventListener('click', function () {
-				console.log(map.getView().getProjection().getCode());
+				/*console.log(map.getView().getProjection().getCode());
 				const view= new ol.View({
 					projection:'EPSG:3857',
 					center: ol.proj.fromLonLat([16.40964, 43.50973]), // Centered near Croatia
 					minZoom: 12,
 					zoom: 15,
 				});
-				map.setView(view);
+				map.setView(view);*/
+				map.getView().fit(initialExtent);				
 			});
 			
 			
@@ -1524,13 +1695,13 @@
 				coordsText = coordsText.replace('WGS84:', '').replace('HTRS96TM:','').trim();
 				// Split into coordinates
 				const coordsArray = coordsText.split(',');
-				console.log(ol.proj.get('EPSG:3765'));
-				console.log(typeof(coordsArray[0]));
-				console.log(coordsArray[0]+"    "+coordsArray[1]);
+				//console.log(ol.proj.get('EPSG:3765'));
+				//console.log(typeof(coordsArray[0]));
+				//console.log(coordsArray[0]+"    "+coordsArray[1]);
 				if (coordsArray.length === 2) {
 					const x = parseFloat(coordsArray[0]);
 					const y = parseFloat(coordsArray[1].trim());
-					console.log(x+"   "+y);
+					//console.log(x+"   "+y);
 					let transformedCoords;
 					if (coordinatesPanelEPSG=="4326"){					
 						const newCoords = ol.proj.transform([x,y], 'EPSG:4326', ol.proj.get('EPSG:3765'));					
@@ -1586,16 +1757,15 @@
 			
 			map.on('click', function(event) {
 				var point = map.getCoordinateFromPixel(event.pixel);				
-			  	var lonLat = ol.proj.toLonLat(point); 
+			  	var pointWGS84=ol.proj.transform(point, projection, 'EPSG:4326');
 				if (coordinatesPanelEPSG=="4326"){
-					transformAndWriteCoordsInPanel(lonLat[0],lonLat[1], coordinatesPanelEPSG);
+					transformAndWriteCoordsInPanel(pointWGS84[0],pointWGS84[1], coordinatesPanelEPSG);
 					//writeCoordsInPanel(newCoords[0], newCoords[1], coordinatesPanelEPSG);
 				}
-				else if (coordinatesPanelEPSG=="3765"){
-					const newCoords = ol.proj.transform([lonLat[0],lonLat[1]], 'EPSG:4326', 'EPSG:3765');					
-					transformAndWriteCoordsInPanel(newCoords[0], newCoords[1], coordinatesPanelEPSG);
+				else if (coordinatesPanelEPSG=="3765"){					
+					transformAndWriteCoordsInPanel(point[0], point[1], coordinatesPanelEPSG);
 					//writeCoordsInPanel(newCoords[0], newCoords[1], coordinatesPanelEPSG);
-				}						
+				}
 			});
 			
 			
@@ -1618,10 +1788,10 @@
 			
 			
 			function exportFeaturesToKML(vectorLayer, filename = 'features.kml') {
-				console.log("Exporting KML..."); // Confirmation message
+				//console.log("Exporting KML..."); // Confirmation message
 
 				const features = vectorLayer.getSource().getFeatures();
-				console.log("Number of features:", features.length); // Check number of features
+				//console.log("Number of features:", features.length); // Check number of features
 
 				if (features.length === 0) {
 					console.warn("No features to export.");
@@ -1684,7 +1854,7 @@
 							}
 						}
 
-						console.log("KML Style:", kmlStyle); // Log the converted style
+						//console.log("KML Style:", kmlStyle); // Log the converted style
 						return kmlStyle;
 					}
 
@@ -1713,26 +1883,43 @@
 						defaultStyle:measureStyle,
 						writeStyles: true
 					});
-					const features = vectorLayer.getSource().getFeatures();
-					features.forEach(feature => {
+					const originalFeatures = vectorLayer.getSource().getFeatures();
+					console.log(originalFeatures);
+					if (originalFeatures) { // Check if features exist
+						const features = [];
+
+						originalFeatures.forEach(feature => {
+							let klon=feature.clone()
+							klon.setStyle(measureStyle);
+							features.push(klon);
+						});
+
+						const kml = kmlFormat.writeFeatures(features, { featureProjection: map.getView().getProjection() });
+						
+						const kmlBlob = new Blob([kml], { type: 'application/vnd.google-earth.kml+xml' });
+						const kmlUrl = URL.createObjectURL(kmlBlob);
+
+						const link = document.createElement('a');
+						link.href = kmlUrl;
+						link.download = filename;
+						link.style.display = 'none';
+						document.body.appendChild(link);
+						link.click();
+						document.body.removeChild(link);
+						URL.revokeObjectURL(kmlUrl);
+							// ... (rest of your KML export code)
+						} else {
+							console.warn("No features to export.");
+						}
+					/*features.forEach(feature => {
 						feature.setStyle(measureStyle);
 						//getKMLStyle(feature));
 					});
 					const kml = kmlFormat.writeFeatures(features, { featureProjection: map.getView().getProjection()       });
 
-					console.log("Generated KML:", kml); // Log the KML string
+					console.log("Generated KML:", kml); // Log the KML string*/
 
-					const kmlBlob = new Blob([kml], { type: 'application/vnd.google-earth.kml+xml' });
-					const kmlUrl = URL.createObjectURL(kmlBlob);
-
-					const link = document.createElement('a');
-					link.href = kmlUrl;
-					link.download = filename;
-					link.style.display = 'none';
-					document.body.appendChild(link);
-					link.click();
-					document.body.removeChild(link);
-					URL.revokeObjectURL(kmlUrl);
+					
 
 				} catch (error) {
 					console.error("Error during KML export:", error); // Log any errors
