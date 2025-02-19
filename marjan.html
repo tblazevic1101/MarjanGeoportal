@@ -751,7 +751,7 @@
 			
 			
 			
-			let katastar=new ol.layer.Tile({
+			let katastarLayer=new ol.layer.Tile({
 					
 				source: new ol.source.TileWMS({
 					attributions: '<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>',
@@ -768,8 +768,23 @@
 				maxResolution: 0.5,
 				//minZoom:13,
 			});
-			katastar.setZIndex(10);
+			katastarLayer.setZIndex(4);
 			map.addLayer(katastar);
+			katastarLayer.setZIndex(4);
+			
+			document.getElementById('katastarLayerVisibility-checkbox').addEventListener("change", function () {				
+				katastarLayer.setVisible(this.checked);
+			});
+			
+			document.getElementById('katastarLayerVisibility-slider').addEventListener('input', function () {
+				const opacity = Number(this.value);
+
+				if (!isNaN(opacity) && opacity >= 0 && opacity <= 1) { // Check if it's a valid number and within range.
+					katastarLayer.setOpacity(opacity);
+				} else {
+					console.error("Invalid opacity value:", this.value); // Debugging
+				}
+			});
 			
 			// Handle basemap changes
 			/*document.getElementById('basemaps').addEventListener('change', function(event) {
