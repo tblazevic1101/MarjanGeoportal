@@ -302,7 +302,7 @@
 					<label for="katastarLayerVisibility-checkbox" style="display: flex; align-items: center;"><input type="checkbox" id="katastarLayerVisibility-checkbox">Katastarske čestice  </label>
 					<input type="range" id="katastarLayerVisibility-slider" style="margin-left: auto;" min="0" max="1" step="0.1" value="1">
 				</div>
-				<div id="prometLayer-controls" style="display: flex; align-items: center; gap:5px">  
+				<!--<div id="prometLayer-controls" style="display: flex; align-items: center; gap:5px">  
 					<label for="prometLayerVisibility-checkbox" style="display: flex; align-items: center;"><input type="checkbox" id="prometLayerVisibility-checkbox" checked>Promet  </label>
 					<input type="range" id="prometLayerVisibility-slider" style="margin-left: auto;" min="0" max="1" step="0.1" value="1">
 				</div>	
@@ -313,7 +313,7 @@
 				<div id="zgradeLayer-controls" style="display: flex; align-items: center; gap:5px">  
 					<label for="zgradeLayerVisibility-checkbox" style="display: flex; align-items: center;"><input type="checkbox" id="zgradeLayerVisibility-checkbox" checked>Zgrade  </label>
 					<input type="range" id="zgradeLayerVisibility-slider" style="margin-left: auto;" min="0" max="1" step="0.1" value="1">
-				</div>
+				</div>-->
 				<div id="measureLayer-controls" style="display: flex; align-items: center; gap:5px">  
 					<label for="measureLayerVisibility-checkbox" style="display: flex; align-items: center;"><input type="checkbox" id="measureLayerVisibility-checkbox" checked>Grafika  </label>
 					<input type="range" id="measureLayerVisibility-slider" style="margin-left: auto;" min="0" max="1" step="0.1" value="1">
@@ -2201,22 +2201,13 @@
 			authenticate(); // Call the async function to start authentication*/
 			
 			map.getView().on('change:resolution', function() {
-			
-			/*const currentResolution = map.getView().getResolution();
-  const dpi = 25.4 / 0.28; // Standard DPI value (dots per inch) for map scale calculation. Adjust if needed.
-  const metersPerUnit = map.getView().getProjection().getMetersPerUnit(); //Meters per unit of projection
-  const currentScale = currentResolution * metersPerUnit * dpi;
-
-  const targetScale = 100; // Your target scale (1:100)
-
-  if (currentScale< 100) { // Tolerance (adjust as needed)
-    katastar.setVisible(true); // Show the layer
-  } else {
-    katastar.setVisible(false); // Hide the layer
-  }
-
-    console.log("Current scale:", currentScale);*/console.log(map.getView().getResolution());
-});
+				if (map.getView().getResolution()<katastar.maxResolution){
+					document.getElementById('katastarLayer-controls').disabled = true;
+				}else{
+					document.getElementById('katastarLayer-controls').disabled = true;
+				}
+				console.log(map.getView().getResolution());
+			});
 			
 		</script>
 	</body>
