@@ -280,6 +280,7 @@
 					<p style="color: #666666;">Pozadinski sloj:</p>
 					<label><input type="radio" name="basemap" class="toc-layer" data-layer="OSM" data-layer-service="WMTS">OSM</label><br>
 					<label><input type="radio" name="basemap" class="toc-layer" data-layer="TK25" data-layer-service="WMTS">TK25</label><br>
+					<label><input type="radio" name="basemap" class="toc-layer" data-layer="DMR_BW" data-layer-service="WMS">Reljef</label><br>
 					<label><input type="radio" name="basemap" class="toc-layer" data-layer="HOK" data-layer-service="WMTS">HOK</label><br>
 					<label><input type="radio" name="basemap" class="toc-layer" data-layer="DOF_2011" data-layer-service="WMTS">Ortofoto 2011</label><br>
 					<label><input type="radio" name="basemap" class="toc-layer" data-layer="DOF_2014_2016" data-layer-service="WMTS">Ortofoto 2014-2016</label><br>
@@ -448,24 +449,24 @@
 		
 			// Create a function to create a WMS layer
 			function createWmsLayer(layerType) {
-				if (url === "https://tile.openstreetmap.org/") {
+				if (layerType === "OSM") {
 					return new ol.layer.Tile({
 						source: new ol.source.OSM(), // OpenStreetMap Tile Layer
 					});
 				}
-				const aK="authKey=fee6e8df-d92b-4413-bef0-e1900c88286d";
+				const ak="authKey=fee6e8df-d92b-4413-bef0-e1900c88286d";
 				var layername="OI.OrthoimageCoverage";
 				let attrib='<a target="_blank" href="https://www.marjan-parksuma.hr/">Park šuma Marjan</a>';
-				
+				let url;
 				if (layerType === "TK25")
 				{
-					url=='https://geoportal.dgu.hr/services/auth/tk/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c88286d'+"?"+ak;
+					url='https://geoportal.dgu.hr/services/auth/tk/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c88286d'+"?"+ak;
 					layername='tk:TK25';
 					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
 				}
 				if (layerType === "HOK")
 				{
-					url=='https://geoportal.dgu.hr/services/auth/hok/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c88286d'+"?"+ak;
+					url='https://geoportal.dgu.hr/services/auth/hok/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c88286d'+"?"+ak;
 					layername='HOK5';
 					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
 				}
@@ -477,7 +478,7 @@
 				}
 				if (layerType === "DOF_2014_2016")
 				{
-					url=='https://geoportal.dgu.hr/services/auth/inspire/orthophoto_2014-2016/wms'+"?"+ak;
+					url='https://geoportal.dgu.hr/services/auth/inspire/orthophoto_2014-2016/wms'+"?"+ak;
 					layername='OI.OrthoImagery';
 					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
 				}
@@ -505,6 +506,18 @@
 				{
 					url='https://geoportal.dgu.hr/services/sla/dmr/wms'+"?"+ak;
 					layername='DMR_COLOR';
+					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
+				}
+				if (layerType === "DMR_BW")
+				{
+					url='https://geoportal.dgu.hr/services/sla/dmr/wms'+"?"+ak;
+					layername='DMR_BW';
+					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
+				}
+				if (layerType === "DEM_25m")
+				{
+					url='https://geoportal.dgu.hr/services/sla/dmr/wms'+"?"+ak;
+					layername='DEM_25m';
 					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
 				}
 				return new ol.layer.Tile({
