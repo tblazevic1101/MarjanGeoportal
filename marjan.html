@@ -1653,18 +1653,30 @@
 
 							// *** NEW: Create controls for EACH layer ***
 							const controlsDiv = document.createElement('div');
-							controlsDiv.id = 'kml-layer-controls-' + kmlLayer.ol_uid; // Unique ID
+							// Add OpenLayers control classes
+							controlsDiv.style.pointerEvents = 'auto'; // Enable pointer events
+							controlsDiv.style.position = 'relative'; // For positioning elements within
 
+							// Create a container for the buttons (optional, but good for organization)
+							const buttonContainer = document.createElement('div');
+							buttonContainer.style.display = 'flex'; // Arrange buttons horizontally
+							buttonContainer.style.gap='5px';
+							
+							// Visibility Checkbox
 							const checkboxLabel = document.createElement('label');
 							checkboxLabel.for = 'kml-layer-visibility-' + kmlLayer.ol_uid;
+							checkboxLabel.style.display = 'flex'; // Align checkbox and text
+							checkboxLabel.style.alignItems = 'center'; // Vertically center
 							const checkbox = document.createElement('input');
 							checkbox.type = 'checkbox';
 							checkbox.id = 'kml-layer-visibility-' + kmlLayer.ol_uid;
 							checkbox.checked = true;
 							checkboxLabel.appendChild(checkbox);
-							checkboxLabel.appendChild(document.createTextNode(file.name));
-							controlsDiv.appendChild(checkboxLabel);
+							checkboxLabel.appendChild(document.createTextNode(file.name)); // Add file name
+							buttonContainer.appendChild(checkboxLabel); // Add to button container
 
+
+							// Opacity Slider
 							const slider = document.createElement('input');
 							slider.type = 'range';
 							slider.id = 'kml-layer-opacity-' + kmlLayer.ol_uid;
@@ -1672,27 +1684,54 @@
 							slider.max = '1';
 							slider.step = '0.1';
 							slider.value = '1';
-							controlsDiv.appendChild(slider);
+							slider.style.width = '80px'; // Set a width for the slider
+							buttonContainer.appendChild(slider); // Add to button container
 
-							const zoomToExtentButton = document.createElement('button');
-							zoomToExtentButton.className = 'kml-zoom-button';
-							zoomToExtentButton.innerHTML = '<img src="icons/arrows-to-circle-solid.svg" alt="Zoom to Extent" width="15" height="15">';
+							// Zoom to Extent Button
+							const zoomToExtentDiv = document.createElement('div');
+							zoomToExtentDiv.style.pointerEvents = 'auto'; // Enable pointer events
+							zoomToExtentDiv.style.position = 'relative';
+							zoomToExtentDiv.className = 'ol-control ol-unselectable';
+							
+							const zoomToExtentButton = document.createElement('button');							
+							zoomToExtentButton.style.padding = '2px';
+							zoomToExtentButton.style.width = '1.5em';
+							zoomToExtentButton.style.height = '1.5em';
+							zoomToExtentButton.style.background = 'white';
+							zoomToExtentButton.style.display = 'flex';
+							zoomToExtentButton.style.alignItems = 'center';
+							zoomToExtentButton.style.justifyContent = 'center';
+							zoomToExtentButton.innerHTML = '<img src="icons/arrows-to-circle-solid.svg" alt="Zoom to Extent" width="20" height="20">'; // Adjusted image size
 							zoomToExtentButton.addEventListener('click', () => {
 								map.getView().fit(kmlLayer.getSource().getExtent());
 							});
-							controlsDiv.appendChild(zoomToExtentButton);
+							zoomToExtentDiv.appendChild(zoomToExtentButton);
+							buttonContainer.appendChild(zoomToExtentDiv); // Add to button container
 
+							// Delete Button
+							const deleteDiv = document.createElement('div');
+							deleteDiv.style.pointerEvents = 'auto'; // Enable pointer events
+							deleteDiv.style.position = 'relative';
+							deleteDiv.className = 'ol-control ol-unselectable';
+							
 							const deleteButton = document.createElement('button');
-							deleteButton.className = 'kml-delete-button';
-							deleteButton.innerHTML = '<img src="icons/trash-solid.svg" alt="Delete KML" width="15" height="15">';
+							deleteButton.style.padding = '2px';
+							deleteButton.style.width = '1.5em';
+							deleteButton.style.height = '1.5em';
+							deleteButton.style.background = 'white';
+							deleteButton.style.display = 'flex';
+							deleteButton.style.alignItems = 'center';
+							deleteButton.style.justifyContent = 'center';
+							deleteButton.innerHTML = '<img src="icons/trash-solid.svg" alt="Delete KML" width="20" height="20">'; // Adjusted image size
 							deleteButton.addEventListener('click', () => {
 								map.removeLayer(kmlLayer);
 								controlsDiv.remove(); // Remove controls for this layer
 							});
-							controlsDiv.appendChild(deleteButton);
+							deleteDiv.appendChild(deleteButton);
+							buttonContainer.appendChild(deleteDiv); // Add to button container
 
-
-							document.getElementById('layers-panel').appendChild(controlsDiv);
+							controlsDiv.appendChild(buttonContainer); // Add buttons to the controls div
+							document.getElementById('layers-panel').appendChild(controlsDiv); // Add controls to the panel
 
 
 							// *** NEW: Event listeners for EACH layer ***
