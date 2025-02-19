@@ -1286,7 +1286,7 @@
 					const coordinates = feature.getGeometry().getCoordinates();
 					const lonLat=ol.proj.transform(coordinates, projection, 'EPSG:4326');
 					//const lonLat = ol.proj.toLonLat(coordinates);
-					const labelText = lonLat[0].toFixed(6) + " " + lonLat[1].toFixed(6);
+					const labelText = lonLat[0].toFixed(6) + "\n" + lonLat[1].toFixed(6);
 
 					let pointLabelStyle = feature.getStyle();
 
