@@ -298,14 +298,14 @@
 					<label><input type="radio" name="overbasemap" class="toc-layer" data-layer="DOF_Lidar_2023" data-layer-service="WMTS">LiDAR Ortofoto 2021-2022</label><br>
 				</div>
 				<br/>
-				<div id="measureLayer-controls" style="display: flex; align-items: center;">  
-					<label for="measureLayerVisibility-checkbox" style="display: flex; align-items: center;"><input type="checkbox" id="measureLayerVisibility-checkbox" checked>Grafika</label>
-					<input type="range" id="measureLayerVisibility-slider" style="margin-left: auto;" min="0" max="1" step="0.1" value="1">
-				</div>
 				<div id="katastarLayer-controls" style="display: flex; align-items: center;">  
-					<label for="katastarLayerVisibility-checkbox" style="display: flex; align-items: center;"><input type="checkbox" id="katastarLayerVisibility-checkbox" checked>Katastarske čestice</label>
+					<label for="katastarLayerVisibility-checkbox" style="display: flex; align-items: center;"><input type="checkbox" id="katastarLayerVisibility-checkbox">Katastarske čestice </label>
 					<input type="range" id="katastarmeasureLayerVisibility-slider" style="margin-left: auto;" min="0" max="1" step="0.1" value="1">
 				</div>
+				<div id="measureLayer-controls" style="display: flex; align-items: center;">  
+					<label for="measureLayerVisibility-checkbox" style="display: flex; align-items: center;"><input type="checkbox" id="measureLayerVisibility-checkbox" checked>Grafika </label>
+					<input type="range" id="measureLayerVisibility-slider" style="margin-left: auto;" min="0" max="1" step="0.1" value="1">
+				</div>				
 			</div>
 			
 
@@ -769,6 +769,7 @@
 				//minZoom:13,
 			});
 			katastarLayer.setZIndex(4);
+			katastarLayer.setVisible(false);
 			map.addLayer(katastar);
 			katastarLayer.setZIndex(4);
 			
