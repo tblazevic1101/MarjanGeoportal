@@ -2220,7 +2220,7 @@
 			
 			changeDivEnabled('katastarLayer-controls', false);
 			map.getView().on('change:resolution', function() {				
-				if (map.getView().getResolution()<katastarLayer.maxResolution){					
+				if (map.getView().getResolution()<katastarLayer.getMaxResolution()){					
 					changeDivEnabled('katastarLayer-controls', false);
 				}else{
 					changeDivEnabled('katastarLayer-controls', true);
