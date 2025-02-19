@@ -2203,7 +2203,7 @@
 
 			function changeDivEnabled(div, enabled){
 				try{
-					const myDiv=document.getElementById('katastarLayer-controls');
+					const myDiv=document.getElementById(div);
 					if (enabled){
 						myDiv.disabled = false;
 						myDiv.style.pointerEvents = "auto";
@@ -2221,9 +2221,9 @@
 			changeDivEnabled('katastarLayer-controls', false);
 			map.getView().on('change:resolution', function() {				
 				if (map.getView().getResolution()<katastarLayer.getMaxResolution()){					
-					changeDivEnabled('katastarLayer-controls', false);
-				}else{
 					changeDivEnabled('katastarLayer-controls', true);
+				}else{
+					changeDivEnabled('katastarLayer-controls', false);
 				}
 				console.log(map.getView().getResolution());
 				console.log(katastarLayer.getMaxResolution());
