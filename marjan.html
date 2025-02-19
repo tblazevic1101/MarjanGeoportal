@@ -1705,7 +1705,7 @@
 							zoomToExtentButton.style.display = 'flex';
 							zoomToExtentButton.style.alignItems = 'center';
 							zoomToExtentButton.style.justifyContent = 'center';
-							zoomToExtentButton.innerHTML = '<img src="icons/arrows-to-circle-solid.svg" alt="Zoom to Extent" width="20" height="20">'; // Adjusted image size
+							zoomToExtentButton.innerHTML = '<img src="icons/arrows-to-circle-solid.svg" alt="Zoom to Extent" width="15px" height="15px">'; // Adjusted image size
 							zoomToExtentButton.addEventListener('click', () => {
 								map.getView().fit(kmlLayer.getSource().getExtent());
 							});
