@@ -1342,7 +1342,7 @@
 					//console.log(coordinatesPanelEPSG);
 					if (coordinatesPanelEPSG!='4326'){
 						//const newCoords = ol.proj.transform([lonLat[0],lonLat[1]], 'EPSG:4326', 'EPSG:3765');	
-						transformAndWriteCoordsInPanel(newCoords[0], newCoords[1], '3765');
+						transformAndWriteCoordsInPanel(coordinates[0], coordinates[1], '3765');
 					}
 					else{
 						transformAndWriteCoordsInPanel(lonLat[0], lonLat[1], '4326');
