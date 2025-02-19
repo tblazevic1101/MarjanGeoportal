@@ -2199,7 +2199,7 @@
 			}
 
 			authenticate(); // Call the async function to start authentication*/
-			
+			document.getElementById('katastarLayer-controls').disabled = true;
 			map.getView().on('change:resolution', function() {
 				if (map.getView().getResolution()<katastar.maxResolution){
 					document.getElementById('katastarLayer-controls').disabled = true;
