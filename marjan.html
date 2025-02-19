@@ -630,52 +630,60 @@
 			
 			async function initializeAndAddBasemapLayer(layerType, layerService) {
 				try {
+					let bLayer;
 					if (layerService=='WMTS'){
 						bLayer = await createWmtsLayer(layerType); // Await here!
-						if (bLayer){
-							try{
-								if (basemapLayer)
-								{
-									map.removeLayer(basemapLayer);
-								}
+					}
+					else{
+						bLayer = createWmsLayer(layerType);
+					}
+					if (bLayer){
+						try{
+							if (basemapLayer)
+							{
+								map.removeLayer(basemapLayer);
 							}
-							catch{}
-							basemapLayer = bLayer;
-							basemapLayer.setZIndex(0);				
-							map.addLayer(basemapLayer);
-							basemapLayer.setZIndex(0);
 						}
+						catch{}
+						basemapLayer = bLayer;
+						basemapLayer.setZIndex(0);				
+						map.addLayer(basemapLayer);
+						basemapLayer.setZIndex(0);
 					}
 				}catch (error) {
 					console.error("Map initialization error:", error);
 				}
 			}
-
+			
 			async function initializeAndAddOverbasemapLayer(layerType, layerService) {
 				try{
+					let overLayer;
 					if (layerService=='WMTS'){
 						overLayer = await createWmtsLayer(layerType); // Await here!
-						if (overLayer) {
-							try{
-								if (overbasemapLayer)
-								{
-									map.removeLayer(overbasemapLayer);
-								}
-							}
-							catch{}
-							
-							overbasemapLayer = overLayer;
-							overbasemapLayer.on('prerender', clipLayer);
-							overbasemapLayer.on('postrender', restoreLayer);
-							overbasemapLayer.setZIndex(1);				
-							map.addLayer(overbasemapLayer);
-							overbasemapLayer.setZIndex(1);
-							const opacity=Number(document.getElementById('overbasemapVisibility-slider').value);
-							if (!isNaN(opacity) && opacity >= 0 && opacity <= 1) { // Check if it's a valid number and within range.
-								overbasemapLayer.setOpacity(opacity);
-							} 		
-						}
 					}
+					else{
+						overLayer = createWmsLayer(layerType);
+					}
+					if (overLayer) {
+						try{
+							if (overbasemapLayer)
+							{
+								map.removeLayer(overbasemapLayer);
+							}
+						}
+						catch{}
+							
+						overbasemapLayer = overLayer;
+						overbasemapLayer.on('prerender', clipLayer);
+						overbasemapLayer.on('postrender', restoreLayer);
+						overbasemapLayer.setZIndex(1);				
+						map.addLayer(overbasemapLayer);
+						overbasemapLayer.setZIndex(1);
+						const opacity=Number(document.getElementById('overbasemapVisibility-slider').value);
+						if (!isNaN(opacity) && opacity >= 0 && opacity <= 1) { // Check if it's a valid number and within range.
+							overbasemapLayer.setOpacity(opacity);
+						} 						
+					}				
 				}catch (error) {
 					console.error("Map initialization error:", error);
 				}
