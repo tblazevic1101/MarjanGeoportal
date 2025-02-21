@@ -921,7 +921,7 @@
 			  	return true;
 			}
 
-			def checkCoordinateValidity(element, isLongitude){
+			function checkCoordinateValidity(element, isLongitude){
 				let x=element.value.trim().replace(",",".");
 				const pattern = /^(\d*[.,]?\d+)( (\d*[.,]?\d+)){0,2}$/;
 				if (pattern.test(x)){
