@@ -883,11 +883,11 @@
 				if (pattern.test(inputValue)) {
 					//errorMessage.textContent = "";
 					document.getElementById('goto-coordinates-warning').style.display='block';
-					this.classList.remove("invalid");
+					element.classList.remove("invalid");
 				  } else {
 					//errorMessage.textContent = "Problem";
 					document.getElementById('goto-coordinates-warning').style.display='block';
-					this.classList.add("invalid");
+					element.classList.add("invalid");
 				  }
 			}
 
