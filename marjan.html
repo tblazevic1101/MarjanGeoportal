@@ -218,6 +218,10 @@
 			    	left: 0px;			       
 			}
 
+			.invalid {
+	    			border: 2px solid red;
+			}
+
 			/*.ol-control{
 				border: 2px solid #62ba46;
 			}*/
@@ -305,10 +309,10 @@
 			
 			<div id="goto-coordinates-panel" style="display: none; position: absolute; top: 50px; right: 10px; background: white; padding: 8px; border: 2px solid #62ba46; border-radius: 5px; max-width:250px">
     				<div style="display: flex; gap: 5px; align-items: center; padding-bottom: 5px">  
-					<label for="x-coordinate" style="margin-right: 5px;">X / λ:</label> <input type="text" id="x-coordinate" name="x-coordinate">
+					<label for="x-coordinate" style="margin-right: 5px;">X / λ:</label> <input style="color:#666666" type="text" id="x-coordinate" name="x-coordinate" oninput="validateCoordinateInput()">
     				</div>
     				<div style="display: flex; gap: 5px; align-items: center; padding-bottom: 5px""> 
-					<label for="y-coordinate" style="margin-right: 5px;">Y / φ:</label> <input type="text" id="y-coordinate" name="y-coordinate">
+					<label for="y-coordinate" style="margin-right: 5px;">Y / φ:</label> <input style="color:#666666" type="text" id="y-coordinate" name="y-coordinate" oninput="validateCoordinateInput()">
     				</div>
 				<div style="text-align: justify; padding: 5px 0; color:#666666;">Podržani sustavi su WGS84, formati: </br>  DD.ddd</br>  DD MM.mmm</br>  DD MM SS.sss</br>i HTRS96TM.</br>
 					Ukoliko se upisuju formati DD MM.mmm i DD MM SS.sss koristite razmak između stupnjeva, minuta i sekunda.
@@ -865,6 +869,56 @@
 					console.error("Invalid opacity value:", this.value); // Debugging
 				}
 			});
+
+			function validateCoordinateInput() {
+				  const inputField = document.getElementById("myInput");
+				  const inputValue = inputField.value;
+				  const errorMessage = document.getElementById("error-message");
+				
+				  // Regex allowing up to two spaces between numbers
+				  const pattern = /^(\d*\.\d+|\d+)( (\d*\.\d+|\d+)){0,2}$/;
+				
+				  if (pattern.test(inputValue)) {
+					    errorMessage.textContent = "";
+					    inputField.classList.remove("invalid");
+				  } else {
+					    errorMessage.textContent = "";
+					    inputField.classList.add("invalid");
+				  }
+			}
+
+			document.getElementById('goto-coordinates-button').addEventListener("change", function () {	
+				let x=document.getElementById('x-coordinate').value;
+				let y=document.getElementById('y-coordinate').value;
+				let epsg=null;
+				if (x>=-180 and x<180 and y>=-90 and y<=90){
+					epsg=4326;
+				}
+				else if (x>=208311.05 and x<744179.92 and y>=4608969.52 and y<5161549.72)
+				{
+					epsg=3765;					
+				}
+				if (epsg){
+					let htrsCoords=null
+					if (epsg===4326){
+						htrsCoords=ol.proj.transform([x,y], projection, 'EPSG:4326');						
+					}
+					else{
+						htrsCoords=[x,y];						
+					}		
+					const htrsPointGeometry = new ol.geom.Point(htrsCoords);
+
+					// Create a new feature with the point geometry
+					const feature = new Feature({
+						geometry: htrsPointGeometry,
+					    	name: 'Idi na koordinate',
+					    	description: 'Idi na koordinate'
+					  });
+					  goToCoordsSource.addFeature(feature);
+				}
+			});
+
+			
 			/*const projection = map.getView().getProjection();
 			const projectionExtent = projection.getExtent();
 			const size = ol.extent.getWidth(projectionExtent) / 256;
