@@ -882,7 +882,7 @@
 				//const errorMessage = document.getElementById("goto-coordinates-warning");
 				
 				// Regex allowing up to two spaces between numbers
-				const pattern = /^(\d*\.\d+|\d+)( (\d*\.\d+|\d+)){0,2}$/;
+				const pattern = /^(\d*[.,]?\d+)( (\d*[.,]?\d+)){0,2}$/;
 				
 				if (!pattern.test(inputValue)) {
 					//errorMessage.textContent = "";
@@ -895,41 +895,152 @@
 				  }
 			}
 
-			document.getElementById('x-coordinate').addEventListener("input", (event) => {
+			document.getElementById('x-coordinate').addEventListener("change", (event) => {
 				validateCoordinateInput(event.target);;
 			});
 			
-			document.getElementById('y-coordinate').addEventListener("input", (event) => {
+			document.getElementById('y-coordinate').addEventListener("change", (event) => {
 				validateCoordinateInput(event.target);;
 			});
+
+			def is_number(s):
+				try:
+			    		float(s)  # Try converting to float first
+			    		return True
+			  	except ValueError:
+			    	try:
+			        	int(s) # If float fails try int
+			        	return True
+			    	except ValueError:
+			        	return False
+
+			def checkCoordinateValidity(element, isLongitude){
+				let x=element.value.trim().replace(",",".");
+				const pattern = /^(\d*[.,]?\d+)( (\d*[.,]?\d+)){0,2}$/;
+				if (pattern.test(x)){
+					const xSplit=x.split(" ").filter(word => word !== ""); 	
+					let xCoord;
+					if (xSplit.length()==1){
+						xCoord=xSplit[0];
+						return xCoord;
+					}
+					//znaci da ima razmak, sto znaci da nije htrs96tm
+					if (xSplit.length==2){
+						if (xSplit[0].includes("."))
+						{
+							xCoord=xSplit[0];
+							element.value=xSplit[0];
+							return xCoord;
+						}
+						else{
+							if (is_number(xSplit[0]) && is_number(xSplit[1])){
+								let minX=-90;
+								if (isLongitude){
+									minX=-180;
+								}
+								if (xSplit[0]>=minX && xSplit[0]<=Math.abs(MinX) && xSplit[1]>=0 && xSplit[1]<60){
+									xCoord=xSplit[0]+xCoord=xSplit[1]/60;
+									return xCoord;
+								}else{
+									return null;
+								}
+							}
+							else{
+								return null;
+							}
+						}							
+					}
+					if (xSplit.length==3){
+						if (xSplit[0].includes("."))
+						{
+							xCoord=xSplit[0];
+							element.value=xSplit[0];
+							return xCoord;
+						}
+						else if (xSplit[1].includes(".")){
+							element.value=xSplit[0]+" "+xSplit[1];
+							if (is_number(xSplit[0]) && is_number(xSplit[1])){
+								let minX=-90;
+								if (isLongitude){
+									minX=-180;
+								}
+								if (xSplit[0]>=minX && xSplit[0]<=Math.abs(MinX) && xSplit[1]>=0 && xSplit[1]<60){
+									xCoord=xSplit[0]+xSplit[1]/60;
+									return xCoord;
+								}else{										
+									return null;
+								}
+							}
+							else{
+								return null;
+							}
+						}
+						else{
+							if (is_number(xSplit[0]) && is_number(xSplit[1]) && is_number(xSplit[2])){
+								let minX=-90;
+								if (isLongitude){
+									minX=-180;
+								}
+								if (xSplit[0]>=minX && xSplit[0]<=Math.abs(MinX) && xSplit[1]>=0 && xSplit[1]<60 && xSplit[2]>=0 && xSplit[2]<60){
+									xCoord=xSplit[0]+xSplit[1]/60+xSplit[2]/3600;
+									return xCoord;
+								}else{										
+									return null;
+								}
+							}
+							else{
+								return null;
+							}
+						}
+						
+					}
+					else
+					{
+						return null;
+					}
+				else{
+					return null;
+				}
+			}
+			
 			document.getElementById('goto-coordinates-button').addEventListener("click", function () {	
-				let x=document.getElementById('x-coordinate').value;
-				let y=document.getElementById('y-coordinate').value;
-				let epsg=null;
-				if (x>=-180 && x<180 && y>=-90 && y<=90){
-					epsg=4326;
-				}
-				else if (x>=208311.05 && x<744179.92 && y>=4608969.52 && y<5161549.72)
+				let x=checkCoordinateValidity(document.getElementById('x-coordinate'), true);
+				let y=checkCoordinateValidity(document.getElementById('y-coordinate'), false);
+				if (x && y)
 				{
-					epsg=3765;					
-				}
-				if (epsg){
-					let htrsCoords=null
-					if (epsg===4326){
-						htrsCoords=ol.proj.transform([x,y], projection, 'EPSG:4326');						
+					let epsg=null;
+					if (x>=-180 && x<180 && y>=-90 && y<=90){
+						epsg=4326;
+					}
+					else if (x>=208311.05 && x<744179.92 && y>=4608969.52 && y<5161549.72)
+					{
+						epsg=3765;					
+					}
+					if (epsg){
+						document.getElementById('goto-coordinates-warning').style.display='none';
+						let htrsCoords=null
+						if (epsg===4326){
+							htrsCoords=ol.proj.transform([x,y], projection, 'EPSG:4326');						
+						}
+						else{
+							htrsCoords=[x,y];						
+						}		
+						const htrsPointGeometry = new ol.geom.Point(htrsCoords);
+	
+						// Create a new feature with the point geometry
+						const feature = new ol.Feature({
+							geometry: htrsPointGeometry,
+						    	name: 'Idi na koordinate',
+						    	description: 'Idi na koordinate'
+						  });
+						  goToCoordsSource.addFeature(feature);
 					}
 					else{
-						htrsCoords=[x,y];						
-					}		
-					const htrsPointGeometry = new ol.geom.Point(htrsCoords);
-
-					// Create a new feature with the point geometry
-					const feature = new Feature({
-						geometry: htrsPointGeometry,
-					    	name: 'Idi na koordinate',
-					    	description: 'Idi na koordinate'
-					  });
-					  goToCoordsSource.addFeature(feature);
+						document.getElementById('goto-coordinates-warning').style.display='block';						
+					}
+				}
+				else{
+					document.getElementById('goto-coordinates-warning').style.display='block';
 				}
 			});
 
