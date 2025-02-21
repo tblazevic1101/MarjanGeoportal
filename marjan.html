@@ -290,6 +290,21 @@
 				<button data-url="https://geoportal.dgu.hr/services/inspire/orthophoto_2019_2020/wms">Ortofoto 2019-2020</button>
 				<button data-url="https://geoportal.dgu.hr/services/inspire/orthophoto_2021_2022/wms">Ortofoto 2021-2022</button>
 			</div> -->
+
+			
+			<div id="goto-coordinates-panel" style="display: none; position:absolute; top:50px; right:10px; background:white; padding:8px; border:2px solid #62ba46; border-radius:5px;">
+				<div style="display: flex; gap: 5px;">
+					<label>
+						X / λ:<input type="textbox" id="goto-coordinates-X-textbox" checked/>						
+					</label>
+				</div>
+				<div style="display: flex; gap: 5px;">
+					<label>
+						Y / φ:<input type="textbox" id="goto-coordinates-Y-textbox" checked/>
+						Prikaži duljine segmenata
+					</label>
+				</div>
+			</div>
 			
 			<div id="layers-panel" style="display: none; background:white; padding:8px; border:2px solid #62ba46; border-radius:5px;">
 				<div id="basemap-menu">
@@ -477,6 +492,22 @@
 				// Toggle the measure tools panel
 				measureToolsPanel.style.display = (measureToolsPanel.style.display === 'block' || measureToolsPanel.style.display === '') ? 'none' : 'block';
 			});
+
+			document.getElementById('goto-coordinates-button').addEventListener('click', function () {
+				const layerMenu = document.getElementById('layers-panel');
+				const measureToolsPanel = document.getElementById('measure-tools-panel');
+				const gotocoordinatesPanel = document.getElementById('goto-coordinates-panel');
+
+				// Check if the layer menu is open and close it if it is
+				if (layerMenu.style.display === 'block') {
+					layerMenu.style.display = 'none';
+				}
+
+				// Toggle the measure tools panel
+				gotocoordinatesPanel.style.display = (gotocoordinatesPanel.style.display === 'block' || gotocoordinatesPanel.style.display === '') ? 'none' : 'block';
+			});
+			
+			
 		
 		
 			// Create a function to create a WMS layer
