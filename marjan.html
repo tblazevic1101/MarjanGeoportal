@@ -890,12 +890,9 @@
 				  }
 			}
 
-			document.getElementById('x-coordinate').addEventListener("change", function () {
-				validateCoordinateInput(this);
-			});
-			document.getElementById('y-coordinate').addEventListener("change", function () {
-				validateCoordinateInput(this);
-			});
+			document.getElementById('x-coordinate').addEventListener("change", validateCoordinateInput);
+			
+			document.getElementById('y-coordinate').addEventListener("change", validateCoordinateInput);
 
 			document.getElementById('goto-coordinates-button').addEventListener("click", function () {	
 				let x=document.getElementById('x-coordinate').value;
