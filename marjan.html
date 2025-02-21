@@ -880,7 +880,7 @@
 				// Regex allowing up to two spaces between numbers
 				const pattern = /^(\d*\.\d+|\d+)( (\d*\.\d+|\d+)){0,2}$/;
 				
-				if (pattern.test(inputValue)) {
+				if (!pattern.test(inputValue)) {
 					//errorMessage.textContent = "";
 					document.getElementById('goto-coordinates-warning').style.display='block';
 					element.classList.remove("invalid");
