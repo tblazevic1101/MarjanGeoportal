@@ -314,8 +314,11 @@
     				<div style="display: flex; gap: 5px; align-items: center; padding-bottom: 5px""> 
 					<label for="y-coordinate" style="margin-right: 5px;">Y / φ:</label> <input style="color:#666666" type="text" id="y-coordinate" name="y-coordinate">
     				</div>
-				<div id="goto-coordinates-warning" style="display: none; text-align: justify; padding: 5px 0; color:#666666;">Podržani sustavi su WGS84, formati: </br>  DD.ddd</br>  DD MM.mmm</br>  DD MM SS.sss</br>i HTRS96TM.</br>
+				<div id="goto-coordinates-warning" style="display: none; text-align: justify; padding: 5px 0; color:#666666;">Podržani sustavi su WGS84, formati: 
+				</br>16.410</br>16 24.6</br>16 24 36.1</br>i HTRS96TM.
+				</br>
 					Ukoliko se upisuju formati DD MM.mmm i DD MM SS.sss koristite razmak između stupnjeva, minuta i sekunda.
+				</br>Pazite na upisane vrijednosti.
     				</div>
 				<div style="display: flex; gap: 5px; align-items: center;"> 
 					<button id="goto-coordinates-button" style="width: 100%; padding: 5px; font-family: Garamond, Times New Roman, serif; display: flex; align-items: center; justify-content: center; background: white; border-radius: 2px; border-width: 1px; border-color: #666666; gap:5px">  						<img src="icons/map-location-dot-solid.svg" alt="Idi na koordinate" width="20" height="20">
@@ -884,11 +887,11 @@
 				if (!pattern.test(inputValue)) {
 					//errorMessage.textContent = "";
 					document.getElementById('goto-coordinates-warning').style.display='block';
-					element.classList.remove("invalid");
+					//element.classList.remove("invalid");
 				  } else {
 					//errorMessage.textContent = "Problem";
 					document.getElementById('goto-coordinates-warning').style.display='none';
-					element.classList.add("invalid");
+					//element.classList.add("invalid");
 				  }
 			}
 
