@@ -1028,7 +1028,7 @@
 						document.getElementById('goto-coordinates-warning').style.display='none';
 						let htrsCoords=null
 						if (epsg===4326){
-							htrsCoords=ol.proj.transform([x,y], projection, 'EPSG:4326');						
+							htrsCoords=ol.proj.transform([x,y], 'EPSG:4326', projection);						
 						}
 						else{
 							htrsCoords=[x,y];						
