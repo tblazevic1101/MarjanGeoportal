@@ -903,16 +903,23 @@
 				validateCoordinateInput(event.target);;
 			});
 
-			def is_number(s):
-				try:
-			    		float(s)  # Try converting to float first
-			    		return True
-			  	except ValueError:
-			    	try:
-			        	int(s) # If float fails try int
-			        	return True
-			    	except ValueError:
-			        	return False
+			function is_number(s) {
+				if (typeof s !== 'string') {  // Check if it's a string first (important!)
+			    		return false;
+			  	}
+			
+			  	if (s.trim() === "") { // Check for empty or whitespace-only strings
+			    		return false;
+			  	}
+			
+			  	// Attempt conversion to number (will handle both ints and floats)
+			  	const n = Number(s);
+			
+			  	if (isNaN(n)) { // Check if it's Not a Number (NaN)
+			    		return false;
+			  	}
+			  	return true;
+			}
 
 			def checkCoordinateValidity(element, isLongitude){
 				let x=element.value.trim().replace(",",".");
