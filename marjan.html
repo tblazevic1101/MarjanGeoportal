@@ -1085,7 +1085,7 @@
 						    	name: 'Idi na koordinate',
 						    	description: 'Idi na koordinate'
 						  });
-						  goToCoordsSource.addFeature(feature);
+						  
 						let pointLabelStyle = feature.getStyle();
 
 						if (!pointLabelStyle) {
@@ -1098,8 +1098,10 @@
 							if (textStyle) {
 								textStyle.setText("TESTIRANJE");
 							}
-						}
+						}							
 						catch{}
+						console.log(feature);
+						goToCoordsSource.addFeature(feature);
 					}
 					else{
 						document.getElementById('goto-coordinates-warning').style.display='block';						
