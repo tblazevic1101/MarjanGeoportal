@@ -1107,8 +1107,27 @@
 						console.log(feature);
 						goToCoordsSource.addFeature(feature);
 						map.getView().setCenter(htrsCoords);
-						map.getView().setZoom(18);
-						transformAndWriteCoordsInPanel(htrsCoords[0], htrsCoords[1], '3765');
+						map.getView().setZoom(16);
+									
+			  			
+						if (coordinatesPanelEPSG=="4326"){
+							if (epsg==4326){
+								transformAndWriteCoordsInPanel(x,y, coordinatesPanelEPSG);
+							}
+							else if (epsg=3765){
+								var pointWGS84=ol.proj.transform([x,y], projection, 'EPSG:4326');
+								transformAndWriteCoordsInPanel(pointWGS84[0],pointWGS84[1], coordinatesPanelEPSG);
+							}
+						}
+						else if (coordinatesPanelEPSG=="3765"){	
+							if (epsg==4326){
+								var pointHTRS=ol.proj.transform([x,y], 'EPSG:4326', projection);
+								transformAndWriteCoordsInPanel(pointHTRS[0],pointHTRS[1], coordinatesPanelEPSG);								
+							}
+							else if (epsg=3765){
+								transformAndWriteCoordsInPanel(x,y, coordinatesPanelEPSG);
+							}
+						}
 					}
 					else{
 						document.getElementById('goto-coordinates-warning').style.display='block';						
