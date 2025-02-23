@@ -876,9 +876,9 @@ ure<!DOCTYPE html>
 
 			function validateCoordinateInput(element) {
 				//const inputField = document.getElementById("myInput");
-				console.log(element);
+				//console.log(element);
 				const inputValue =element.value;
-				console.log(inputValue);
+				//console.log(inputValue);
 				//const errorMessage = document.getElementById("goto-coordinates-warning");
 				
 				// Regex allowing up to two spaces between numbers
@@ -930,6 +930,7 @@ ure<!DOCTYPE html>
 					if (xSplit.length==1){
 						if (is_number(xSplit[0])){
 							xCoord=Number(xSplit[0]);
+							element.value=xSplit[0];
 							return xCoord;
 						}
 						else{
@@ -968,6 +969,7 @@ ure<!DOCTYPE html>
 								let mm=Number(xSplit[1]);
 								if (dd>=minX && dd<=Math.abs(minX) && mm>=0 && mm<60){
 									xCoord=dd+ss/60;
+									element.value=xSplit[0]+" "+xSplit[1];
 									return xCoord;
 								}else{
 									return null;
@@ -1030,6 +1032,7 @@ ure<!DOCTYPE html>
 								let ss=Number(xSplit[2]);
 								if (dd>=minX && dd<=Math.abs(minX) && mm>=0 && mm<60 && ss>=0 && ss<60){
 									xCoord=dd+mm/60+ss/3600;
+									element.value=xSplit[0]+" "+xSplit[1]+" "+xSplit[2];
 									return xCoord;
 								}else{										
 									return null;
@@ -1047,7 +1050,7 @@ ure<!DOCTYPE html>
 					}
 				}
 				else{
-					console.log("problem s formatom");
+					//console.log("problem s formatom");
 					return null;
 				}
 			}
@@ -1087,7 +1090,6 @@ ure<!DOCTYPE html>
 						  });
 						  
 						let pointLabelStyle = feature.getStyle();
-
 						if (!pointLabelStyle) {
 							pointLabelStyle = goToCoordsStyle.clone();
 							//feature.setStyle(pointLabelStyle);
@@ -1096,11 +1098,11 @@ ure<!DOCTYPE html>
 						const textStyle = pointLabelStyle.getText();
 						try{
 							if (textStyle) {
-								textStyle.setText("TESTIRANJE");
+								textStyle.setText(document.getElementById('x-coordinate').value+"\n"+document.getElementById('y-coordinate').value);
 							}
 						}							
 						catch{}
-						console.log("STIL PRIMJENJEN");
+						console.log("STIL PRIMJENJEN1233");
 						feature.setStyle(pointLabelStyle);
 						console.log(feature);
 						goToCoordsSource.addFeature(feature);
