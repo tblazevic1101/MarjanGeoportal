@@ -946,7 +946,7 @@
 									minX=-180;
 								}
 								let dd=Number(xSplit[0]);
-								if (dd>=minX && dd<=Math.abs(MinX)){
+								if (dd>=minX && dd<=Math.abs(minX)){
 									element.value=xSplit[0];
 									xCoord=dd;
 									return xCoord;
@@ -966,7 +966,7 @@
 								}
 								let dd=Number(xSplit[0]);
 								let mm=Number(xSplit[1]);
-								if (dd>=minX && dd<=Math.abs(MinX) && ss>=0 && ss<60){
+								if (dd>=minX && dd<=Math.abs(minX) && ss>=0 && ss<60){
 									xCoord=dd+ss/60;
 									return xCoord;
 								}else{
@@ -987,7 +987,7 @@
 									minX=-180;
 								}
 								let dd=Number(xSplit[0]);
-								if (dd>=minX && dd<=Math.abs(MinX)){
+								if (dd>=minX && dd<=Math.abs(minX)){
 									element.value=xSplit[0];
 									xCoord=dd;
 									return xCoord;
