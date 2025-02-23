@@ -1056,6 +1056,8 @@
 				let y=checkCoordinateValidity(document.getElementById('y-coordinate'), false);
 				if (x && y)
 				{
+					console.log(x);
+					console.log(y);
 					let epsg=null;
 					if (x>=-180 && x<180 && y>=-90 && y<=90){
 						epsg=4326;
