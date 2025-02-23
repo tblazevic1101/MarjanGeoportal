@@ -966,7 +966,7 @@
 								}
 								let dd=Number(xSplit[0]);
 								let mm=Number(xSplit[1]);
-								if (dd>=minX && dd<=Math.abs(minX) && ss>=0 && ss<60){
+								if (dd>=minX && dd<=Math.abs(minX) && mm>=0 && mm<60){
 									xCoord=dd+ss/60;
 									return xCoord;
 								}else{
@@ -1006,8 +1006,8 @@
 									minX=-180;
 								}
 								let dd=Number(xSplit[0]);
-								let ss=Number(xSplit[1]);
-								if (dd>=minX && dd<=Math.abs(minX) && ss>=0 && ss<60){
+								let mm=Number(xSplit[1]);
+								if (dd>=minX && dd<=Math.abs(minX) && mm>=0 && mm<60){
 									xCoord=dd+ss/60;
 									element.value=xSplit[0]+" "+xSplit[1];
 									return xCoord;
@@ -1047,6 +1047,7 @@
 					}
 				}
 				else{
+					console.log("problem s formatom");
 					return null;
 				}
 			}
