@@ -1106,6 +1106,9 @@ ure<!DOCTYPE html>
 						feature.setStyle(pointLabelStyle);
 						console.log(feature);
 						goToCoordsSource.addFeature(feature);
+						map.getView().setCenter(htrsCoords);
+						map.getView().setZoom(18);
+						transformAndWriteCoordsInPanel(htrsCoords[0], htrsCoords[1], '3765');
 					}
 					else{
 						document.getElementById('goto-coordinates-warning').style.display='block';						
