@@ -1086,6 +1086,19 @@
 						    	description: 'Idi na koordinate'
 						  });
 						  goToCoordsSource.addFeature(feature);
+						let pointLabelStyle = feature.getStyle();
+
+						if (!pointLabelStyle) {
+							pointLabelStyle = goToCoordsStyle.clone();
+							//feature.setStyle(pointLabelStyle);
+						}
+
+						const textStyle = pointLabelStyle.getText();
+						try{
+							if (textStyle) {
+								textStyle.setText(labelText);
+							}
+						}
 					}
 					else{
 						document.getElementById('goto-coordinates-warning').style.display='block';						
