@@ -532,6 +532,7 @@
 
 			document.getElementById('zoomToExtentGrafika').addEventListener('click', function () {
 				try{
+					console.log(map);
 					map.getView().fit(measureLayer.getSource().getExtent(), {
 				        size: map.getSize(),
 				        duration: 1000,
