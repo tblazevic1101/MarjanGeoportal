@@ -532,34 +532,40 @@
 
 			document.getElementById('zoomToExtentGrafika').addEventListener('click', function () {
 				try{
-					console.log(map);
-					map.getView().fit(measureLayer.getSource().getExtent(), {
-				        size: map.getSize(),
-				        duration: 1000,
-				        padding: [50, 50, 50, 50] // Prevents zooming too close to the edges
-				    });
-				
-				    // Get the zoom level after fitting
-				    const resolution = map.getView().getResolution();
-				    const calculatedZoom = map.getView().getZoomForResolution(resolution);
-				
-				    // Define a minimum zoom level (adjust as needed)
-				    const minZoom = 14;
-				
-				    // If zoom level is too high (too close), adjust manually
-				    if (calculatedZoom > minZoom) {
-				        const center = ol.extent.getCenter(measureLayer.getSource().getExtent());
+					const minZoom = 12;
+					const layerExtent=measureLayer.getSource().getExtent();
+					if (Math.abs(layerExtent[0]-layerExtent[2])<50 && Math.abs(layerExtent[1]-layerExtent[3])<50){
+						const center = ol.extent.getCenter(layerExtent);
 				        map.getView().setCenter(center);
 				        map.getView().setZoom(minZoom);
-				    }
-					//map.getView().fit(measureLayer.getSource().getExtent());
-					
+					}
+					else{
+						map.getView().fit(layerExtent, {
+							size: map.getSize(),
+							duration: 500,
+							padding: [50, 50, 50, 50] // Prevents zooming too close to the edges
+						});
+					}
 				}
 				catch{}
 			});
 
 			document.getElementById('zoomToExtentIdiNaKoordinate').addEventListener('click', function () {
 				try{
+					const minZoom = 12;
+					const layerExtent=goToCoordsLayer.getSource().getExtent();
+					if (Math.abs(layerExtent[0]-layerExtent[2])<50 && Math.abs(layerExtent[1]-layerExtent[3])<50){
+						const center = ol.extent.getCenter(layerExtent);
+				        map.getView().setCenter(center);
+				        map.getView().setZoom(minZoom);
+					}
+					else{
+						map.getView().fit(layerExtent, {
+							size: map.getSize(),
+							duration: 500,
+							padding: [50, 50, 50, 50] // Prevents zooming too close to the edges
+						});
+					}
 					map.getView().fit(goToCoordsLayer.getSource().getExtent());
 				}
 				catch{}
