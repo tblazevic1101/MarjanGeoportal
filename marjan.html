@@ -369,12 +369,17 @@
 				<div id="measureLayer-controls" style="display: flex; align-items: center; gap:5px">  
 					<label for="measureLayerVisibility-checkbox" style="display: flex; align-items: center;"><input type="checkbox" id="measureLayerVisibility-checkbox" checked>Grafika  </label>
 					<input type="range" id="measureLayerVisibility-slider" style="margin-left: auto;" min="0" max="1" step="0.1" value="1">
+					<div class="ol-control ol-unselectable" style="pointer-events: auto; position: relative;">
+						<button id="zoomToExtentGrafika" style="padding: 2px; width: 1.5em; height: 1.5em; background: white; display: flex; align-items: center; justify-content: center;">
+							<img src="icons/arrows-to-circle-solid.svg" alt="Zoom to Extent" width="15px" height="15px">
+						</button>
+					</div>
 				</div>
 				<div id="goToCoordsLayer-controls" style="display: flex; align-items: center; gap:5px">  
 					<label for="goToCoordsLayerVisibility-checkbox" style="display: flex; align-items: center;"><input type="checkbox" id="goToCoordsLayerVisibility-checkbox" checked>Idi na koordinate  </label>
 					<input type="range" id="goToCoordsLayerVisibility-slider" style="margin-left: auto;" min="0" max="1" step="0.1" value="1">
 					<div class="ol-control ol-unselectable" style="pointer-events: auto; position: relative;">
-						<button style="padding: 2px; width: 1.5em; height: 1.5em; background: white; display: flex; align-items: center; justify-content: center;">
+						<button id="zoomToExtentIdiNaKoordinate" style="padding: 2px; width: 1.5em; height: 1.5em; background: white; display: flex; align-items: center; justify-content: center;">
 							<img src="icons/arrows-to-circle-solid.svg" alt="Zoom to Extent" width="15px" height="15px">
 						</button>
 					</div>
@@ -523,6 +528,20 @@
 
 				// Toggle the measure tools panel
 				measureToolsPanel.style.display = (measureToolsPanel.style.display === 'block' || measureToolsPanel.style.display === '') ? 'none' : 'block';
+			});
+
+			document.getElementById('zoomToExtentGrafika').addEventListener('click', function () {
+				try{
+					map.getView().fit(goToCoordsLayer.getSource().getExtent());
+				}
+				catch{}
+			});
+
+			document.getElementById('zoomToExtentIdiNaKoordinate').addEventListener('click', function () {
+				try{
+					map.getView().fit(measureLayer.getSource().getExtent());
+				}
+				catch{}
 			});
 
 			document.getElementById('goto-coordinates-panel-button').addEventListener('click', function () {
