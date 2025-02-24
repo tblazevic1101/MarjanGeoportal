@@ -832,7 +832,7 @@
 			initializeAndAddBasemapLayer('TK25','WMTS');
 			initializeAndAddOverbasemapLayer('DOF_Lidar_2023','WMTS');
 
-			map.addLayer(mreza);
+			graticule.setMap(map);
 			
 			//Idi na koordinate
 			const goToCoordsSource = new ol.source.Vector();
