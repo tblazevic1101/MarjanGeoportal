@@ -2359,8 +2359,18 @@
 			
 			
 			
-			function exportFeaturesToKML(vectorLayer, filename = 'features.kml') {
+			function exportFeaturesToKML(vectorLayer, filename = 'Marjan_Geoportal.kml') {
 				//console.log("Exporting KML..."); // Confirmation message
+				const now = new Date();
+				const year = now.getFullYear();
+				const month = String(now.getMonth() + 1).padStart(2, '0'); // Ensure two-digit month
+				const day = String(now.getDate()).padStart(2, '0'); // Ensure two-digit day
+				const hour = String(now.getHours()).padStart(2, '0'); // Ensure two-digit hour
+				const minute = String(now.getMinutes()).padStart(2, '0'); // Ensure two-digit minute
+				const second = String(now.getSeconds()).padStart(2, '0'); // Ensure two-digit second
+				
+				// Construct filename: Marjan_Geoportal_YYYY_MM_DD_HH_MM_SS.kml
+				const filename = `Marjan_Geoportal_${year}_${month}_${day}_${hour}_${minute}_${second}.kml`;
 
 				const features = vectorLayer.getSource().getFeatures();
 				//console.log("Number of features:", features.length); // Check number of features
