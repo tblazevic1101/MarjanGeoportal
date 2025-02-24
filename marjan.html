@@ -852,7 +852,7 @@
 			map.addLayer(goToCoordsLayer);
 			goToCoordsLayer.setZIndex(21);
 			
-			//goToCoordsLayeStyle sluzi za iscrtavanje featurea dok je u fazi crtanja, a i nakon sto bude gotov. to je stil mjerenja
+			//goToCoordsLayeStyle sluzi za iscrtavanje featurea za sloj idi na koordinate
 			const goToCoordsStyle = new ol.style.Style({
 				text: new ol.style.Text({
 					font: '14px Calibri,sans-serif',
@@ -870,7 +870,7 @@
 					radius: 6,
 					points: 3,
 					angle: Math.PI,
-					displacement: [0, 8],
+					displacement: [0, 5],
 					fill: new ol.style.Fill({
 						color: 'red',
 					}),
