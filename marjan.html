@@ -492,6 +492,7 @@
 			// Apply the transformed extent
 			//projection.setExtent(worldExtent3765);
 			projection.setWorldExtent(worldExtent4326);
+			projection.setExtent([208311.05, 4608969.52, 744179.92 5161549.72]);
 			
 			document.getElementById('layer-menu-button').addEventListener('click', function () {
 				const layerMenu = document.getElementById('layers-panel');
@@ -819,7 +820,7 @@
 			
 			let basemapLayer;
 			let overbasemapLayer ;
-			console.log("mreza2");
+			console.log("mreza3");
 			const mreza=new ol.layer.Graticule({
     showLabels: true,
     lonLabelFormatter: (lon) => lon.toFixed(2) + "°",  // Format longitude labels
