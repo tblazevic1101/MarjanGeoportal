@@ -6,7 +6,7 @@
 		<title>Geoportal - Park šuma Marjan</title>
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v10.3.1/ol.css">
 		<style>
-			body, html { margin: 0; padding: 0; font-family: Garamond, "Times New Roman", serif}
+			body, html { margin: 0; padding: 0; font-family: Garamond, "Times New Roman", serif; color:#666666}
 			#map { position: relative; width: 100%; height: 100vh; }
 			
 			#layers-panel {
@@ -307,12 +307,12 @@
 			</div> -->
 
 			
-			<div id="goto-coordinates-panel" style="display: none; position: absolute; top: 50px; right: 10px; background: white; padding: 8px; border: 2px solid #62ba46; border-radius: 5px; max-width:250px">
+			<div id="goto-coordinates-panel" style="display: none; position: absolute; top: 50px; right: 10px; background: white; padding: 8px; border: 1px solid #62ba46; border-radius: 5px; max-width:250px">
     				<div style="display: flex; gap: 5px; align-items: center; padding-bottom: 5px">  
-					<label for="x-coordinate" style="margin-right: 5px;">X / λ:</label> <input style="color:#666666" type="text" id="x-coordinate" name="x-coordinate">
+					<label for="x-coordinate" style="margin-right: 5px;">X / λ:</label> <input style="color:#666666; border-color:rgba(128, 128, 128, 0.25)" type="text" id="x-coordinate" name="x-coordinate">
     				</div>
     				<div style="display: flex; gap: 5px; align-items: center; padding-bottom: 5px""> 
-					<label for="y-coordinate" style="margin-right: 5px;">Y / φ:</label> <input style="color:#666666" type="text" id="y-coordinate" name="y-coordinate">
+					<label for="y-coordinate" style="margin-right: 5px;">Y / φ:</label> <input style="color:#666666; border-color:rgba(128, 128, 128, 0.25)" type="text" id="y-coordinate" name="y-coordinate">
     				</div>
 				<div id="goto-coordinates-warning" style="display: none; text-align: justify; padding: 5px 0; color:#666666;">Podržani sustavi su WGS84, formati: 
 				</br>16.410</br>16 24.6</br>16 24 36.1</br>i HTRS96TM.
@@ -321,13 +321,13 @@
 				</br>Pazite na upisane vrijednosti.
     				</div>
 				<div style="display: flex; gap: 5px; align-items: center;"> 
-					<button id="goto-coordinates-button" style="width: 100%; padding: 5px; font-family: Garamond, Times New Roman, serif; display: flex; align-items: center; justify-content: center; background: white; border-radius: 2px; border-width: 1px; border-color: #666666; gap:5px">  						<img src="icons/map-location-dot-solid.svg" alt="Idi na koordinate" width="20" height="20">
+					<button id="goto-coordinates-button" style="width: 100%; padding: 5px; font-family: Garamond, Times New Roman, serif; display: flex; align-items: center; justify-content: center; background: white; border-radius: 2px; border-width: 1px; border-color: rgba(128, 128, 128, 0.25); color:#666666; gap:5px">  						<img src="icons/map-location-dot-solid.svg" alt="Idi na koordinate" width="20" height="20">
   						<span>Prikaži lokaciju</span>  
 					</button>
     				</div>
     			</div>
 			
-			<div id="layers-panel" style="display: none; background:white; padding:8px; border:2px solid #62ba46; border-radius:5px;">
+			<div id="layers-panel" style="display: none; background:white; padding:8px; border:1px solid #62ba46; border-radius:5px;">
 				<div id="basemap-menu">
 					<p style="color: #666666;">Pozadinski sloj:</p>
 					<label><input type="radio" name="basemap" class="toc-layer" data-layer="OSM" data-layer-service="WMTS">OSM</label><br>
@@ -351,7 +351,7 @@
 				</div>
 				<br/>
 				<div id="katastarLayer-controls" style="display: flex; align-items: center; gap:5px; padding:2px">  
-					<label for="katastarLayerVisibility-checkbox" style="display: flex; align-items: center;"><input type="checkbox" id="katastarLayerVisibility-checkbox">Katastarske čestice  </label>
+					<label for="katastarLayerVisibility-checkbox" style="display: flex; align-items: center; gap: 5px"><input type="checkbox" id="katastarLayerVisibility-checkbox">Katastarske čestice  </label>
 					<input type="range" id="katastarLayerVisibility-slider" style="margin-left: auto;" min="0" max="1" step="0.1" value="1">
 				</div>
 				<!--<div id="prometLayer-controls" style="display: flex; align-items: center; gap:5px">  
@@ -367,7 +367,7 @@
 					<input type="range" id="zgradeLayerVisibility-slider" style="margin-left: auto;" min="0" max="1" step="0.1" value="1">
 				</div>-->
 				<div id="measureLayer-controls" style="display: flex; align-items: center; gap:5px; padding:2px">  
-					<label for="measureLayerVisibility-checkbox" style="display: flex; align-items: center;"><input type="checkbox" id="measureLayerVisibility-checkbox" checked>Grafika  </label>
+					<label for="measureLayerVisibility-checkbox" style="display: flex; align-items: center; gap: 5px"><input type="checkbox" id="measureLayerVisibility-checkbox" checked>Grafika  </label>
 					<input type="range" id="measureLayerVisibility-slider" style="margin-left: auto;" min="0" max="1" step="0.1" value="1">
 					<div class="ol-control ol-unselectable" style="pointer-events: auto; position: relative;">
 						<button id="zoomToExtentGrafika" style="padding: 2px; width: 1.5em; height: 1.5em; background: white; display: flex; align-items: center; justify-content: center;">
@@ -376,7 +376,7 @@
 					</div>
 				</div>
 				<div id="goToCoordsLayer-controls" style="display: flex; align-items: center; gap:5px; padding:2px">  
-					<label for="goToCoordsLayerVisibility-checkbox" style="display: flex; align-items: center;"><input type="checkbox" id="goToCoordsLayerVisibility-checkbox" checked>Idi na koordinate  </label>
+					<label for="goToCoordsLayerVisibility-checkbox" style="display: flex; align-items: center; gap: 5px"><input type="checkbox" id="goToCoordsLayerVisibility-checkbox" checked>Idi na koordinate  </label>
 					<input type="range" id="goToCoordsLayerVisibility-slider" style="margin-left: auto;" min="0" max="1" step="0.1" value="1">
 					<div class="ol-control ol-unselectable" style="pointer-events: auto; position: relative;">
 						<button id="zoomToExtentIdiNaKoordinate" style="padding: 2px; width: 1.5em; height: 1.5em; background: white; display: flex; align-items: center; justify-content: center;">
@@ -387,7 +387,7 @@
 			</div>
 			
 
-			<div id="measure-tools-panel" style="display: none; position:absolute; top:50px; right:10px; background:white; padding:8px; border:2px solid #62ba46; border-radius:5px;">
+			<div id="measure-tools-panel" style="display: none; position:absolute; top:50px; right:10px; background:white; padding:8px; border:1px solid #62ba46; border-radius:5px;">
 				<div style="display: flex; gap: 5px;">
 					<div class="ol-control ol-unselectable" style="pointer-events: auto; position:relative;"><button id="measure-points" style="padding:2px; width:1.5em; height:1.5em; background: white; display: flex; align-items: center; justify-content: center;"><img src="icons/thumbtack-solid.svg" alt="Point" width="15px" height="15px"/></button></div>
 					<div class="ol-control ol-unselectable" style="pointer-events: auto; position:relative;"><button id="measure-lines" style="padding:2px; width:1.5em; height:1.5em; background: white; display: flex; align-items: center; justify-content: center;"><img src="icons/slash-solid.svg" alt="Line" width="15px" height="15px" /></button></div>
@@ -398,13 +398,13 @@
 					<div class="ol-control ol-unselectable" style="pointer-events: auto; position:relative;"><button id="measure-download-KML" style="padding:2px; width:1.5em; height:1.5em; background: white; display: flex; align-items: center; justify-content: center;"><img src="icons/download-solid.svg" alt="Delete All" width="15px" height="15px" /></button></div>
 				</div>
 				<div style="margin-top: 5px;">
-					<label>
+					<label style="color:#666666;">
 						<input type="checkbox" id="show-segment-lengths" checked/>
 						Prikaži duljine segmenata
 					</label>
 				</div>
 				<div style="margin-top: 5px;">
-					<label>
+					<label style="color:#666666;">
 						<input type="checkbox" id="show-measurements" checked/>
 						Prikaži izmjere
 					</label>
@@ -507,10 +507,14 @@
 			document.getElementById('layer-menu-button').addEventListener('click', function () {
 				const layerMenu = document.getElementById('layers-panel');
 				const measureToolsPanel = document.getElementById('measure-tools-panel');
+				const gotocoordinatesPanel = document.getElementById('goto-coordinates-panel');
 
 				// Check if the measure tools panel is open and close it if it is
 				if (measureToolsPanel.style.display === 'block') {
 					measureToolsPanel.style.display = 'none';
+				}
+				if (gotocoordinatesPanel.style.display === 'block') {
+					gotocoordinatesPanel.style.display = 'none';
 				}
 
 				// Toggle the layer menu
@@ -520,15 +524,106 @@
 			document.getElementById('measure-tools-button').addEventListener('click', function () {
 				const layerMenu = document.getElementById('layers-panel');
 				const measureToolsPanel = document.getElementById('measure-tools-panel');
+				const gotocoordinatesPanel = document.getElementById('goto-coordinates-panel');
 
 				// Check if the layer menu is open and close it if it is
 				if (layerMenu.style.display === 'block') {
 					layerMenu.style.display = 'none';
 				}
+				if (gotocoordinatesPanel.style.display === 'block') {
+					gotocoordinatesPanel.style.display = 'none';
+				}
 
 				// Toggle the measure tools panel
 				measureToolsPanel.style.display = (measureToolsPanel.style.display === 'block' || measureToolsPanel.style.display === '') ? 'none' : 'block';
 			});
+			
+			
+			document.getElementById('goto-coordinates-panel-button').addEventListener('click', function () {
+				const layerMenu = document.getElementById('layers-panel');
+				const measureToolsPanel = document.getElementById('measure-tools-panel');
+				const gotocoordinatesPanel = document.getElementById('goto-coordinates-panel');
+
+				// Check if the layer menu is open and close it if it is
+				if (layerMenu.style.display === 'block') {
+					layerMenu.style.display = 'none';
+				}
+				
+				if (measureToolsPanel.style.display === 'block') {
+					measureToolsPanel.style.display = 'none';
+				}
+
+				// Toggle the measure tools panel
+				gotocoordinatesPanel.style.display = (gotocoordinatesPanel.style.display === 'block' || gotocoordinatesPanel.style.display === '') ? 'none' : 'block';
+			});
+			
+			
+			document.getElementById('download-data-button').addEventListener('click', function () {
+				const layerMenu = document.getElementById('layers-panel');
+				const measureToolsPanel = document.getElementById('measure-tools-panel');
+				const gotocoordinatesPanel = document.getElementById('goto-coordinates-panel');
+
+				// Check if the layer menu is open and close it if it is
+				if (layerMenu.style.display === 'block') {
+					layerMenu.style.display = 'none';
+				}
+				
+				if (measureToolsPanel.style.display === 'block') {
+					measureToolsPanel.style.display = 'none';
+				}
+
+				if (gotocoordinatesPanel.style.display === 'block') {
+					gotocoordinatesPanel.style.display = 'none';
+				}
+				let htrsextent=[492927.8859,4818500.0,494410.3078,4818924.3888];
+				//let htrsextent=[492725,4819269,492868,4819327];
+				let width=htrsextent[2]-htrsextent[0];
+				let height=htrsextent[3]-htrsextent[1];
+				const extent4326 = ol.proj.transformExtent(htrsextent, projection, 'EPSG:4326');
+				let wcsurl=buildWCSRequest("MarjanOrtofoto2024:Marjan_jug_DSM_2m_hillshade", htrsextent, width, height, 'image/png');
+
+				fetch(wcsurl)
+					.then(response => {
+						if (!response.ok) {
+							throw new Error('Network response was not ok');
+						}
+						return response.blob(); // Get the response as a Blob
+					})
+					.then(blob => {
+						// Create a URL for the Blob and download it
+						const url = URL.createObjectURL(blob);
+						const a = document.createElement('a');
+						a.href = url;
+						a.download = 'downloaded_image.png'; // Set the desired file name
+						document.body.appendChild(a);
+						a.click();
+						a.remove(); // Remove the link after downloading
+						URL.revokeObjectURL(url); // Free up memory
+					})
+					.catch(error => {
+						console.error('There was a problem with the fetch operation:', error);
+					});
+				// Toggle the measure tools panel
+				//gotocoordinatesPanel.style.display = (gotocoordinatesPanel.style.display === 'block' || gotocoordinatesPanel.style.display === '') ? 'none' : 'block';
+			});
+			
+			function buildWCSRequest(coverageId, bbox, width, height, format) {
+				const wcsServer = 'http://192.168.33.86:8080/geoserver/wcs'; // Replace with your WCS server URL
+				const version = '1.1.1'; // Specify the WCS version
+				const request = `GetCoverage`;
+
+				const url = `${wcsServer}?service=WCS&version=${version}&request=${request}` +
+							`&IDENTIFIER=${coverageId}&BOUNDINGBOX=${bbox.join(',')},urn:ogc:def:crs:EPSG::3765` + // Assuming bbox is an array [minX, minY, maxX, maxY]
+							`&FORMAT=image/geotiff&` +
+							`STORE=false&` +
+							`GridBaseCRS=urn:ogc:def:crs:EPSG::3765&` +
+							`GridType=urn:ogc:def:method:WCS:1.1:2dSimpleGrid&` +
+							`GridOffsets=2.0005693657220185,-2.0018339622633987&` +
+							`GridCS=urn:ogc:def:cs:OGC:0.0:Grid2dSquareCS`;
+
+				return url;
+			}
+			
 
 			document.getElementById('zoomToExtentGrafika').addEventListener('click', function () {
 				try{
@@ -571,19 +666,6 @@
 				catch{}
 			});
 
-			document.getElementById('goto-coordinates-panel-button').addEventListener('click', function () {
-				const layerMenu = document.getElementById('layers-panel');
-				const measureToolsPanel = document.getElementById('measure-tools-panel');
-				const gotocoordinatesPanel = document.getElementById('goto-coordinates-panel');
-
-				// Check if the layer menu is open and close it if it is
-				if (layerMenu.style.display === 'block') {
-					layerMenu.style.display = 'none';
-				}
-
-				// Toggle the measure tools panel
-				gotocoordinatesPanel.style.display = (gotocoordinatesPanel.style.display === 'block' || gotocoordinatesPanel.style.display === '') ? 'none' : 'block';
-			});
 			
 			
 		
@@ -2142,7 +2224,7 @@
 							});
 
 
-							// *** NEW: Create controls for EACH layer ***
+							/*// *** NEW: Create controls for EACH layer ***
 							const controlsDiv = document.createElement('div');
 							// Add OpenLayers control classes
 							controlsDiv.style.pointerEvents = 'auto'; // Enable pointer events
@@ -2222,7 +2304,130 @@
 							buttonContainer.appendChild(deleteDiv); // Add to button container
 
 							controlsDiv.appendChild(buttonContainer); // Add buttons to the controls div
+							document.getElementById('layers-panel').appendChild(controlsDiv); // Add controls to the panel*/
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							// *** NEW: Create controls for EACH layer ***
+							const controlsDiv = document.createElement('div');
+							// Add OpenLayers control classes
+							controlsDiv.style.pointerEvents = 'auto'; // Enable pointer events
+							controlsDiv.style.position = 'relative'; // For positioning elements within
+							controlsDiv.style.padding='2px';
+
+							// Create a container for the buttons (optional, but good for organization)
+							const buttonContainer = document.createElement('div');
+							buttonContainer.style.display = 'flex'; // Arrange buttons horizontally
+							buttonContainer.style.gap = '5px';
+							buttonContainer.style.alignItems = 'center'; // Vertically center the items
+
+							// Visibility Checkbox
+							const checkboxContainer = document.createElement('div');
+							checkboxContainer.style.display = 'flex'; // Align checkbox and text in a row
+							checkboxContainer.style.alignItems = 'center'; // Vertically center the checkbox and text
+
+							// Create the checkbox
+							const checkbox = document.createElement('input');
+							checkbox.type = 'checkbox';
+							checkbox.id = 'kml-layer-visibility-' + kmlLayer.ol_uid;
+							checkbox.checked = true;
+
+							// Append the checkbox to the container
+							checkboxContainer.appendChild(checkbox);
+
+							// Create the label
+							const checkboxLabel = document.createElement('label');
+							checkboxLabel.setAttribute('for', checkbox.id); // Associate label with checkbox
+							checkboxLabel.style.display = 'block'; // Change to block to allow wrapping
+							checkboxLabel.style.maxWidth = '180px'; // Set the maximum width for the label
+							checkboxLabel.style.whiteSpace = 'normal'; // Allow wrapping
+							checkboxLabel.style.overflowWrap = 'break-word'; // Break words as needed
+							checkboxLabel.style.wordWrap = 'break-word'; // Old browsers support
+							checkboxLabel.style.marginLeft='5px';
+							checkboxLabel.appendChild(document.createTextNode(file.name)); // Add file name
+
+							// Append the label to the container
+							checkboxContainer.appendChild(checkboxLabel);
+
+							// Add the container to the button container
+							buttonContainer.appendChild(checkboxContainer);
+
+							// Opacity Slider
+							const slider = document.createElement('input');
+							slider.type = 'range';
+							slider.id = 'kml-layer-opacity-' + kmlLayer.ol_uid;
+							slider.min = '0';
+							slider.max = '1';
+							slider.step = '0.1';
+							slider.value = '1';
+							slider.style.minWidth = '80px'; // Set a width for the slider
+							slider.style.marginLeft='auto';
+							buttonContainer.appendChild(slider); // Add to button container
+
+							// Zoom to Extent Button
+							const zoomToExtentDiv = document.createElement('div');
+							zoomToExtentDiv.style.pointerEvents = 'auto'; // Enable pointer events
+							zoomToExtentDiv.style.position = 'relative';
+							zoomToExtentDiv.className = 'ol-control ol-unselectable';
+
+							const zoomToExtentButton = document.createElement('button');
+							zoomToExtentButton.style.padding = '2px';
+							zoomToExtentButton.style.width = '1.5em';
+							zoomToExtentButton.style.height = '1.5em';
+							zoomToExtentButton.style.background = 'white';
+							zoomToExtentButton.style.display = 'flex';
+							zoomToExtentButton.style.alignItems = 'center';
+							zoomToExtentButton.style.justifyContent = 'center';
+							zoomToExtentButton.innerHTML = '<img src="icons/arrows-to-circle-solid.svg" alt="Zoom to Extent" width="15px" height="15px">'; // Adjusted image size
+							zoomToExtentButton.addEventListener('click', () => {
+								map.getView().fit(kmlLayer.getSource().getExtent());
+							});
+							zoomToExtentDiv.appendChild(zoomToExtentButton);
+							buttonContainer.appendChild(zoomToExtentDiv); // Add to button container
+
+							// Delete Button
+							const deleteDiv = document.createElement('div');
+							deleteDiv.style.pointerEvents = 'auto'; // Enable pointer events
+							deleteDiv.style.position = 'relative';
+							deleteDiv.className = 'ol-control ol-unselectable';
+
+							const deleteButton = document.createElement('button');
+							deleteButton.style.padding = '2px';
+							deleteButton.style.width = '1.5em';
+							deleteButton.style.height = '1.5em';
+							deleteButton.style.background = 'white';
+							deleteButton.style.display = 'flex';
+							deleteButton.style.alignItems = 'center';
+							deleteButton.style.justifyContent = 'center';
+							deleteButton.innerHTML = '<img src="icons/xmark-solid.svg" alt="Delete KML" width="15" height="15">'; // Adjusted image size
+							deleteButton.addEventListener('click', () => {
+								map.removeLayer(kmlLayer);
+								controlsDiv.remove(); // Remove controls for this layer
+							});
+							deleteDiv.appendChild(deleteButton);
+							buttonContainer.appendChild(deleteDiv); // Add to button container
+
+							controlsDiv.appendChild(buttonContainer); // Add buttons to the controls div
 							document.getElementById('layers-panel').appendChild(controlsDiv); // Add controls to the panel
+
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
 
 
 							// *** NEW: Event listeners for EACH layer ***
@@ -2361,7 +2566,7 @@
 			
 			function exportFeaturesToKML(vectorLayer, filename = 'Marjan_Geoportal.kml') {
 				//console.log("Exporting KML..."); // Confirmation message
-				const now = new Date();
+				/*const now = new Date();
 				const year = now.getFullYear();
 				const month = String(now.getMonth() + 1).padStart(2, '0'); // Ensure two-digit month
 				const day = String(now.getDate()).padStart(2, '0'); // Ensure two-digit day
@@ -2370,7 +2575,7 @@
 				const second = String(now.getSeconds()).padStart(2, '0'); // Ensure two-digit second
 				
 				// Construct filename: Marjan_Geoportal_YYYY_MM_DD_HH_MM_SS.kml
-				const filename = `Marjan_Geoportal_${year}_${month}_${day}_${hour}_${minute}_${second}.kml`;
+				filename = `Marjan_Geoportal_${year}_${month}_${day}_${hour}_${minute}_${second}.kml`;*/
 
 				const features = vectorLayer.getSource().getFeatures();
 				//console.log("Number of features:", features.length); // Check number of features
