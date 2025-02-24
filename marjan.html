@@ -532,14 +532,34 @@
 
 			document.getElementById('zoomToExtentGrafika').addEventListener('click', function () {
 				try{
-					map.getView().fit(goToCoordsLayer.getSource().getExtent());
+					map.getView().fit(measureLayer.getSource().getExtent(), {
+				        size: map.getSize(),
+				        duration: 1000,
+				        padding: [50, 50, 50, 50] // Prevents zooming too close to the edges
+				    });
+				
+				    // Get the zoom level after fitting
+				    const resolution = map.getView().getResolution();
+				    const calculatedZoom = map.getView().getZoomForResolution(resolution);
+				
+				    // Define a minimum zoom level (adjust as needed)
+				    const minZoom = 14;
+				
+				    // If zoom level is too high (too close), adjust manually
+				    if (calculatedZoom > minZoom) {
+				        const center = ol.extent.getCenter(extent);
+				        map.getView().setCenter(center);
+				        map.getView().setZoom(minZoom);
+				    }
+					//map.getView().fit(measureLayer.getSource().getExtent());
+					
 				}
 				catch{}
 			});
 
 			document.getElementById('zoomToExtentIdiNaKoordinate').addEventListener('click', function () {
 				try{
-					map.getView().fit(measureLayer.getSource().getExtent());
+					map.getView().fit(goToCoordsLayer.getSource().getExtent());
 				}
 				catch{}
 			});
@@ -1148,7 +1168,7 @@
 						console.log(feature);
 						goToCoordsSource.addFeature(feature);
 						map.getView().setCenter(htrsCoords);
-						map.getView().setZoom(14);
+						map.getView().setZoom(13);
 									
 			  			
 						if (coordinatesPanelEPSG=="4326"){
