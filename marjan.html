@@ -582,27 +582,34 @@
 				const extent4326 = ol.proj.transformExtent(htrsextent, projection, 'EPSG:4326');
 				let wcsurl=buildWCSRequest("MarjanOrtofoto2024:Marjan_jug_DSM_2m_hillshade", htrsextent, width, height, 'image/png');
 
-				fetch(wcsurl)
-					.then(response => {
-						if (!response.ok) {
-							throw new Error('Network response was not ok');
-						}
-						return response.blob(); // Get the response as a Blob
-					})
-					.then(blob => {
-						// Create a URL for the Blob and download it
-						const url = URL.createObjectURL(blob);
-						const a = document.createElement('a');
-						a.href = url;
-						a.download = 'downloaded_image.png'; // Set the desired file name
-						document.body.appendChild(a);
-						a.click();
-						a.remove(); // Remove the link after downloading
-						URL.revokeObjectURL(url); // Free up memory
-					})
-					.catch(error => {
-						console.error('There was a problem with the fetch operation:', error);
-					});
+				fetch(wcsurl, {
+    method: 'GET',
+    headers: {
+        'Accept': 'image/tiff', // Explicitly request TIFF image
+        'Content-Type': 'application/x-www-form-urlencoded' // Some servers may require this
+    },
+    mode: 'cors', // Enable CORS
+    credentials: 'include' // Include cookies if needed
+})
+.then(response => {
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    return response.blob(); // Convert response to a Blob
+})
+.then(blob => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'downloaded_image.tiff'; // Ensure correct file format
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url); // Free up memory
+})
+.catch(error => {
+    console.error('Fetch error:', error);
+});
 				// Toggle the measure tools panel
 				//gotocoordinatesPanel.style.display = (gotocoordinatesPanel.style.display === 'block' || gotocoordinatesPanel.style.display === '') ? 'none' : 'block';
 			});
