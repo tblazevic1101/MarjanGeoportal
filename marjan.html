@@ -548,7 +548,7 @@
 				
 				    // If zoom level is too high (too close), adjust manually
 				    if (calculatedZoom > minZoom) {
-				        const center = ol.extent.getCenter(extent);
+				        const center = ol.extent.getCenter(measureLayer.getSource().getExtent());
 				        map.getView().setCenter(center);
 				        map.getView().setZoom(minZoom);
 				    }
