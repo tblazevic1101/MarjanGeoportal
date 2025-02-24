@@ -815,7 +815,7 @@
 			
 			let basemapLayer;
 			let overbasemapLayer ;
-			console.log("mreza");
+			console.log("mreza1");
 			const mreza=new ol.layer.Graticule({
     showLabels: true,
     lonLabelFormatter: (lon) => lon.toFixed(2) + "°",  // Format longitude labels
@@ -832,7 +832,7 @@
 			initializeAndAddBasemapLayer('TK25','WMTS');
 			initializeAndAddOverbasemapLayer('DOF_Lidar_2023','WMTS');
 
-			graticule.setMap(map);
+			mreza.setMap(map);
 			
 			//Idi na koordinate
 			const goToCoordsSource = new ol.source.Vector();
