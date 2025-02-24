@@ -822,15 +822,15 @@
 			let overbasemapLayer ;
 			console.log("mreza4");
 			const mreza=new ol.layer.Graticule({
-    showLabels: true,
-    lonLabelFormatter: (lon) => lon.toFixed(2) + "°",  // Format longitude labels
-    latLabelFormatter: (lat) => lat.toFixed(2) + "°",  // Format latitude labels
-    wrapX: false,
-    strokeStyle: new ol.style.Stroke({
-        color: "rgba(0, 0, 255, 0.5)", // Blue grid lines
-        width: 1
-    })
-});
+				showLabels: true,
+				lonLabelFormatter: (lon) => lon.toFixed(2) + "°",  // Format longitude labels
+				latLabelFormatter: (lat) => lat.toFixed(2) + "°",  // Format latitude labels
+				wrapX: false,
+				strokeStyle: new ol.style.Stroke({
+					color: "rgba(0, 0, 255, 0.4)", // Blue grid lines
+			        	width: 1
+			    	})
+			});
 
 			
 			// Add initial layer
