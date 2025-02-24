@@ -816,11 +816,23 @@
 			let basemapLayer;
 			let overbasemapLayer ;
 
+			const mreza=new ol.layer.Graticule({
+				// the style to use for the lines, optional.
+				strokeStyle: new ol.style.Stroke({
+					color: 'rgba(255,120,0,0.9)',
+					width: 2,
+					lineDash: [0.5, 4],
+			      	}),
+				showLabels: true,
+				wrapX: false,
+			    });
+
 			
 			// Add initial layer
 			initializeAndAddBasemapLayer('TK25','WMTS');
 			initializeAndAddOverbasemapLayer('DOF_Lidar_2023','WMTS');
-			
+
+			map.addLayer(mreza);
 			
 			//Idi na koordinate
 			const goToCoordsSource = new ol.source.Vector();
