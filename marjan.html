@@ -3134,41 +3134,47 @@
 			}
 			
 			document.getElementById('print-map-button').addEventListener('click', function () {
-			
-			
-			const mapCanvass = document.querySelector('#map canvas');
-    console.log(mapCanvass);
-    // Check if canvas is found
-    if (!mapCanvass) {
-        console.error('No canvas element found inside the map div.');
-        return;
+			map.once('rendercomplete', function () {
+  var mapCanvas = document.createElement('canvas');
+  var size = map.getSize();
+  mapCanvas.width = size[0];
+  mapCanvas.height = size[1];
+  var mapContext = mapCanvas.getContext('2d');
+  Array.prototype.forEach.call(
+  document.querySelectorAll('.ol-viewport'),
+  function (canvas) {
+  console.log(canvas);
+    if (canvas.width > 0) {
+	
+      var opacity = canvas.parentNode.style.opacity;
+      mapContext.globalAlpha = opacity === '' ? 1 : Number(opacity);
+      var transform = canvas.style.transform;
+      // Get the transform parameters from the style's transform matrix
+      var matrix = transform
+        .match(/^matrix\(([^\(]*)\)$/)[1]
+        .split(',')
+        .map(Number);
+      // Apply the transform to the export map context
+      CanvasRenderingContext2D.prototype.setTransform.apply(
+        mapContext,
+        matrix
+      );
+      mapContext.drawImage(canvas, 0, 0);
     }
-			 const mapElement = document.getElementById('map'); // Your map div
-    const mapViewport = mapElement.querySelector('.ol-viewport');
-    // Trigger map rendering completion
-    map.once('rendercomplete', function () {
-        // Use html2canvas to take the screenshot of the map container
-        html2canvas(mapViewport, {
-            allowTaint: true,
-            foreignObjectRendering: true,
-            scale: 2 // Optional: increases resolution of the captured image
-        }).then(canvas => {
-            // Dynamically create and trigger download
-            const link = document.createElement('a');
-			link.crossorigin='anonymous';
-            link.href = canvas.toDataURL(); // Convert canvas to data URL
-            link.download = "map.png"; // Set the filename
-            document.body.appendChild(link); // Append temporarily
-            link.click(); // Trigger download
-            document.body.removeChild(link); // Clean up
+  }
+ );
+ if (navigator.msSaveBlob) {
+   // link download attribuute does not work on MS browsers
+   var imgName = prompt("Please provide the name", "survey_map");
+   navigator.msSaveBlob(mapCanvas.msToBlob(), imgName + '.png');
+ } else {
+   var link = document.getElementById('image-download');
+   link.href = mapCanvas.toDataURL();
+   link.click();
+ }
+});
+ map.renderSync();
 
-        }).catch(error => {
-            console.error("Error capturing map screenshot: ", error);
-        });
-    });
-
-    // Manually trigger renderSync to ensure the map is ready
-    map.renderSync();
 });
 
 			
