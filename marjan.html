@@ -30,6 +30,17 @@
 				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 				display: none;
 			}
+			
+			#download-data-panel {
+				position: absolute;
+				top: 50px;
+				right: 10px;
+				background: white;
+				padding: 10px;
+				border-radius: 5px;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+				display: none;
+			}
 
 			#swipe1 {
 				position: absolute;
@@ -147,7 +158,7 @@
 			}
 
 			/* Ensure your controls have a higher z-index */
-			.ol-control, #bottom-panel, #swipe, #layers-panel, #measure-tools-panel, #goto-coordinates-panel{
+			.ol-control, #bottom-panel, #swipe, #layers-panel, #measure-tools-panel, #goto-coordinates-panel, #download-data-panel{
 				z-index: 2000; /* Or higher */				
 			}
 			
@@ -228,6 +239,7 @@
 		</style>
 	</head>
 	<body>
+	<a id="image-download" download="map.png"></a>
 		<div id="report-problem-Div">
 			<iframe id="report-problem-iframe" src=""></iframe> 
 		</div>
@@ -325,7 +337,25 @@
   						<span>Prikaži lokaciju</span>  
 					</button>
     				</div>
+    		</div>
+			
+			
+			<div id="download-data-panel" style="display: none; position: absolute; top: 50px; right: 10px; background: white; padding: 8px; border: 1px solid #62ba46; border-radius: 5px; max-width:250px">
+				<div id="download-image-data-menu" style="padding-bottom: 5px">
+					<p style="color: #666666;">Sloj za preuzimanje:</p>
+						<label><input type="radio" name="downloadWCS" class="toc-layer" data-layer="Hillshade_jug_2m_2024">Sjenčani teren (2m)</label><br>
+						<label><input type="radio" name="downloadWCS" class="toc-layer" data-layer="DSM_jug_2m_2024">Model visina Marjan 2024 (2m)</label><br>
+						<label><input type="radio" name="downloadWCS" class="toc-layer" data-layer="Orto_jug_1cm_2024" checked>Ortofoto Marjan jug 2024 (1cm)</label><br>
+						<!--<label><input type="radio" name="basemap" class="toc-layer" data-layer="HOK" data-layer-service="WMTS">HOK</label><br>-->
+				</div>
+				<div style="display: flex; gap: 5px; align-items: center;"> 
+					<button id="download-image-data-button" style="width: 100%; padding: 5px; font-family: Garamond, Times New Roman, serif; display: flex; align-items: center; justify-content: center; background: white; border-radius: 2px; border-width: 1px; border-color: rgba(128, 128, 128, 0.25); color:#666666; gap:5px">  						
+						<img src="icons/object-group-regular.svg" alt="Preuzmi podatke" width="20" height="20">
+  						<span>Preuzmi podatke</span>  
+					</button>
     			</div>
+    		</div>
+			
 			
 			<div id="layers-panel" style="display: none; background:white; padding:8px; border:1px solid #62ba46; border-radius:5px;">
 				<div id="basemap-menu">
@@ -339,6 +369,7 @@
 					<label><input type="radio" name="basemap" class="toc-layer" data-layer="DOF_2017_2018" data-layer-service="WMTS">Ortofoto 2017-2018</label><br>
 					<label><input type="radio" name="basemap" class="toc-layer" data-layer="DOF_2019_2020" data-layer-service="WMTS">Ortofoto 2019-2020</label><br>
 					<label><input type="radio" name="basemap" class="toc-layer" data-layer="DOF_2021_2022" data-layer-service="WMTS">Ortofoto 2021-2022</label><br>
+					<label><input type="radio" name="basemap" class="toc-layer" data-layer="Marjan_hillshade_2024_2m" data-layer-service="WMTS">Marjan DSM 2024</label><br>
 				</div>
 				<div id="overbasemap-menu">				
 					<div style="display: flex; align-items: center; gap:5px"><label>Dodatni sloj:</label><input type="range" id="overbasemapVisibility-slider" style="margin-left: auto;" min="0" max="1" step="0.1" value="1"></div>
@@ -348,6 +379,7 @@
 					<label><input type="radio" name="overbasemap" class="toc-layer" data-layer="DOF_2019_2020" data-layer-service="WMTS">Ortofoto 2019-2020</label><br>
 					<label><input type="radio" name="overbasemap" class="toc-layer" data-layer="DOF_2021_2022" data-layer-service="WMTS">Ortofoto 2021-2022</label><br>
 					<label><input type="radio" name="overbasemap" class="toc-layer" data-layer="DOF_Lidar_2023" data-layer-service="WMTS">LiDAR Ortofoto 2021-2022</label><br>
+					<label><input type="radio" name="overbasemap" class="toc-layer" data-layer="Marjan_jug_orto_2024_5cm" data-layer-service="WMTS">Marjan jug Ortofoto 2024</label><br>
 				</div>
 				<br/>
 				<div id="katastarLayer-controls" style="display: flex; align-items: center; gap:5px; padding:2px">  
@@ -508,6 +540,7 @@
 				const layerMenu = document.getElementById('layers-panel');
 				const measureToolsPanel = document.getElementById('measure-tools-panel');
 				const gotocoordinatesPanel = document.getElementById('goto-coordinates-panel');
+				const downloaddataPanel = document.getElementById('download-data-panel');
 
 				// Check if the measure tools panel is open and close it if it is
 				if (measureToolsPanel.style.display === 'block') {
@@ -515,6 +548,10 @@
 				}
 				if (gotocoordinatesPanel.style.display === 'block') {
 					gotocoordinatesPanel.style.display = 'none';
+				}
+				
+				if (downloaddataPanel.style.display === 'block') {
+					downloaddataPanel.style.display = 'none';
 				}
 
 				// Toggle the layer menu
@@ -525,6 +562,7 @@
 				const layerMenu = document.getElementById('layers-panel');
 				const measureToolsPanel = document.getElementById('measure-tools-panel');
 				const gotocoordinatesPanel = document.getElementById('goto-coordinates-panel');
+				const downloaddataPanel = document.getElementById('download-data-panel');
 
 				// Check if the layer menu is open and close it if it is
 				if (layerMenu.style.display === 'block') {
@@ -532,6 +570,9 @@
 				}
 				if (gotocoordinatesPanel.style.display === 'block') {
 					gotocoordinatesPanel.style.display = 'none';
+				}
+				if (downloaddataPanel.style.display === 'block') {
+					downloaddataPanel.style.display = 'none';
 				}
 
 				// Toggle the measure tools panel
@@ -543,6 +584,7 @@
 				const layerMenu = document.getElementById('layers-panel');
 				const measureToolsPanel = document.getElementById('measure-tools-panel');
 				const gotocoordinatesPanel = document.getElementById('goto-coordinates-panel');
+				const downloaddataPanel = document.getElementById('download-data-panel');
 
 				// Check if the layer menu is open and close it if it is
 				if (layerMenu.style.display === 'block') {
@@ -552,16 +594,27 @@
 				if (measureToolsPanel.style.display === 'block') {
 					measureToolsPanel.style.display = 'none';
 				}
+				if (downloaddataPanel.style.display === 'block') {
+					downloaddataPanel.style.display = 'none';
+				}
 
 				// Toggle the measure tools panel
 				gotocoordinatesPanel.style.display = (gotocoordinatesPanel.style.display === 'block' || gotocoordinatesPanel.style.display === '') ? 'none' : 'block';
 			});
 			
 			
+			
+			
+			
+			
+			
+			
+			
 			document.getElementById('download-data-button').addEventListener('click', function () {
 				const layerMenu = document.getElementById('layers-panel');
 				const measureToolsPanel = document.getElementById('measure-tools-panel');
 				const gotocoordinatesPanel = document.getElementById('goto-coordinates-panel');
+				const downloaddataPanel = document.getElementById('download-data-panel');
 
 				// Check if the layer menu is open and close it if it is
 				if (layerMenu.style.display === 'block') {
@@ -575,61 +628,32 @@
 				if (gotocoordinatesPanel.style.display === 'block') {
 					gotocoordinatesPanel.style.display = 'none';
 				}
-				let htrsextent=[492927.8859,4818500.0,494410.3078,4818924.3888];
-				//let htrsextent=[492725,4819269,492868,4819327];
-				let width=htrsextent[2]-htrsextent[0];
-				let height=htrsextent[3]-htrsextent[1];
-				const extent4326 = ol.proj.transformExtent(htrsextent, projection, 'EPSG:4326');
-				let wcsurl=buildWCSRequest("MarjanOrtofoto2024:Marjan_jug_DSM_2m_hillshade", htrsextent, width, height, 'image/png');
-
-				fetch(wcsurl, {
-    method: 'GET',
-    headers: {
-        'Accept': 'image/tiff', // Explicitly request TIFF image
-        'Content-Type': 'application/x-www-form-urlencoded' // Some servers may require this
-    },
-    mode: 'cors', // Enable CORS
-    credentials: 'include' // Include cookies if needed
-})
-.then(response => {
-    if (!response.ok) {
-        throw new Error('Network response was not ok');
-    }
-    return response.blob(); // Convert response to a Blob
-})
-.then(blob => {
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'downloaded_image.tiff'; // Ensure correct file format
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url); // Free up memory
-})
-.catch(error => {
-    console.error('Fetch error:', error);
-});
-				// Toggle the measure tools panel
-				//gotocoordinatesPanel.style.display = (gotocoordinatesPanel.style.display === 'block' || gotocoordinatesPanel.style.display === '') ? 'none' : 'block';
+				//downloaddataPanel.style.display= 'block';
+				const status=downloaddataPanel.style.display;
+				if (status==='none'){
+					if (rectangleSource.getFeatures().length==0)
+					{
+						const mapCenter=map.getView().getCenter();
+						const rectangleExtent = [mapCenter[0]-50,mapCenter[1]-50,mapCenter[0]+50,mapCenter[1]+50];
+						const rectangle = new ol.Feature(ol.geom.Polygon.fromExtent(rectangleExtent) );
+						
+						rectangle.setStyle(new ol.style.Style({
+							stroke: new ol.style.Stroke({ color: 'black', width: 2 }),
+							fill: new ol.style.Fill({ color: 'rgba(255, 0, 0, 0.2)' })
+						}));
+						
+						rectangleSource.addFeature(rectangle);
+					}
+					rectangleLayer.setVisible(true);
+					downloaddataPanel.style.display = 'block';
+				}
+				else{
+					rectangleLayer.setVisible(false);
+					downloaddataPanel.style.display = 'none';
+				}
 			});
-			
-			function buildWCSRequest(coverageId, bbox, width, height, format) {
-				const wcsServer = 'http://192.168.33.86:8080/geoserver/wcs'; // Replace with your WCS server URL
-				const version = '1.1.1'; // Specify the WCS version
-				const request = `GetCoverage`;
+				
 
-				const url = `${wcsServer}?service=WCS&version=${version}&request=${request}` +
-							`&IDENTIFIER=${coverageId}&BOUNDINGBOX=${bbox.join(',')},urn:ogc:def:crs:EPSG::3765` + // Assuming bbox is an array [minX, minY, maxX, maxY]
-							`&FORMAT=image/geotiff&` +
-							`STORE=false&` +
-							`GridBaseCRS=urn:ogc:def:crs:EPSG::3765&` +
-							`GridType=urn:ogc:def:method:WCS:1.1:2dSimpleGrid&` +
-							`GridOffsets=2.0005693657220185,-2.0018339622633987&` +
-							`GridCS=urn:ogc:def:cs:OGC:0.0:Grid2dSquareCS`;
-
-				return url;
-			}
 			
 
 			document.getElementById('zoomToExtentGrafika').addEventListener('click', function () {
@@ -681,7 +705,7 @@
 			function createWmsLayer(layerType) {
 				if (layerType === "OSM") {
 					return new ol.layer.Tile({
-						source: new ol.source.OSM(), // OpenStreetMap Tile Layer
+						source: new ol.source.OSM({crossOrigin:"Anonymous"})// OpenStreetMap Tile Layer						
 					});
 				}
 				const ak="authKey=fee6e8df-d92b-4413-bef0-e1900c88286d";
@@ -768,6 +792,19 @@
 					layername='TN.RoadTransportNetwork.RoadArea';
 					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
 				}
+				if (layerType === "Marjan_jug_orto_2024_5cm")
+				{
+					url='http://192.168.33.86:8080/geoserver/MarjanOrtofoto2024/wms';
+					layername='MarjanOrtofoto2024:Marjan_jug_ortofoto_5cm';
+					attrib='<a target="_blank" href="https://www.marjan-parksuma.hr/">Marjan park šuma</a>';
+				}
+				if (layerType === "Marjan_hillshade_2024_2m")
+				{
+					url='http://192.168.33.86:8080/geoserver/MarjanOrtofoto2024/wms';
+					layername='MarjanOrtofoto2024:Marjan_jug_DSM_2m_hillshade';
+					attrib='<a target="_blank" href="https://www.marjan-parksuma.hr/">Marjan park šuma</a>';
+				}
+				
 				return new ol.layer.Tile({
 					source: new ol.source.TileWMS({
 						attributions: attrib,
@@ -779,7 +816,8 @@
 							'TILED': false,
 							'CRS': 'EPSG:3765'
 						},
-						serverType: 'geoserver'
+						serverType: 'geoserver',
+						crossOrigin: 'Anonymous'
 					})
 				});
 			}
@@ -858,13 +896,192 @@
 					url='https://geoportal.dgu.hr/services/sla/orthophoto_2023/wmts'+"?"+ak;
 					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
 				}
+				
+				
+				if (layerType === "Marjan_jug_orto_2024_5cm")
+				{
+					url='http://192.168.33.86:8080/geoserver/gwc/service/wmts?service=wmts&version=1.1.1';
+					layername='MarjanOrtofoto2024:Marjan_jug_ortofoto_5cm';
+					attrib='<a target="_blank" href="https://www.marjan-parksuma.hr/">Marjan park šuma</a>';
+				
+				const resolutions = [
+    1931.333812189312, 965.666906094656, 482.833453047328, 241.416726523664,
+    120.708363261832, 60.354181630916, 30.177090815458, 15.088545407729,
+    7.5442727038645, 3.77213635193225, 1.886068175966125, 0.9430340879830625,
+    0.4715170439915313, 0.2357585219957656, 0.1178792609978828, 0.0589396304989414,
+    0.0294698152494707, 0.0147349076247354, 0.0073674538123677
+]; // Reverse for OpenLayers order
+
+        const matrixIds = resolutions.map((_, i) => `EPSG3765:256x256:${i}`);
+
+        // Define WMTS TileGrid
+        const tileGrid = new ol.tilegrid.WMTS({
+    origin: [247020.52671340803, 5160175.80631312], // Top-left from GeoServer bounds
+    resolutions: resolutions,
+    matrixIds: matrixIds,
+    tileSize: [256, 256]
+});
+
+        // Define WMTS Layer
+        const wmtsLayer = new ol.layer.Tile({
+            source: new ol.source.WMTS({
+                url: 'http://192.168.33.86:8080/geoserver/gwc/service/wmts?',
+                layer: 'MarjanOrtofoto2024:Marjan_jug_ortofoto_5cm',
+                matrixSet: 'EPSG3765:256x256_2', // Confirmed correct from QGIS
+                format: 'image/png',
+                projection: projection,
+                tileGrid: tileGrid,
+                style: '',
+                requestEncoding: 'KVP',
+				crossOrigin: 'Anonymous'
+            })
+        });
+					return wmtsLayer;
+	}
+				
+				
+				
+				if (layerType === "Marjan_hillshade_2024_2m")
+				{
+					url='http://192.168.33.86:8080/geoserver/gwc/service/wmts?service=wmts&version=1.1.1';
+					layername='MarjanOrtofoto2024:Marjan_jug_DSM_2m_hillshade';
+					attrib='<a target="_blank" href="https://www.marjan-parksuma.hr/">Marjan park šuma</a>';
+					
+					
+					/*const projection = ol.proj.get('EPSG:3765'); // Use your map's projection
+					const projectionExtent = projection.getExtent();
+					const tileSize = 256; // Standard tile size
+
+					const resolutions = [];
+					const matrixIds = [];
+					const maxZoom = 19; // Adjust based on your WMTS
+
+					for (let z = 0; z < maxZoom; ++z) {
+					  resolutions[z] = (projectionExtent[2] - projectionExtent[0]) / tileSize / Math.pow(2, z);
+					  matrixIds[z] = z;
+					}
+
+					const wmtsLayer = new ol.layer.Tile({
+					  opacity: 0.7,
+					  source: new ol.source.WMTS({
+						attributions: 'Tiles © <a href="https://mrdata.usgs.gov/geology/state/" target="_blank">USGS</a>',
+						url: 'http://192.168.33.86:8080/geoserver/gwc/service/wmts',
+						layer: 'MarjanOrtofoto2024:Marjan_jug_DSM_2m_hillshade',
+						matrixSet: 'GoogleMapsCompatible', // Ensure this matches your GeoServer
+						format: 'image/png',
+						projection: projection,
+						tileGrid: new ol.tilegrid.WMTS({
+						  origin: ol.extent.getTopLeft(projectionExtent),
+						  resolutions: resolutions,
+						  matrixIds: matrixIds,
+						}),
+						style: 'default',
+						wrapX: false, // Recommended for non-global layers
+					  }),
+					});*/
+					
+					/*const wmtsLayer = new ol.layer.Tile({
+					  opacity: 0.7,
+					  source: new ol.source.TileImage({
+						projection: 'EPSG:3765',
+						tileLoadFunction: (tile, src) => {
+						  tile.getImage().src = src;
+						},
+						tileUrlFunction: function(tileCoord, pixelRatio, projection) {
+						  const z = tileCoord[0];
+						  const x = tileCoord[1];
+						  const y = tileCoord[2];
+
+						  return `http://192.168.33.86:8080/geoserver/gwc/service/wmts?layer=MarjanOrtofoto2024:Marjan_jug_DSM_2m_hillshade&style=&tilematrixset=EPSG:3765&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix=EPSG:3765:${z}&TileCol=${x}&TileRow=${y}`;
+						},
+					  }),
+					});*/
+					
+					
+					/*const projection3765 = ol.proj.get('EPSG:3765');
+					const extent3765 = projection3765.getExtent();
+					console.log(extent3765);
+					const resolutions = [
+						// Replace with your actual EPSG:3765 resolutions
+						1000, 500, 250, 125, 62.5, 31.25, 15.625, 7.8125, 3.90625, 1.953125
+					];
+					const tileSize = [256, 256];
+					const topLeft = ol.extent.getTopLeft(extent3765);
+					console.log(topLeft);
+					const tileGrid3765 = new ol.tilegrid.TileGrid({
+						extent: extent3765,
+						resolutions: resolutions,
+						tileSize: tileSize,
+						origin: topLeft
+					});
+
+					const wmtsSource = new ol.source.WMTS({
+						url: 'http://192.168.33.86:8080/geoserver/gwc/service/wmts', // Replace with your Geoserver WMTS URL
+						layer: 'MarjanOrtofoto2024:Marjan_jug_DSM_2m_hillshade', // Replace with your layer name
+						matrixSet: 'EPSG:4326', //if you created a new matrix set in geoserver.
+						format: 'image/png',
+						projection: projection3765,
+						tileGrid: tileGrid3765
+					});
+
+					const wmtsLayer = new ol.layer.Tile({
+						source: wmtsSource
+					});*/
+					
+					const resolutions = [
+    1931.333812189312, 965.666906094656, 482.833453047328, 241.416726523664,
+    120.708363261832, 60.354181630916, 30.177090815458, 15.088545407729,
+    7.5442727038645, 3.77213635193225, 1.886068175966125, 0.9430340879830625,
+    0.4715170439915313, 0.2357585219957656, 0.1178792609978828, 0.0589396304989414,
+    0.0294698152494707, 0.0147349076247354, 0.0073674538123677, 0.0036837269061838,
+    0.0018418634530919, 0.000920931726546, 0.000460465863273, 0.0002302329316365,
+    0.0001151164658182, 0.0000575582329091, 0.0000287791164546, 0.0000143895582273,
+    0.0000071947791136, 0.0000035973895568, 0.0000017986947784
+]; // Reverse for OpenLayers order
+
+        const matrixIds = resolutions.map((_, i) => `My_EPSG3765:256x256:${i}`);
+
+        // Define WMTS TileGrid
+        const tileGrid = new ol.tilegrid.WMTS({
+    origin: [247020.52671340803, 5160175.80631312], // Top-left from GeoServer bounds
+    resolutions: resolutions,
+    matrixIds: matrixIds,
+    tileSize: [256, 256]
+});
+
+        // Define WMTS Layer
+        const wmtsLayer = new ol.layer.Tile({
+            source: new ol.source.WMTS({
+                url: 'http://192.168.33.86:8080/geoserver/gwc/service/wmts?',
+                layer: 'MarjanOrtofoto2024:Marjan_jug_DSM_2m_hillshade',
+                matrixSet: 'EPSG3765:256x256_1', // Confirmed correct from QGIS
+                format: 'image/png',
+                projection: projection,
+                tileGrid: tileGrid,
+                style: '',
+                requestEncoding: 'KVP'
+            })
+        });
+					return wmtsLayer;
+
+									
+					
+					
+				}
 				let wmtsCapabilities = await getWMTSCapabilities(url + "&request=GetCapabilities"); // Await here!
 
 				if (wmtsCapabilities) { // Check wmtsCapabilities *here*
+					//let matrixSet='EPSG3765:1024x1024';
+					console.log(wmtsCapabilities);
+					let matrixSet='EPSG:4326';
+					if (layerType === "Marjan_hillshade_2024_2m"){
+						matrixSet='EPSG:4326';
+					}
 					const options = ol.source.WMTS.optionsFromCapabilities(wmtsCapabilities, { //Use wmtsCapabilities
 						layer: layername,
-						matrixSet: 'EPSG3765:1024x1024',
+						matrixSet: matrixSet,
 					});
+					console.log(options);
 					options.attributions= attrib;
 					const layer = new ol.layer.Tile({
 						source: new ol.source.WMTS(options),
@@ -2905,6 +3122,175 @@
 					changeDivEnabled('katastarLayer-controls', false);
 				}
 			});
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			const rectangleSource = new ol.source.Vector();
+			const rectangleLayer = new ol.layer.Vector({ source: rectangleSource });
+			rectangleLayer.setZIndex(10000);
+			map.addLayer(rectangleLayer);			
+			rectangleLayer.setVisible(false);
+			const translate = new ol.interaction.Translate({layers:[rectangleLayer]});
+			map.addInteraction(translate);
+			
+			let wcsLayerToDownload='Orto_jug_1cm_2024';
+			
+			/*const rectangleModify = new ol.interaction.Modify({
+				source: rectangleSource,
+				condition: function(event) {
+					return false; // Disables vertex modification
+				}
+			});
+			map.addInteraction(rectangleModify);*/
+			
+			
+			document.querySelectorAll('#download-image-data-menu input[type="radio"]').forEach(radio => {
+				radio.addEventListener('change', function () {
+					const wcsLayerToDownload = this.getAttribute('data-layer');
+				});
+			});
+			
+			document.getElementById('download-image-data-button').addEventListener('click', function () {
+				downloadWCSData();			
+			});
+			
+			function downloadWCSData(){								
+				const features = rectangleSource.getFeatures();
+				if (features.length > 0) {
+					// Get the first feature (assuming only one rectangle)
+					const rectangleFeature = features[0];
+
+					// Get the extent from the geometry
+					const extent = rectangleFeature.getGeometry().getExtent();
+					let coverageID;
+					if (wcsLayerToDownload=='Hillshade_jug_2m_2024'){
+						coverageID="Marjan_jug_DSM_2m_hillshade";
+					}
+					else if (wcsLayerToDownload=='DSM_jug_2m_2024'){
+						coverageID="MarjanOrtofoto2024:Marjan_jug_DSM_2m";
+					}
+					else if (wcsLayerToDownload=='Orto_jug_1cm_2024'){
+						coverageID="MarjanOrtofoto2024:Marjan_jug_ortofoto_5cm";
+					}
+					
+					
+					if(coverageID){
+						let wcsurl=buildWCSRequest(coverageID, extent, 'image/png');
+
+						fetch(wcsurl)
+							.then(response => {
+								if (!response.ok) {
+									throw new Error('Network response was not ok');
+								}
+								return response.blob(); // Get the response as a Blob
+							})
+							.then(blob => {
+								// Create a URL for the Blob and download it
+								const url = URL.createObjectURL(blob);
+								const a = document.createElement('a');
+								a.href = url;
+								a.download = 'downloaded_image.png'; // Set the desired file name
+								document.body.appendChild(a);
+								a.click();
+								a.remove(); // Remove the link after downloading
+								URL.revokeObjectURL(url); // Free up memory
+							})
+							.catch(error => {
+								console.error('There was a problem with the fetch operation:', error);
+							});
+					}
+				}
+			}
+			
+			
+			function buildWCSRequest(coverageId, bbox, format) {
+				const wcsServer = 'http://192.168.33.86:8080/geoserver/wcs'; // Replace with your WCS server URL
+				const version = '1.1.1'; // Specify the WCS version
+				const request = `GetCoverage`;
+
+				const url = `${wcsServer}?service=WCS&version=${version}&request=${request}` +
+							`&IDENTIFIER=${coverageId}&BOUNDINGBOX=${bbox.join(',')},urn:ogc:def:crs:EPSG::3765` + // Assuming bbox is an array [minX, minY, maxX, maxY]
+							`&FORMAT=image/geotiff&` +
+							`STORE=true&` +
+							`GridBaseCRS=urn:ogc:def:crs:EPSG::3765&` +
+							`GridType=urn:ogc:def:method:WCS:1.1:2dSimpleGrid&` +
+							`GridOffsets=2.0005693657220185,-2.0018339622633987&` +
+							`GridCS=urn:ogc:def:cs:OGC:0.0:Grid2dSquareCS`;
+
+				return url;
+			}
+			
+			document.getElementById('print-map-button').addEventListener('click', function () {
+				map.once('rendercomplete', function () {
+					const mapCanvas = document.createElement('canvas');
+					const size = map.getSize();
+					mapCanvas.width = size[0];
+					mapCanvas.height = size[1];
+					const mapContext = mapCanvas.getContext('2d');
+
+					Array.prototype.forEach.call(
+						map.getViewport().querySelectorAll('.ol-layer canvas, canvas.ol-layer'),
+						function (canvas) {
+							if (canvas.width > 0) {
+								const opacity = canvas.parentNode.style.opacity || canvas.style.opacity;
+								mapContext.globalAlpha = opacity === '' ? 1 : Number(opacity);
+								let matrix;
+								const transform = canvas.style.transform;
+								if (transform) {
+									matrix = transform.match(/^matrix\(([^\(]*)\)$/)[1].split(',').map(Number);
+								} else {
+									matrix = [
+										parseFloat(canvas.style.width) / canvas.width,
+										0,
+										0,
+										parseFloat(canvas.style.height) / canvas.height,
+										0,
+										0,
+									];
+								}
+								CanvasRenderingContext2D.prototype.setTransform.apply(mapContext, matrix);
+
+								const backgroundColor = canvas.parentNode.style.backgroundColor;
+								if (backgroundColor) {
+									mapContext.fillStyle = backgroundColor;
+									mapContext.fillRect(0, 0, canvas.width, canvas.height);
+								}
+
+								mapContext.drawImage(canvas, 0, 0);
+							}
+						}
+					);
+
+					mapContext.globalAlpha = 1;
+					mapContext.setTransform(1, 0, 0, 1, 0, 0);
+
+					// Dynamically create and trigger download
+					/*const link = document.createElement('a');
+					link.href = mapCanvas.toDataURL();
+					link.download = 'map.png'; // Set the filename
+					document.body.appendChild(link); // Append temporarily
+					link.click(); // Trigger download
+					document.body.removeChild(link); // Clean up*/
+					const link = document.getElementById('image-download');
+					link.href = mapCanvas.toDataURL();
+					link.click();
+				});
+
+				map.renderSync();
+			});
+
 			
 		</script>
 	</body>
