@@ -239,7 +239,6 @@
 		</style>
 	</head>
 	<body>
-	<div id="simpleElement">Hello, world!</div>
 	<a id="image-download" download="map.png"></a>
 		<div id="report-problem-Div">
 			<iframe id="report-problem-iframe" src=""></iframe> 
@@ -698,7 +697,7 @@
 			function createWmsLayer(layerType) {
 				if (layerType === "OSM") {
 					return new ol.layer.Tile({
-						source: new ol.source.OSM({crossOrigin:'anonymus'})// OpenStreetMap Tile Layer						
+						source: new ol.source.OSM({crossOrigin:'anonymous'})// OpenStreetMap Tile Layer						
 					});
 				}
 				const ak="authKey=fee6e8df-d92b-4413-bef0-e1900c88286d";
@@ -816,7 +815,7 @@
 							'CRS': 'EPSG:3765'
 						},
 						serverType: 'geoserver',
-						//crossOrigin: 'anonymus'
+						//crossOrigin: 'anonymous'
 					})
 				});
 			}
@@ -848,7 +847,7 @@
 			async function createWmtsLayer(layerType) {
 				if (layerType === "OSM") {
 					return new ol.layer.Tile({
-						source: new ol.source.OSM({crossOrigin:'anonymus'}), // OpenStreetMap Tile Layer
+						source: new ol.source.OSM({crossOrigin:'anonymous'}), // OpenStreetMap Tile Layer
 					});
 				}
 				const ak="authKey=fee6e8df-d92b-4413-bef0-e1900c88286d";
@@ -960,7 +959,7 @@
 							tileGrid: tileGrid,
 							style: '',
 							requestEncoding: 'KVP',
-							//crossOrigin: 'anonymus'
+							//crossOrigin: 'anonymous'
 						})
 					});
 					return wmtsLayer;
@@ -1096,7 +1095,7 @@
 			mreza.setMap(map);
 			
 			//Idi na koordinate
-			const goToCoordsSource = new ol.source.Vector({crossOrigin:'anonymus'});
+			const goToCoordsSource = new ol.source.Vector({crossOrigin:'anonymous'});
 
 			const goToCoordsLayer = new ol.layer.Vector({
 				source: goToCoordsSource,
@@ -1477,7 +1476,7 @@
 						'CRS': 'EPSG:3765'
 					},
 					serverType: 'geoserver',
-					crossOrigin:'anonymus'
+					crossOrigin:'anonymous'
 				}),
 				maxResolution: 0.5,
 				//minZoom:13,
@@ -1698,7 +1697,7 @@
 			  	map: map,
 			  	source: new ol.source.Vector({
 					features: [accuracyFeature, positionFeature],
-					crossOrigin:'anonymus'
+					crossOrigin:'anonymous'
 			  	}),
 			});
 			
@@ -1709,7 +1708,7 @@
 
 
 			//measure
-			const measureSource = new ol.source.Vector({crossOrigin:'anonymus'});
+			const measureSource = new ol.source.Vector({crossOrigin:'anonymous'});
 
 			const measureLayer = new ol.layer.Vector({
 				source: measureSource,
@@ -2330,7 +2329,7 @@
 
 							const vectorSource = new ol.source.Vector({
 								features: transformedFeatures,
-								crossOrigin:'anonymus'
+								crossOrigin:'anonymous'
 							});
 
 							const kmlLayer = new ol.layer.Vector({
@@ -3039,7 +3038,7 @@
 			
 			
 			
-			const rectangleSource = new ol.source.Vector({crossOrigin:'anonymus'});
+			const rectangleSource = new ol.source.Vector({crossOrigin:'anonymous'});
 			const rectangleLayer = new ol.layer.Vector({ source: rectangleSource });
 			rectangleLayer.setZIndex(10000);
 			map.addLayer(rectangleLayer);			
@@ -3135,16 +3134,28 @@
 			}
 			
 			document.getElementById('print-map-button').addEventListener('click', function () {
-    /*// Trigger map rendering completion
+			
+			
+			const mapCanvass = document.querySelector('#map canvas');
+    console.log(mapCanvass);
+    // Check if canvas is found
+    if (!mapCanvass) {
+        console.error('No canvas element found inside the map div.');
+        return;
+    }
+			 const mapElement = document.getElementById('map'); // Your map div
+    const mapViewport = mapElement.querySelector('.ol-viewport');
+    // Trigger map rendering completion
     map.once('rendercomplete', function () {
         // Use html2canvas to take the screenshot of the map container
-        html2canvas(document.getElementById("map"), {
+        html2canvas(mapViewport, {
             allowTaint: true,
             foreignObjectRendering: true,
             scale: 2 // Optional: increases resolution of the captured image
         }).then(canvas => {
             // Dynamically create and trigger download
             const link = document.createElement('a');
+			link.crossorigin='anonymous';
             link.href = canvas.toDataURL(); // Convert canvas to data URL
             link.download = "map.png"; // Set the filename
             document.body.appendChild(link); // Append temporarily
@@ -3157,25 +3168,9 @@
     });
 
     // Manually trigger renderSync to ensure the map is ready
-    map.renderSync();*/
-	console.log('Element to capture:', document.getElementById("simpleElement"));
+    map.renderSync();
+});
 
-			if (typeof html2canvas === 'undefined') {
-    console.error('html2canvas is not defined.');
-} else {
-			html2canvas(document.getElementById("simpleElement"), {
-			useCORS: true,
-						allowTaint: true,
-						foreignObjectRendering: true,
-						scale: 2
-					}).then(canvas => {
-					canvas.crossOrigin='anonymus';
-						document.body.appendChild(canvas);
-					}).catch(error => {
-						console.error("html2canvas error:", error);
-					});
-}
-		});
 			
 		</script>
 	</body>
