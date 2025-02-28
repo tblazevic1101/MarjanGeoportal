@@ -236,10 +236,54 @@
 			/*.ol-control{
 				border: 2px solid #62ba46;
 			}*/
+			
+			
+			
+			/* Remove default appearance */
+			input[type="checkbox"] {
+				-webkit-appearance: none; /* For Safari */
+				-moz-appearance: none; /* For Firefox */
+				appearance: none;
+				width: 15px;
+				height: 15px;
+				border: 1px solid #666666; /* Default border */
+				border-radius: 4px; /* Optional: Rounded corners */
+				background-color: white;
+				cursor: pointer;
+				transition: background-color 0.3s ease, border-color 0.3s ease;
+			}
+
+			/* Change background when checked */
+				input[type="checkbox"]:checked {
+				background-color: #62ba46; /* Change to desired color */
+				//border-color: #4CAF50;
+			}
+			
+			
+			input[type="radio"] {
+				appearance: none; /* Removes default styling */
+				width: 16px;
+				height: 16px;
+				border: 1px solid #666666; /* Border color */
+				border-radius: 50%; /* Makes it round */
+				outline: none;
+				cursor: pointer;
+			}
+
+			input[type="radio"]:checked {
+				background-color: #62ba46; /* Change to your desired color */
+				border: 1px solid #666;
+			}
+			
+			label {
+				display: inline-flex;
+				align-items: center; /* Vertically centers input and text */
+				gap: 5px; /* Adds spacing between input and text */
+			}
 		</style>
 	</head>
 	<body>
-	<a id="image-download" download="map.png"></a>
+		<a style="display:none" id="printscreen-download" download="Marjan_Geoportal.png"></a>
 		<div id="report-problem-Div">
 			<iframe id="report-problem-iframe" src=""></iframe> 
 		</div>
@@ -342,7 +386,7 @@
 			
 			<div id="download-data-panel" style="display: none; position: absolute; top: 50px; right: 10px; background: white; padding: 8px; border: 1px solid #62ba46; border-radius: 5px; max-width:250px">
 				<div id="download-image-data-menu" style="padding-bottom: 5px">
-					<p style="color: #666666;">Sloj za preuzimanje:</p>
+					<p style="color: #666666; margin-bottom: 5px;">Sloj za preuzimanje:</p>
 						<label><input type="radio" name="downloadWCS" class="toc-layer" data-layer="Hillshade_jug_2m_2024">Sjenčani teren (2m)</label><br>
 						<label><input type="radio" name="downloadWCS" class="toc-layer" data-layer="DSM_jug_2m_2024">Model visina Marjan 2024 (2m)</label><br>
 						<label><input type="radio" name="downloadWCS" class="toc-layer" data-layer="Orto_jug_1cm_2024" checked>Ortofoto Marjan jug 2024 (1cm)</label><br>
@@ -359,7 +403,7 @@
 			
 			<div id="layers-panel" style="display: none; background:white; padding:8px; border:1px solid #62ba46; border-radius:5px;">
 				<div id="basemap-menu">
-					<p style="color: #666666;">Pozadinski sloj:</p>
+					<p style="color: #666666; margin-bottom: 5px;">Pozadinski sloj:</p>
 					<label><input type="radio" name="basemap" class="toc-layer" data-layer="OSM" data-layer-service="WMTS">OSM</label><br>
 					<label><input type="radio" name="basemap" class="toc-layer" data-layer="TK25" data-layer-service="WMTS">TK25</label><br>
 					<label><input type="radio" name="basemap" class="toc-layer" data-layer="DMR_BW" data-layer-service="WMS">Reljef</label><br>
@@ -372,7 +416,7 @@
 					<label><input type="radio" name="basemap" class="toc-layer" data-layer="Marjan_hillshade_2024_2m" data-layer-service="WMTS">Marjan DSM 2024</label><br>
 				</div>
 				<div id="overbasemap-menu">				
-					<div style="display: flex; align-items: center; gap:5px"><label>Dodatni sloj:</label><input type="range" id="overbasemapVisibility-slider" style="margin-left: auto;" min="0" max="1" step="0.1" value="1"></div>
+					<div style="display: flex; margin-bottom: 5px; align-items: center; gap:5px"><label>Dodatni sloj:</label><input type="range" id="overbasemapVisibility-slider" style="margin-left: auto;" min="0" max="1" step="0.1" value="1"></div>
 					<label><input type="radio" name="overbasemap" class="toc-layer" data-layer="DOF_2011" data-layer-service="WMTS">Ortofoto 2011</label><br>
 					<label><input type="radio" name="overbasemap" class="toc-layer" data-layer="DOF_2014_2016" data-layer-service="WMTS">Ortofoto 2014-2016</label><br>
 					<label><input type="radio" name="overbasemap" class="toc-layer" data-layer="DOF_2017_2018" data-layer-service="WMTS">Ortofoto 2017-2018</label><br>
@@ -430,13 +474,13 @@
 					<div class="ol-control ol-unselectable" style="pointer-events: auto; position:relative;"><button id="measure-download-KML" style="padding:2px; width:1.5em; height:1.5em; background: white; display: flex; align-items: center; justify-content: center;"><img src="icons/download-solid.svg" alt="Delete All" width="15px" height="15px" /></button></div>
 				</div>
 				<div style="margin-top: 5px;">
-					<label style="color:#666666;">
+					<label style="color:#666666; display: flex; align-items: center; gap:5px">
 						<input type="checkbox" id="show-segment-lengths" checked/>
 						Prikaži duljine segmenata
 					</label>
 				</div>
 				<div style="margin-top: 5px;">
-					<label style="color:#666666;">
+					<label style="color:#666666; display: flex; align-items: center; gap:5px">
 						<input type="checkbox" id="show-measurements" checked/>
 						Prikaži izmjere
 					</label>
@@ -706,13 +750,13 @@
 				let url;
 				if (layerType === "TK25")
 				{
-					url='https://geoportal.dgu.hr/services/auth/tk/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c88286d'+"?"+ak;
+					url='https://geoportal.dgu.hr/services/auth/tk/wms'+"?"+ak;
 					layername='tk:TK25';
 					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
 				}
 				if (layerType === "HOK")
 				{
-					url='https://geoportal.dgu.hr/services/auth/hok/wms?authKey=fee6e8df-d92b-4413-bef0-e1900c88286d'+"?"+ak;
+					url='https://geoportal.dgu.hr/services/auth/hok/wms'+"?"+ak;
 					layername='HOK5';
 					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
 				}
@@ -802,22 +846,43 @@
 					layername='MarjanOrtofoto2024:Marjan_jug_DSM_2m_hillshade';
 					attrib='<a target="_blank" href="https://www.marjan-parksuma.hr/">Marjan park šuma</a>';
 				}
-				
-				return new ol.layer.Tile({
-					source: new ol.source.TileWMS({
-						attributions: attrib,
-						minZoom: 8,      // Minimum zoom level for the layer to be visible
-						maxZoom: 14, 
-						url: url,
-						params: {
-							'LAYERS': layername, // Correct layer name from GetCapabilities
-							'TILED': false,
-							'CRS': 'EPSG:3765'
-						},
-						serverType: 'geoserver',
-						//crossOrigin: 'anonymous'
-					})
-				});
+				if (layerType.includes("Marjan")){
+					return new ol.layer.Tile({
+						source: new ol.source.TileWMS({
+							attributions: attrib,
+							minZoom: 8,      // Minimum zoom level for the layer to be visible
+							maxZoom: 14, 
+							url: url,
+							params: {
+								'LAYERS': layername, // Correct layer name from GetCapabilities
+								'TILED': false,
+								'CRS': 'EPSG:3765',
+								//crossOrigin: 'anonymous'
+							},
+							serverType: 'geoserver',
+							//crossOrigin: 'anonymous'
+						})
+					});
+				}
+				else{
+					let el=new ol.layer.Tile({
+						source: new ol.source.TileWMS({
+							attributions: attrib,
+							minZoom: 8,      // Minimum zoom level for the layer to be visible
+							maxZoom: 14, 
+							url: url,
+							params: {
+								'LAYERS': layername, // Correct layer name from GetCapabilities
+								'TILED': false,
+								'CRS': 'EPSG:3765',
+								crossOrigin: 'anonymous'
+							},
+							serverType: 'geoserver',
+							//crossOrigin: 'anonymous'
+						})
+					});
+					return el;
+				}
 			}
 
 			async function getWMTSCapabilities(url) {
@@ -978,6 +1043,7 @@
 					const options = ol.source.WMTS.optionsFromCapabilities(wmtsCapabilities, { //Use wmtsCapabilities
 						layer: layername,
 						matrixSet: matrixSet,
+						crossOrigin: 'anonymous'
 					});
 					console.log(options);
 					options.attributions= attrib;
@@ -3134,50 +3200,49 @@
 			}
 			
 			document.getElementById('print-map-button').addEventListener('click', function () {
-			map.once('rendercomplete', function () {
-  var mapCanvas = document.createElement('canvas');
-  var size = map.getSize();
-  mapCanvas.width = size[0];
-  mapCanvas.height = size[1];
-  var mapContext = mapCanvas.getContext('2d');
-  Array.prototype.forEach.call(
-  document.querySelectorAll('.ol-layer canvas'),
-  function (canvas) {try{
-  console.log(canvas);
-    if (canvas.width > 0) {
-	
-      var opacity = canvas.parentNode.style.opacity;
-      mapContext.globalAlpha = opacity === '' ? 1 : Number(opacity);
-      var transform = canvas.style.transform;
-      // Get the transform parameters from the style's transform matrix
-      var matrix = transform
-        .match(/^matrix\(([^\(]*)\)$/)[1]
-        .split(',')
-        .map(Number);
-      // Apply the transform to the export map context
-      CanvasRenderingContext2D.prototype.setTransform.apply(
-        mapContext,
-        matrix
-      );
-      mapContext.drawImage(canvas, 0, 0);
-    }
-  }
-  catch{}
-  }
- );
- if (navigator.msSaveBlob) {
-   // link download attribuute does not work on MS browsers
-   var imgName = prompt("Please provide the name", "survey_map");
-   navigator.msSaveBlob(mapCanvas.msToBlob(), imgName + '.png');
- } else {
-   var link = document.getElementById('image-download');
-   link.href = mapCanvas.toDataURL();
-   link.click();
- }
-});
- map.renderSync();
-
-});
+				map.once('rendercomplete', function () {
+					var mapCanvas = document.createElement('canvas');
+					var size = map.getSize();
+					mapCanvas.width = size[0];
+					mapCanvas.height = size[1];
+					var mapContext = mapCanvas.getContext('2d');
+					Array.prototype.forEach.call(
+					document.querySelectorAll('.ol-layer canvas'),
+					function (canvas) {
+						try{
+							console.log(canvas);
+							if (canvas.width > 0) {
+						
+								var opacity = canvas.parentNode.style.opacity;
+								mapContext.globalAlpha = opacity === '' ? 1 : Number(opacity);
+								var transform = canvas.style.transform;
+								// Get the transform parameters from the style's transform matrix
+								var matrix = transform
+								.match(/^matrix\(([^\(]*)\)$/)[1]
+								.split(',')
+								.map(Number);
+								// Apply the transform to the export map context
+								CanvasRenderingContext2D.prototype.setTransform.apply(
+									mapContext,
+									matrix
+								);
+								mapContext.drawImage(canvas, 0, 0);
+							}
+						}
+						catch{}
+					});
+					if (navigator.msSaveBlob) {
+						// link download attribuute does not work on MS browsers
+						var imgName = prompt("Upišite ime karte", "survey_map");
+						navigator.msSaveBlob(mapCanvas.msToBlob(), imgName + '.png');
+					} else {
+						var link = document.getElementById('printscreen-download');
+						link.href = mapCanvas.toDataURL();
+						link.click();
+					}
+				});
+				map.renderSync();
+			});
 
 			
 		</script>
