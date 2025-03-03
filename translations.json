@@ -1,4 +1,4 @@
-const translations = {
+{
     hr: {
         reportProblemButton: { title: "Prijava problema"},
         locationTrackingButton: { title: "Moja lokacija" },
