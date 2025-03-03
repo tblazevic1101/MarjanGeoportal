@@ -74,7 +74,7 @@
         "pointerCoordinatesLink": { "title": "Otvori u Google Mapsu" },
         "logoLink": { "title": "Park šuma Marjan" }
     },
-    "eng": {
+    "en": {
         "reportProblemButton": { "title": "Report problem" },
         "locationTrackingButton": { "title": "My location" },
         "locationTrackingImg": { "alt": "My location" },
