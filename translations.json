@@ -27,8 +27,8 @@
         "downloadImageDataMenu2024DSM2mSpan": { "innerHTML": "Model visina Marjan 2024 (2m)" },
         "downloadImageDataMenu2024Ortofoto1cmSpan": { "innerHTML": "Ortofoto Marjan jug 2024 (1cm)" },
         "downloadImageDataButton": { "title": "Preuzmi podatke" },
-        "downloadImageDataImg": { "alt": "Preuzmi podatke" },
-        "downloadImageDataSpan": { "innerHTML": "Preuzmi podatke" },
+        "downloadImageDataButtonImg": { "alt": "Preuzmi podatke" },
+        "downloadImageDataButtonSpan": { "innerHTML": "Preuzmi podatke" },
         "basemapMenuP": { "innerHTML": "Pozadinski sloj" },
         "basemapMenuOSMSpan": { "innerHTML": "OSM" },
         "basemapMenuTK25Span": { "innerHTML": "TK25" },
@@ -73,7 +73,8 @@
         "showMeasurementsSpan": { "innerHTML": "Prikaži izmjere" },
         "changeCrsImg": { "title": "Promijeni koordinativni sustav", "alt": "Promijeni koordinativni sustav" },
         "pointerCoordinatesLink": { "title": "Otvori u Google Mapsu" },
-        "logoLink": { "title": "Park šuma Marjan" }
+        "logoLink": { "title": "Park šuma Marjan" },
+		"changeLanguageButton": { "title": "Promijeni jezik" }		
     },
     "en": {
         "reportProblemButton": { "title": "Report problem" },
@@ -103,8 +104,8 @@
         "downloadImageDataMenu2024DSM2mSpan": { "innerHTML": "Surface model 2024 (2m)" },
         "downloadImageDataMenu2024Ortofoto1cmSpan": { "innerHTML": "Ortophoto Marjan south 2024 (1cm)" },
         "downloadImageDataButton": { "title": "Download data" },
-        "downloadImageDataImg": { "alt": "Download data" },
-        "downloadImageDataSpan": { "innerHTML": "Download" },
+        "downloadImageDataButtonImg": { "alt": "Download data" },
+        "downloadImageDataButtonSpan": { "innerHTML": "Download" },
         "basemapMenuP": { "innerHTML": "Basemap" },
         "basemapMenuOSMSpan": { "innerHTML": "OSM" },
         "basemapMenuTK25Span": { "innerHTML": "TK25" },
@@ -149,6 +150,7 @@
         "showMeasurementsSpan": { "innerHTML": "Show measurements" },
         "changeCrsImg": { "title": "Change coordinate system", "alt": "Change coordinate system" },
         "pointerCoordinatesLink": { "title": "Open in Google Maps" },
-        "logoLink": { "title": "Marjan forest park" }
+        "logoLink": { "title": "Marjan forest park" },
+		"changeLanguageButton": { "title": "Change language" }	
     }
 }
