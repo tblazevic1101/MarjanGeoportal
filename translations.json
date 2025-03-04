@@ -74,7 +74,11 @@
         "changeCrsImg": { "title": "Promijeni koordinativni sustav", "alt": "Promijeni koordinativni sustav" },
         "pointerCoordinatesLink": { "title": "Otvori u Google Mapsu" },
         "logoLink": { "title": "Park šuma Marjan" },
-		"changeLanguageButton": { "title": "Promijeni jezik" }		
+		"changeLanguageButton": { "title": "Promijeni jezik" },
+		"downloadDataPanelHeaderSpan": { "innerHTML": "Preuzimanje podataka" },
+		"layersPanelHeaderSpan":{ "innerHTML": "Slojevi" },
+		"measureToolsPanelHeaderSpan":{ "innerHTML": "Crtanje i mjerenje" },
+		"gotoCoordinatesPanelHeaderSpan":{ "innerHTML": "Idi na koordinate" }
     },
     "en": {
         "reportProblemButton": { "title": "Report problem" },
@@ -151,6 +155,10 @@
         "changeCrsImg": { "title": "Change coordinate system", "alt": "Change coordinate system" },
         "pointerCoordinatesLink": { "title": "Open in Google Maps" },
         "logoLink": { "title": "Marjan forest park" },
-		"changeLanguageButton": { "title": "Change language" }	
+		"changeLanguageButton": { "title": "Change language" },
+		"downloadDataPanelHeaderSpan": { "innerHTML": "Download data" },
+		"layersPanelHeaderSpan":{ "innerHTML": "Layers" },
+		"measureToolsPanelHeaderSpan":{ "innerHTML": "Draw and Measure" },
+		"gotoCoordinatesPanelHeaderSpan":{ "innerHTML": "Go to coordinates" }
     }
 }
