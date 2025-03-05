@@ -78,7 +78,20 @@
 		"downloadDataPanelHeaderSpan": { "innerHTML": "Preuzimanje podataka" },
 		"layersPanelHeaderSpan":{ "innerHTML": "Slojevi" },
 		"measureToolsPanelHeaderSpan":{ "innerHTML": "Crtanje i mjerenje" },
-		"gotoCoordinatesPanelHeaderSpan":{ "innerHTML": "Idi na koordinate" }
+		"gotoCoordinatesPanelHeaderSpan":{ "innerHTML": "Idi na koordinate" },
+		"reportIssuePanelHeaderSpan":{ "innerHTML": "Prijava građana" },		
+		"reportIssuePanelNameLabel":{ "innerHTML": "Ime:" },
+		"reportIssuePanelSurnameLabel":{ "innerHTML": "Prezime:" },
+		"reportIssuePanelEmailLabel":{ "innerHTML": "E-mail:" },
+		"reportIssuePanelSubjectLabel":{ "innerHTML": "Predmet:" },
+		"eportIssuePanelMyLocationLabel":{ "innerHTML": "Trenutna lokacija:" },
+		"reportIssuePanelMapLocationLabel":{ "innerHTML": "Odaberi na karti:" },
+		"reportIssuePanelNoLocationLabel":{ "innerHTML": "Bez lokacije:" },
+		"reportIssuePanelMessageLabel":{ "innerHTML": "Poruka:" },
+		"reportIssuePanelSendMessageButton":{ "title": "Pošalji prijavu" },
+		"reportIssuePanelSendMessageButtonImg":{ "title": "Pošalji prijavu" },
+		"reportIssuePanelSendMessageButtonSpan":{ "innerHTML": "Pošalji prijavu" },
+		"helpButton":{ "title": "Upute" }
     },
     "en": {
         "reportProblemButton": { "title": "Report problem" },
@@ -159,6 +172,19 @@
 		"downloadDataPanelHeaderSpan": { "innerHTML": "Download data" },
 		"layersPanelHeaderSpan":{ "innerHTML": "Layers" },
 		"measureToolsPanelHeaderSpan":{ "innerHTML": "Draw and Measure" },
-		"gotoCoordinatesPanelHeaderSpan":{ "innerHTML": "Go to coordinates" }
+		"gotoCoordinatesPanelHeaderSpan":{ "innerHTML": "Go to coordinates" },
+		"reportIssuePanelHeaderSpan":{ "innerHTML": "Report problem" },
+		"reportIssuePanelNameLabel":{ "innerHTML": "Name:" },
+		"reportIssuePanelSurnameLabel":{ "innerHTML": "Surname:" },
+		"reportIssuePanelEmailLabel":{ "innerHTML": "E-mail:" },
+		"reportIssuePanelSubjectLabel":{ "innerHTML": "Subject:" },
+		"eportIssuePanelMyLocationLabel":{ "innerHTML": "My location:" },
+		"reportIssuePanelMapLocationLabel":{ "innerHTML": "Choose on map:" },
+		"reportIssuePanelNoLocationLabel":{ "innerHTML": "No location:" },
+		"reportIssuePanelMessageLabel":{ "innerHTML": "Message:" },
+		"reportIssuePanelSendMessageButton":{ "title": "Send report" },
+		"reportIssuePanelSendMessageButtonImg":{ "title": "Send report" },
+		"reportIssuePanelSendMessageButtonSpan":{ "innerHTML": "Send report" },
+		"helpButton":{ "title": "Help" }
     }
 }
