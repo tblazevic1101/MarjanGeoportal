@@ -3333,26 +3333,8 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 			
 			//const iframeDiv=document.getElementById('reportProblemPanel');
 			//const iframe=document.getElementById('reportProblemIframe');
-			const reportProblemButton = document.getElementById('reportProblemButton'); // Replace with your button's ID
+			//const reportProblemButton = document.getElementById('reportProblemButton'); // Replace with your button's ID
 			
-			
-			reportProblemButton.addEventListener('click', () => {	
-				/*if (iframeDiv.style.display === 'block'){
-					iframeDiv.style.display = 'none'; 			
-				}
-				else{
-					iframeDiv.style.display = 'block'; 
-					iframe.src="https://www.marjan-parksuma.hr/prijava";
-				}*/
-				const reportProblemPanel=document.getElementById('reportIssuePanel')
-				if (reportProblemPanel.style.display === 'block'){
-					reportProblemPanel.style.display = 'none'; 			
-				}
-				else{
-					reportProblemPanel.style.display = 'block'; 
-					//iframe.src="https://www.marjan-parksuma.hr/prijava";
-				}
-			});
 			
 			/*function closeIframe() {
 				iframeDiv.style.display = 'none';
@@ -3732,6 +3714,54 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 			try{
 				document.querySelector('.ol-full-screen-false').setAttribute('title','Cijeli ekran');
 			}catch{}
+			
+			
+			
+			
+			
+			const reportProblemButton = document.getElementById('reportProblemButton'); // Replace with your button's ID
+			
+			
+			reportProblemButton.addEventListener('click', () => {	
+				/*if (iframeDiv.style.display === 'block'){
+					iframeDiv.style.display = 'none'; 			
+				}
+				else{
+					iframeDiv.style.display = 'block'; 
+					iframe.src="https://www.marjan-parksuma.hr/prijava";
+				}*/
+				const reportProblemPanel=document.getElementById('reportIssuePanel')
+				if (reportProblemPanel.style.display === 'block'){
+					reportProblemPanel.style.display = 'none'; 			
+				}
+				else{
+					reportProblemPanel.style.display = 'block'; 
+					try{					
+						if (document.getElementById('reportIssuePanelMyLocationRadio').checked){
+
+							const geometry = positionFeature.getGeometry();
+
+							if (geometry && geometry instanceof ol.geom.Point) {
+								// Get the coordinates of the point
+								const coordinates = geometry.getCoordinates();
+								document.getElementById('reportIssuePanelLocationInput').value = coordinates[0] + ', ' + coordinates[1]+'  ( '+"https://maps.google.com/maps?q="+coordinates[0].toFixed(6)+","+coordinates[1].toFixed(6)+' )';
+							}
+							else{
+								document.getElementById('reportIssuePanelLocationInput').value ="";
+								document.getElementById('reportIssuePanelNoLocationRadio').checked=true;
+							}
+						}
+						else{
+							document.getElementById('reportIssuePanelLocationInput').value ="";
+							document.getElementById('reportIssuePanelNoLocationRadio').checked=true;
+						}
+					}catch{ 
+						document.getElementById('reportIssuePanelLocationInput').value ="";	
+						document.getElementById('reportIssuePanelNoLocationRadio').checked=true;										
+					}
+					//iframe.src="https://www.marjan-parksuma.hr/prijava";
+				}
+			});
 			
 			
 			
