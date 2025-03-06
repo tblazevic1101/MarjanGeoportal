@@ -57,12 +57,13 @@
 			
 			#swipe{
 				position: fixed;
-				bottom: 48px; /* Keeps it at the bottom */
+				bottom: 55px; /* Keeps it at the bottom */
 				left: 0;
 				right: 0; /* Ensures full width without overflow */
 				width: auto;
-				overflow: hidden; /* Prevents scrollbars */
+				/*overflow: hidden;  Prevents scrollbars */
 				z-index: 5000;
+				max-width:5000px;
 			}
 			
 			#basemapMenu p, #overbasemapMenu p {
@@ -190,27 +191,6 @@
 				margin-left:1em;
 			}
 			
-			
-			#reportProblemPanel {
-				display: none; /* Initially hidden */
-				position: absolute; /* Cover the entire viewport */
-				top: 50%;
-				left: 50%;
-				transform: translate(-50%, -50%);
-				width: 80%;
-				height: 80%;
-				background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent backdrop */
-				z-index: 3000; /* Ensure it's on top of everything */
-				overflow: hidden; /* Prevent scrollbars on the iframe */
-				
-			}
-
-			#reportProblemIframe {
-				border: none; /* Remove iframe border */
-				position:relative;
-				width:100%;
-				height:100%
-			}
 
 			.ol-control button {
 			    font-size: 1em;
@@ -225,12 +205,12 @@
 
 			.ol-scale-line {
 				position: fixed;
-			    	bottom: 0px;
-			    	left: 0px;			       
+			    bottom: 0px;
+			    left: 0px;			       
 			}
 
 			.invalid {
-	    			border: 2px solid red;
+	    		border: 2px solid red;
 			}
 
 			/*.ol-control{
@@ -311,15 +291,196 @@
 				border: none; 
 				color: white; 
 				font-size: 16px; 
-				cursor: pointer;"
+				cursor: pointer;
 			}
+			
+			.report-problem-top{
+				top:0.5em; 
+				left: 3.5em;
+			}
+			
+			.change-language-top{
+				position:absolute; 
+				top:0.5em; 
+				left:5.6em;
+			}
+			
+			.report-problem-left{
+				left:0.5em; 
+				top: 14.8em;
+			}
+			
+			.change-language-left{
+				position:absolute; 
+				left:0.5em; 
+				top:10.5em;
+			}
+			
+			.help-left{
+				position:absolute; 
+				left:0.5em; 
+				top:12.6em;
+			}
+			
+			
+			.report-issue-panel {
+				display: none; /* Initially hidden */
+				position: absolute; /* Cover the entire viewport */
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				width: 80%;
+				height: 80%;
+				z-index: 3000; /* Ensure it's on top of everything */
+				overflow: hidden; /* Prevent scrollbars on the iframe */
+				align-items: center;
+				justify-content: center;
+				
+				background: white;
+				padding: 8px;
+				border: 1px solid rgb(98, 186, 70);
+				border-radius: 5px;
+			}
+			.report-issue-content {
+				background: white;
+				padding: 10px;
+				border-radius: 8px;
+				width: 50%;
+				display: flex;
+				flex-direction: column;
+				gap: 5px; /* Adds spacing between elements */
+				width: auto;
+				max-height: 75vh; /* Limits height to 60% of the viewport */
+				overflow: auto; /* Adds scrollbar only when needed */
+			}
+			
+			.report-issue-content {
+				display: flex;
+				flex-direction: column;
+				margin-bottom: 0px;
+				height: 90%;
+			}
+
+			.report-issue-content label {
+				margin-top: 5px;
+			}
+
+			.report-issue-content input:not([type="radio"]),
+			.report-issue-content textarea {
+				padding: 8px;
+				border: 1px solid #ccc;
+				border-radius: 4px;
+				font-size: 14px;
+				color:#666666;
+			}
+			.report-issue-content textarea {
+				resize: vertical; /* Allows resizing only vertically */
+				min-height: 40px;
+				height: 120px;
+			}
+
+			#submitReportButton {
+				background: #62ba46;
+				color: white;
+				border: none;
+				padding: 10px;
+				cursor: pointer;
+				border-radius: 5px;
+				font-size: 16px;
+				transition: background 0.3s ease;
+			}
+
+			#submitReportButton:hover {
+				background: #519d3c;
+			}
+			
+			
+			
+			#reportProblemPanel {
+				display: none; /* Initially hidden */
+				position: absolute; /* Cover the entire viewport */
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				width: 80%;
+				height: 80%;
+				background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent backdrop */
+				z-index: 3000; /* Ensure it's on top of everything */
+				overflow: hidden; /* Prevent scrollbars on the iframe */
+				
+			}
+
+			#reportProblemIframe {
+				border: none; /* Remove iframe border */
+				position:relative;
+				width:100%;
+				height:100%
+			}
+			
 		</style>
 	</head>
 	<body>
 		<a style="display:none" id="printscreenDownload" download="Marjan_Geoportal.png"></a>
+		<!--Stari panel za prijavu problema s iframeom
 		<div id="reportProblemPanel">
 			<iframe id="reportProblemIframe" src=""></iframe> 
+		</div>-->
+		
+		<div id="reportIssuePanel" class="report-issue-panel">
+			<div class="close-panel-header">
+				<span id="reportIssuePanelHeaderSpan">Prijava građana</span>
+				<button id="reportIssuePanelCloseButton" class="close-panel-button">&#x2716;</button>
+			</div>
+			<div class="report-issue-content">
+				<label id="reportIssuePanelNameLabel" for="reportName">Ime:</label>
+				<input type="text" id="reportName" name="reportName" required>
+					
+				<label id="reportIssuePanelSurnameLabel" for="reportSurname">Prezime:</label>
+				<input type="text" id="reportIssuePanelSurnameInput" name="reportSurname" required>
+					
+				<label id="reportIssuePanelEmailLabel" for="reportEmail">*E-mail:</label>
+				<input type="email" id="reportIssuePanelEmailInput" name="reportEmail" required>
+					
+				<label id="reportIssuePanelSubjectLabel" for="reportSubject">Predmet:</label>
+				<input type="text" id="reportIssuePanelSubjectInput" name="reportSubject" required>
+				
+				
+				<label id="reportIssuePanelLocationLabel" for="reportLocation">Lokacija:</label>
+				<div style="display: flex; align-items: center; gap: 20px; margin-top: 5px; justify-content:center">
+					<div style="display: flex; align-items: center; gap: 5px;">
+						<input type="radio" id="reportIssuePanelMyLocationRadio" name="reportIssuePanelLocationChoice" value="currentLocation" onchange="handleReportProblemLocationRadioChange()" checked>
+						<label id="reportIssuePanelMyLocationLabel" style="margin-bottom: 0px;" for="reportIssuePanelMyLocationRadio" >Trenutna lokacija</label>
+					</div>
+
+					<div style="display: flex; align-items: center; gap: 5px;">
+						<input type="radio" id="reportIssuePanelMapLocationRadio" name="reportIssuePanelLocationChoice" value="mapSelection" onchange="handleReportProblemLocationRadioChange()">
+						<label id="reportIssuePanelMapLocationLabel" style="margin-bottom: 0px;" for="reportIssuePanelMapLocationRadio">Odaberi na karti</label>
+					</div>
+
+					<div style="display: flex; align-items: center; gap: 5px;">
+						<input type="radio" id="reportIssuePanelNoLocationRadio" name="reportIssuePanelLocationChoice" value="noLocation" onchange="handleReportProblemLocationRadioChange()">
+						<label id="reportIssuePanelNoLocationLabel" style="margin-bottom: 0px;" for="reportIssuePanelNoLocationRadio">Bez lokacije</label>
+					</div>
+				</div>
+				
+				
+				<input type="text" id="reportIssuePanelLocationInput" name="reportLocation" required>
+					
+				<label id="reportIssuePanelMessageLabel" for="reportMessage">*Poruka:</label>
+				<textarea id="reportIssuePanelMessageInput" name="reportMessage" rows="5" required></textarea>
+				
+				<div style="display: flex; gap: 5px; align-items: center; margin-top:10px"> 
+					<button id="reportIssuePanelSendMessageButton" title="Pošalji prijavu" style="width: 100%; padding: 5px; font-family: Garamond, Times New Roman, serif; display: flex; align-items: center; justify-content: center; background: white; border-radius: 2px; border-width: 1px; border-color: rgba(128, 128, 128, 0.25); color:#666666; gap:5px">  						
+					<img id="reportIssuePanelSendMessageButtonImg" src="icons/file-signature-solid.svg" alt="Pošalji prijavu" width="20" height="20">
+  						<span id="reportIssuePanelSendMessageButtonSpan">Pošalji prijavu</span>  
+					</button>
+    			</div>
+				
+				<!--<button id="submitReportButton">Pošalji</button>-->
+			</div>
 		</div>
+		
+		
 		<div id="map">			
 			<input id="swipe" type="range" min="0" max="100" value="95">
 			<!--<div id="basemap-selector">
@@ -332,15 +493,22 @@
 					<option value="https://geoportal.dgu.hr/services/inspire/orthophoto_2021_2022/wms">Ortofoto 2021-2022</option>
 				</select>
 			</div>-->
-			<div class="ol-control" style="top:0.5em; left: 3.5em;">  
-				<button id="reportProblemButton" title="Prijava problema" class="ol-controlButton">  
-					<img id="reportProblemImg" src="icons/file-signature-solid.svg" alt="Prijava problema" width="20" height="20" />
+			<div class="ol-control report-problem-left">  
+				<button id="reportProblemButton" title="Prijava građana" class="ol-controlButton">  
+					<img id="reportProblemImg" src="icons/file-signature-solid.svg" alt="Prijava građana" width="20" height="20" />
+				</button>
+			</div>
+				
+			
+			<div title="Promijeni jezik" class="ol-unselectable ol-control change-language-left">
+				<button id="changeLanguageButton">
+					EN
 				</button>
 			</div>
 			
-			<div style="position:absolute; top:0.5em; left:5.6em" title="Promijeni jezik" class="ol-unselectable ol-control">
-				<button id="changeLanguageButton">
-					EN
+			<div title="Pomoć" class="ol-unselectable ol-control help-left">
+				<button id="helpButton">
+					?
 				</button>
 			</div>
 			
@@ -426,7 +594,7 @@
 					<img id="gotoCoordinatesButtonImg" src="icons/map-location-dot-solid.svg" alt="Prikaži lokaciju" width="20" height="20">
   						<span id="gotoCoordinatesButtonSpan">Prikaži lokaciju</span>  
 					</button>
-    				</div>
+    			</div>
     		</div>
 			
 			
@@ -658,6 +826,12 @@
 			document.getElementById('gotoCoordinatesPanelCloseButton').addEventListener('click', function () {
 				switchPanelState('gotoCoordinatesPanelButton');
 			});
+			
+			
+			document.getElementById('reportIssuePanelCloseButton').addEventListener('click', function () {
+				document.getElementById('reportIssuePanel').style.display = 'none';
+			});
+			
 				
 				
 			// Function to handle button click events
@@ -3157,22 +3331,30 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 
 			
 			
-			const iframeDiv=document.getElementById('reportProblemPanel');
-			const iframe=document.getElementById('reportProblemIframe');
+			//const iframeDiv=document.getElementById('reportProblemPanel');
+			//const iframe=document.getElementById('reportProblemIframe');
 			const reportProblemButton = document.getElementById('reportProblemButton'); // Replace with your button's ID
 			
 			
 			reportProblemButton.addEventListener('click', () => {	
-				if (iframeDiv.style.display === 'block'){
+				/*if (iframeDiv.style.display === 'block'){
 					iframeDiv.style.display = 'none'; 			
 				}
 				else{
 					iframeDiv.style.display = 'block'; 
 					iframe.src="https://www.marjan-parksuma.hr/prijava";
+				}*/
+				const reportProblemPanel=document.getElementById('reportIssuePanel')
+				if (reportProblemPanel.style.display === 'block'){
+					reportProblemPanel.style.display = 'none'; 			
+				}
+				else{
+					reportProblemPanel.style.display = 'block'; 
+					//iframe.src="https://www.marjan-parksuma.hr/prijava";
 				}
 			});
 			
-			function closeIframe() {
+			/*function closeIframe() {
 				iframeDiv.style.display = 'none';
 			}
 			
@@ -3189,7 +3371,7 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 				} else {
 					console.error("Iframe document not accessible");
 				}
-			};
+			};*/
 			
 			
 			
@@ -3500,7 +3682,7 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 			
 
 			function loadTranslations(lang) {
-				fetch("https://tblazevic1101.github.io/MarjanGeoportal/translations.json?13")
+				fetch("https://tblazevic1101.github.io/MarjanGeoportal/translations.json?14")
 					.then(response => response.json())
 					.then(data => {
 						if (data[lang]) {
@@ -3553,7 +3735,60 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 			
 			
 			
-			const wfsSource = new ol.source.Vector({
+			
+			function handleReportProblemLocationRadioChange() {
+				const selectedValue = document.querySelector('input[name="reportIssuePanelLocationChoice"]:checked').value;
+				console.log("Selected location: " + selectedValue);
+				
+				// You can add more logic here to handle the selected value.
+				if (selectedValue === 'currentLocation') {
+					// Handle the current location case
+					
+					try{
+						const geometry = positionFeature.getGeometry();
+
+						if (geometry && geometry instanceof ol.geom.Point) {
+							// Get the coordinates of the point
+							const coordinates = geometry.getCoordinates();
+							document.getElementById('reportIssuePanelLocationInput').value = coordinates[0] + ', ' + coordinates[1]+'  ( '+"https://maps.google.com/maps?q="+coordinates[0].toFixed(6)+","+coordinates[1].toFixed(6)+' )';
+						}
+						else{document.getElementById('reportIssuePanelLocationInput').value ="";}
+					}catch{ console.log("Problem s trenutnom lokacijom");}
+					console.log("Current location selected");
+				} else if (selectedValue === 'mapSelection') {
+					// Handle the map selection case
+					console.log("Map selection chosen");
+					document.getElementById('reportIssuePanel').style.display = 'none';
+					
+					map.once('click', function (event) {
+						// Get the clicked location in pixel coordinates
+						const pixel = event.pixel;
+
+						// Convert the pixel coordinates to geographic coordinates (lon, lat)
+						const coordinate = map.getCoordinateFromPixel(pixel);
+						const lonLat = ol.proj.transform(coordinate, projection, 'EPSG:4326');
+						//const lonLat = ol.proj.toLonLat(coordinate); // Converts from map projection to EPSG:4326 (lat, lon)
+
+						// Log the geographic coordinates to the console
+						console.log('Na lokaciji: ' + lonLat[0] + ', ' + lonLat[1]+'\n'+"https://maps.google.com/maps?q="+lonLat[0].toFixed(6)+","+lonLat[1].toFixed(6));
+
+						// Optionally, display the coordinates inside the '1234' element
+						document.getElementById('reportIssuePanelLocationInput').value = lonLat[0] + ', ' + lonLat[1]+'  ( '+"https://maps.google.com/maps?q="+lonLat[0].toFixed(6)+","+lonLat[1].toFixed(6)+' )';
+
+						// Show the report issue panel again after the map selection
+						document.getElementById('reportIssuePanel').style.display = 'block';
+					});
+					
+				} else if (selectedValue === 'noLocation') {
+					document.getElementById('reportIssuePanelLocationInput').value ='';
+					console.log("No location selected");
+				}
+			}
+			
+			
+			
+			
+			/*const wfsSource = new ol.source.Vector({
     format: new ol.format.GeoJSON(),
     url: function (extent) {
         return 'https://api.uredjenazemlja.hr/services/inspire/cp/wfs' +
@@ -3566,10 +3801,10 @@ document.getElementById('downloadDataButton').addEventListener('click', function
             '&bbox=' + initialExtent.join(',') + ',EPSG:3765'; // Match projection
     },
     strategy: ol.loadingstrategy.bbox, // Loads features dynamically when viewport changes
-});
+});*/
 
 // Define the WFS layer
-const wfsLayer = new ol.layer.Vector({
+/*const wfsLayer = new ol.layer.Vector({
     source: wfsSource,
     style: new ol.style.Style({
         stroke: new ol.style.Stroke({
@@ -3583,7 +3818,7 @@ const wfsLayer = new ol.layer.Vector({
 });
 
 // Add the WFS layer to the map
-map.addLayer(wfsLayer);
+map.addLayer(wfsLayer);*/
 			
 		</script>
 	</body>
