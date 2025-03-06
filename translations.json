@@ -82,15 +82,16 @@
 		"reportIssuePanelHeaderSpan":{ "innerHTML": "Prijava građana" },		
 		"reportIssuePanelNameLabel":{ "innerHTML": "Ime:" },
 		"reportIssuePanelSurnameLabel":{ "innerHTML": "Prezime:" },
-		"reportIssuePanelEmailLabel":{ "innerHTML": "E-mail:" },
+		"reportIssuePanelEmailLabel":{ "innerHTML": "*E-mail:" },
 		"reportIssuePanelSubjectLabel":{ "innerHTML": "Predmet:" },
 		"reportIssuePanelMyLocationLabel":{ "innerHTML": "Trenutna lokacija" },
 		"reportIssuePanelMapLocationLabel":{ "innerHTML": "Odaberi na karti" },
 		"reportIssuePanelNoLocationLabel":{ "innerHTML": "Bez lokacije" },
-		"reportIssuePanelMessageLabel":{ "innerHTML": "Poruka:" },
+		"reportIssuePanelMessageLabel":{ "innerHTML": "*Poruka:" },
 		"reportIssuePanelSendMessageButton":{ "title": "Pošalji prijavu" },
 		"reportIssuePanelSendMessageButtonImg":{ "title": "Pošalji prijavu" },
 		"reportIssuePanelSendMessageButtonSpan":{ "innerHTML": "Pošalji prijavu" },
+		"reportIssuePanelLocationLabel":{ "innerHTML": "Lokacija:" },
 		"helpButton":{ "title": "Upute" }
     },
     "en": {
@@ -176,15 +177,16 @@
 		"reportIssuePanelHeaderSpan":{ "innerHTML": "Report problem" },
 		"reportIssuePanelNameLabel":{ "innerHTML": "Name:" },
 		"reportIssuePanelSurnameLabel":{ "innerHTML": "Surname:" },
-		"reportIssuePanelEmailLabel":{ "innerHTML": "E-mail:" },
+		"reportIssuePanelEmailLabel":{ "innerHTML": "*E-mail:" },
 		"reportIssuePanelSubjectLabel":{ "innerHTML": "Subject:" },
 		"reportIssuePanelMyLocationLabel":{ "innerHTML": "My location" },
 		"reportIssuePanelMapLocationLabel":{ "innerHTML": "Choose on map" },
 		"reportIssuePanelNoLocationLabel":{ "innerHTML": "Without location" },
-		"reportIssuePanelMessageLabel":{ "innerHTML": "Message:" },
+		"reportIssuePanelMessageLabel":{ "innerHTML": "*Message:" },
 		"reportIssuePanelSendMessageButton":{ "title": "Send report" },
 		"reportIssuePanelSendMessageButtonImg":{ "title": "Send report" },
 		"reportIssuePanelSendMessageButtonSpan":{ "innerHTML": "Send report" },
+		"reportIssuePanelLocationLabel":{ "innerHTML": "Location:" },
 		"helpButton":{ "title": "Help" }
     }
 }
