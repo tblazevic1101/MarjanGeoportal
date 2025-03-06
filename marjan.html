@@ -3744,7 +3744,9 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 							if (geometry && geometry instanceof ol.geom.Point) {
 								// Get the coordinates of the point
 								const coordinates = geometry.getCoordinates();
-								document.getElementById('reportIssuePanelLocationInput').value = coordinates[0] + ', ' + coordinates[1]+'  ( '+"https://maps.google.com/maps?q="+coordinates[0].toFixed(6)+","+coordinates[1].toFixed(6)+' )';
+								const transformedCoordinates = ol.proj.transform(coordinates, projection, 'EPSG:4326');
+
+								document.getElementById('reportIssuePanelLocationInput').value = transformedCoordinates[0] + ', ' + transformedCoordinates[1]+'  ( '+"https://maps.google.com/maps?q="+transformedCoordinates[0].toFixed(6)+","+transformedCoordinates[1].toFixed(6)+' )';
 							}
 							else{
 								document.getElementById('reportIssuePanelLocationInput').value ="";
