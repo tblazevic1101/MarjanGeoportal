@@ -307,7 +307,7 @@
 			
 			.report-problem-left{
 				left:0.5em; 
-				top: 14.8em;
+				top: 15.1em;
 			}
 			
 			.change-language-left{
@@ -506,9 +506,9 @@
 				</button>
 			</div>
 			
-			<div title="Pomoć" class="ol-unselectable ol-control help-left">
+			<div title="Korisnički priručnik" class="ol-unselectable ol-control help-left">
 				<button id="helpButton">
-					?
+					<a id="helpButtonLink" style="color: #62ba46;" href="Marjan_geoportal_korisnicki_prirucnik.pdf" target="_blank">?</a>
 				</button>
 			</div>
 			
@@ -3634,6 +3634,7 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 					try{
 						document.querySelector('.ol-full-screen-false').setAttribute('title','Toggle full-screen');
 					}catch{}
+					document.getElementById('helpButtonLink').href='Marjan_Geoportal_User_Manual.pdf';
 				}			
 				else
 				{
@@ -3658,7 +3659,8 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 					}catch{}
 					try{
 						document.querySelector('.ol-full-screen-false').setAttribute('title','Cijeli ekran');
-					}catch{}					
+					}catch{}			
+					document.getElementById('helpButtonLink').href='Marjan_Geoportal_Korisnicke_upute.pdf';					
 				}
 			});
 			
@@ -3754,8 +3756,10 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 							}
 						}
 						else{
-							document.getElementById('reportIssuePanelLocationInput').value ="";
-							document.getElementById('reportIssuePanelNoLocationRadio').checked=true;
+							if (document.getElementById('reportIssuePanelNoLocationRadio').checked==true){							
+								document.getElementById('reportIssuePanelLocationInput').value ="";
+								//document.getElementById('reportIssuePanelNoLocationRadio').checked=true;
+							}
 						}
 					}catch{ 
 						document.getElementById('reportIssuePanelLocationInput').value ="";	
