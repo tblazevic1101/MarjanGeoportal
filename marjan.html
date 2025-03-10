@@ -608,7 +608,7 @@
 					<p id="downloadImageDataMenuP" style="color: #666666; margin-bottom: 5px;">Sloj za preuzimanje:</p>
 						<label id="downloadImageDataMenu2024Hillshade2mLabel"><input id="downloadImageDataMenu2024Hillshade2m" type="radio" name="downloadWCS" class="toc-layer" data-layer="Hillshade_jug_2m_2024"><span id="downloadImageDataMenu2024Hillshade2mSpan">Sjenčani teren (2m)</span></label><br>
 						<label id="downloadImageDataMenu2024DSM2mLabel"><input id="downloadImageDataMenu2024DSM2m" type="radio" name="downloadWCS" class="toc-layer" data-layer="DSM_jug_2m_2024"><span id="downloadImageDataMenu2024DSM2mSpan">Model visina Marjan 2024 (2m)</span></label><br>
-						<label id="downloadImageDataMenu2024Ortofoto1cmLabel"><input id="downloadImageDataMenu2024Ortofoto1cm" type="radio" name="downloadWCS" class="toc-layer" data-layer="Orto_jug_1cm_2024" checked><span id="downloadImageDataMenu2024Ortofoto1cmSpan">Ortofoto Marjan jug 2024 (1cm)</span></label><br>
+						<label id="downloadImageDataMenu2024Ortofoto1cmLabel"><input id="downloadImageDataMenu2024Ortofoto1cm" type="radio" name="downloadWCS" class="toc-layer" data-layer="Orto_jug_2cm_2024" checked><span id="downloadImageDataMenu2024Ortofoto1cmSpan">Ortofoto Marjan jug 2024 (2cm)</span></label><br>
 						<!--<label><input type="radio" name="basemap" class="toc-layer" data-layer="HOK" data-layer-service="WMTS">HOK</label><br>-->
 				</div>
 				<div style="display: flex; gap: 5px; align-items: center;"> 
@@ -894,7 +894,7 @@
 						// If no features exist, create a rectangle
 						if (rectangleSource.getFeatures().length == 0) {
 							const mapCenter = map.getView().getCenter();
-							const rectangleExtent = [mapCenter[0] - 50, mapCenter[1] - 50, mapCenter[0] + 50, mapCenter[1] + 50];
+							const rectangleExtent = [mapCenter[0] - 25, mapCenter[1] - 25, mapCenter[0] + 25, mapCenter[1] + 25];
 							const rectangle = new ol.Feature(ol.geom.Polygon.fromExtent(rectangleExtent));
 
 							rectangle.setStyle(new ol.style.Style({
@@ -2288,9 +2288,11 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 
 
 			const formatLength = function (line) {
-				const length = ol.sphere.getLength(line);
+				//ne koristiti ol.sphere jer je karta vec u 3765
+				//const length = ol.sphere.getLength(line);
+				const length = line.getLength();
 				let output;
-				if (length > 100) {
+				if (length > 1000) {
 				output = Math.round((length / 1000) * 100) / 100 + ' km';
 				} else {
 					output = Math.round(length * 100) / 100 + ' m';
@@ -2299,7 +2301,9 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 			};
 
 			const formatArea = function (polygon) {
-				const area = ol.sphere.getArea(polygon);
+				//ne koristiti ol.sphere jer je karta vec u 3765
+				//const area = ol.sphere.getArea(polygon);
+				const area =polygon.getArea();
 				let output;
 				if (area > 10000) {
 					output = Math.round((area / 1000000) * 100) / 100 + ' km\xB2';
@@ -3472,7 +3476,7 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 			const translate = new ol.interaction.Translate({layers:[rectangleLayer]});
 			map.addInteraction(translate);
 			
-			let wcsLayerToDownload='Orto_jug_1cm_2024';
+			let wcsLayerToDownload='Orto_jug_2cm_2024';
 			
 			/*const rectangleModify = new ol.interaction.Modify({
 				source: rectangleSource,
@@ -3485,11 +3489,12 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 			
 			document.querySelectorAll('#downloadImageDataMenu input[type="radio"]').forEach(radio => {
 				radio.addEventListener('change', function () {
-					const wcsLayerToDownload = this.getAttribute('data-layer');
+					wcsLayerToDownload = this.getAttribute('data-layer');
+					console.log('Selected Layer:', wcsLayerToDownload);
 				});
 			});
-			
 			document.getElementById('downloadImageDataButton').addEventListener('click', function () {
+			console.log("dSASCFC");
 				downloadWCSData();			
 			});
 			
@@ -3498,24 +3503,36 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 				if (features.length > 0) {
 					// Get the first feature (assuming only one rectangle)
 					const rectangleFeature = features[0];
-
 					// Get the extent from the geometry
 					const extent = rectangleFeature.getGeometry().getExtent();
 					let coverageID;
+					let width;
+					let height;
+					console.log(wcsLayerToDownload);
 					if (wcsLayerToDownload=='Hillshade_jug_2m_2024'){
-						coverageID="Marjan_jug_DSM_2m_hillshade";
+						coverageID="MarjanOrtofoto2024:Marjan_jug_DSM_2m_hillshade";
+						width=25;
+						height=25;
+						//downloadWMSImage("http://192.168.33.86:8080/geoserver/MarjanOrtofoto2024/wms", coverageID, extent, 25, 25);
 					}
 					else if (wcsLayerToDownload=='DSM_jug_2m_2024'){
 						coverageID="MarjanOrtofoto2024:Marjan_jug_DSM_2m";
+						width=25;
+						height=25;
+						//downloadWMSImage("http://192.168.33.86:8080/geoserver/MarjanOrtofoto2024/wms", coverageID, extent, 25, 25);
 					}
-					else if (wcsLayerToDownload=='Orto_jug_1cm_2024'){
-						coverageID="MarjanOrtofoto2024:Marjan_jug_ortofoto_5cm";
+					else if (wcsLayerToDownload=='Orto_jug_2cm_2024'){
+						coverageID="MarjanOrtofoto2024_WCS:Marjan_jug_ortofoto";
+						width=1000;
+						height=1000;
+						//downloadWMSImage("http://192.168.33.86:8080/geoserver/MarjanOrtofoto2024_WCS/wms", coverageID, extent, 2500, 2500);
 					}
+					
 					
 					
 					if(coverageID){
-						let wcsurl=buildWCSRequest(coverageID, extent, 'image/png');
-
+						//let wcsurl=buildWCSRequest(coverageID, extent, 'image/png');
+						let wcsurl=buildWCSRequest(coverageID, extent, width, height, "GeoTIFF")
 						fetch(wcsurl)
 							.then(response => {
 								if (!response.ok) {
@@ -3528,7 +3545,7 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 								const url = URL.createObjectURL(blob);
 								const a = document.createElement('a');
 								a.href = url;
-								a.download = 'downloaded_image.png'; // Set the desired file name
+								a.download = 'Marjan_Geoportal_pruzeti_podaci.png'; // Set the desired file name
 								document.body.appendChild(a);
 								a.click();
 								a.remove(); // Remove the link after downloading
@@ -3541,8 +3558,20 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 				}
 			}
 			
+			function buildWCSRequest(coverageId, bbox, width, height, format) {
+				const wcsServer = 'http://192.168.33.86:8080/geoserver/ows'; // Replace with your WCS server URL
+				const version = '1.0.0'; // Specify the WCS version
+				const request = `GetCoverage`;
+
+				const url = `${wcsServer}?service=WCS&version=${version}&request=${request}` +
+							`&COVERAGE=${coverageId}&BBOX=${bbox.join(',')}&CRS=EPSG:3765&RESPONSE_CRS=EPSG:3765` + // Assuming bbox is an array [minX, minY, maxX, maxY]
+							`&FORMAT=GeoTIFF&WIDTH=${width}&HEIGHT=${height}`;
+				
+				return url;
+			}
 			
-			function buildWCSRequest(coverageId, bbox, format) {
+			
+			/*function buildWCSRequest(coverageId, bbox, format) {
 				const wcsServer = 'http://192.168.33.86:8080/geoserver/wcs'; // Replace with your WCS server URL
 				const version = '1.1.1'; // Specify the WCS version
 				const request = `GetCoverage`;
@@ -3557,7 +3586,40 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 							`GridCS=urn:ogc:def:cs:OGC:0.0:Grid2dSquareCS`;
 
 				return url;
+			}*/
+			
+			
+			function downloadWMSImage(wmsUrl, layerName, extent, width, height ) {
+				const bbox = extent.join(',');
+				//const width = 1000, height = 1000; // Adjust size as needed
+				const wmsImageUrl = `${wmsUrl}?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap` +
+					`&LAYERS=${layerName}&FORMAT=image/png&SRS=EPSG:3765&BBOX=${bbox}&WIDTH=${width}&HEIGHT=${height}`;
+				console.log(wmsImageUrl);
+				fetch(wmsImageUrl)
+					.then(response => response.blob())
+					.then(blob => {
+						const link = document.createElement('a');
+						link.href = URL.createObjectURL(blob);
+						link.download = 'wms_image.png';
+						document.body.appendChild(link);
+						link.click();
+						document.body.removeChild(link);
+					})
+					.catch(error => console.error('Download error:', error));
 			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			
 			document.getElementById('printMapButton').addEventListener('click', function () {
 				map.once('rendercomplete', function () {
