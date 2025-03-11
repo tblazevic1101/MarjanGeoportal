@@ -94,8 +94,9 @@
 			#bottomPanel {
 				position: fixed;
 				bottom: 20px;
-				left: 0;
-				right:0;
+				left: 50%;
+				transform: translate(-50%, 0%);
+				/*right:0;*/
 				width:auto;
 				background: transparent;
 				foreground: #666666;
@@ -608,9 +609,12 @@
 					<p id="downloadImageDataMenuP" style="color: #666666; margin-bottom: 5px;">Sloj za preuzimanje:</p>
 						<label id="downloadImageDataMenu2024Hillshade2mLabel"><input id="downloadImageDataMenu2024Hillshade2m" type="radio" name="downloadWCS" class="toc-layer" data-layer="Hillshade_jug_2m_2024"><span id="downloadImageDataMenu2024Hillshade2mSpan">Sjenčani teren (2m)</span></label><br>
 						<label id="downloadImageDataMenu2024DSM2mLabel"><input id="downloadImageDataMenu2024DSM2m" type="radio" name="downloadWCS" class="toc-layer" data-layer="DSM_jug_2m_2024"><span id="downloadImageDataMenu2024DSM2mSpan">Model visina Marjan 2024 (2m)</span></label><br>
-						<label id="downloadImageDataMenu2024Ortofoto1cmLabel"><input id="downloadImageDataMenu2024Ortofoto1cm" type="radio" name="downloadWCS" class="toc-layer" data-layer="Orto_jug_2cm_2024" checked><span id="downloadImageDataMenu2024Ortofoto1cmSpan">Ortofoto Marjan jug 2024 (2cm)</span></label><br>
+						<label id="downloadImageDataMenu2024Ortofoto1cmLabel"><input id="downloadImageDataMenu2024Ortofoto1cm" type="radio" name="downloadWCS" class="toc-layer" data-layer="Orto_jug_2cm_2024" checked><span id="downloadImageDataMenu2024Ortofoto1cmSpan">Ortofoto Marjan jug 2024 (5cm)</span></label><br>
 						<!--<label><input type="radio" name="basemap" class="toc-layer" data-layer="HOK" data-layer-service="WMTS">HOK</label><br>-->
 				</div>
+				<div id="downloadImageDataWarning" style="margin:8px; align-items: center; display: none">
+				Molimo sačekajte.<br>Podaci za preuzimanje se pripremaju.<br>Priprema i preuzimanje mogu potrajati i nekoliko minuta, nakon čega će podaci biti preuzeti na vaš uređaj.
+    			</div>
 				<div style="display: flex; gap: 5px; align-items: center;"> 
 					<button id="downloadImageDataButton" title="Preuzmi podatke" style="width: 100%; padding: 5px; font-family: Garamond, Times New Roman, serif; display: flex; align-items: center; justify-content: center; background: white; border-radius: 2px; border-width: 1px; border-color: rgba(128, 128, 128, 0.25); color:#666666; gap:5px">  						
 						<img id="downloadImageDataButtonImg" src="icons/object-group-regular.svg" alt="Preuzmi podatke" width="20" height="20">
@@ -1489,8 +1493,8 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 			console.log("mreza4");
 			const mreza=new ol.layer.Graticule({
 				showLabels: true,
-				lonLabelFormatter: (lon) => lon.toFixed(2) + "°",  // Format longitude labels
-				latLabelFormatter: (lat) => lat.toFixed(2) + "°",  // Format latitude labels
+				lonLabelFormatter: (lon) => lon.toFixed(4) + "°",  // Format longitude labels
+				latLabelFormatter: (lat) => lat.toFixed(4) + "°",  // Format latitude labels
 				wrapX: false,
 				strokeStyle: new ol.style.Stroke({
 					color: "rgba(0, 0, 255, 0.4)", // Blue grid lines
@@ -3494,7 +3498,6 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 				});
 			});
 			document.getElementById('downloadImageDataButton').addEventListener('click', function () {
-			console.log("dSASCFC");
 				downloadWCSData();			
 			});
 			
@@ -3508,29 +3511,37 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 					let coverageID;
 					let width;
 					let height;
-					console.log(wcsLayerToDownload);
+					let filename;
+					//console.log(wcsLayerToDownload);
+					changeDivEnabled('downloadImageDataButton', false);
+					document.getElementById('downloadImageDataWarning').style.display='block';
 					if (wcsLayerToDownload=='Hillshade_jug_2m_2024'){
 						coverageID="MarjanOrtofoto2024:Marjan_jug_DSM_2m_hillshade";
 						width=25;
 						height=25;
-						//downloadWMSImage("http://192.168.33.86:8080/geoserver/MarjanOrtofoto2024/wms", coverageID, extent, 25, 25);
+						filename="Marjan_Sjencani_teren_2024"
+						downloadWMSImageAndJGW("http://192.168.33.86:8080/geoserver/MarjanOrtofoto2024/wms", coverageID, extent, height, width, filename);
 					}
 					else if (wcsLayerToDownload=='DSM_jug_2m_2024'){
 						coverageID="MarjanOrtofoto2024:Marjan_jug_DSM_2m";
 						width=25;
 						height=25;
-						//downloadWMSImage("http://192.168.33.86:8080/geoserver/MarjanOrtofoto2024/wms", coverageID, extent, 25, 25);
+						filename="Marjan_Model_visina_2024"
+						downloadWMSImageAndJGW("http://192.168.33.86:8080/geoserver/MarjanOrtofoto2024/wms", coverageID, extent, height, width, filename);
 					}
 					else if (wcsLayerToDownload=='Orto_jug_2cm_2024'){
 						coverageID="MarjanOrtofoto2024_WCS:Marjan_jug_ortofoto";
 						width=1000;
 						height=1000;
-						//downloadWMSImage("http://192.168.33.86:8080/geoserver/MarjanOrtofoto2024_WCS/wms", coverageID, extent, 2500, 2500);
+						filename="Marjan_Ortofoto_2024"
+						downloadWMSImageAndJGW("http://192.168.33.86:8080/geoserver/MarjanOrtofoto2024_WCS/wms", coverageID, extent, height, width, filename);
 					}
 					
 					
 					
-					if(coverageID){
+					/*if(coverageID){
+						changeDivEnabled('downloadImageDataButton', false);
+						document.getElementById('downloadImageDataWarning').style.display='block';
 						//let wcsurl=buildWCSRequest(coverageID, extent, 'image/png');
 						let wcsurl=buildWCSRequest(coverageID, extent, width, height, "GeoTIFF")
 						fetch(wcsurl)
@@ -3539,22 +3550,31 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 									throw new Error('Network response was not ok');
 								}
 								return response.blob(); // Get the response as a Blob
+								changeDivEnabled('downloadImageDataButton', true);
+								document.getElementById('downloadImageDataWarning').style.display='none';
 							})
 							.then(blob => {
 								// Create a URL for the Blob and download it
 								const url = URL.createObjectURL(blob);
 								const a = document.createElement('a');
 								a.href = url;
-								a.download = 'Marjan_Geoportal_pruzeti_podaci.png'; // Set the desired file name
+								a.download = 'Marjan_Geoportal_pruzeti_podaci.tiff'; // Set the desired file name
 								document.body.appendChild(a);
 								a.click();
 								a.remove(); // Remove the link after downloading
 								URL.revokeObjectURL(url); // Free up memory
+								changeDivEnabled('downloadImageDataButton', true);
+								document.getElementById('downloadImageDataWarning').style.display='none';
 							})
 							.catch(error => {
 								console.error('There was a problem with the fetch operation:', error);
 							});
-					}
+					}*/
+				}
+				else
+				{
+					changeDivEnabled('downloadImageDataButton', true);
+					document.getElementById('downloadImageDataWarning').style.display='none';
 				}
 			}
 			
@@ -3589,29 +3609,74 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 			}*/
 			
 			
-			function downloadWMSImage(wmsUrl, layerName, extent, width, height ) {
+			async function downloadWMSImageAndJGW(wmsUrl, layerName, extent, width, height,filename) {
 				const bbox = extent.join(',');
 				//const width = 1000, height = 1000; // Adjust size as needed
 				const wmsImageUrl = `${wmsUrl}?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap` +
-					`&LAYERS=${layerName}&FORMAT=image/png&SRS=EPSG:3765&BBOX=${bbox}&WIDTH=${width}&HEIGHT=${height}`;
-				console.log(wmsImageUrl);
+					`&LAYERS=${layerName}&FORMAT=image/jpeg&SRS=EPSG:3765&BBOX=${bbox}&WIDTH=${width}&HEIGHT=${height}`;
+				/*console.log(wmsImageUrl);
 				fetch(wmsImageUrl)
 					.then(response => response.blob())
 					.then(blob => {
 						const link = document.createElement('a');
 						link.href = URL.createObjectURL(blob);
-						link.download = 'wms_image.png';
+						link.download = 'wms_image.jpg';
 						document.body.appendChild(link);
 						link.click();
 						document.body.removeChild(link);
+						generateJGW(extent, width, height);
 					})
-					.catch(error => console.error('Download error:', error));
+					.catch(error => console.error('Download error:', error));*/
+				try {
+					const jgwContent = generateJGW(extent, width, height);
+					// Fetch the WMS image
+					const response = await fetch(wmsImageUrl );
+					const imageBlob = await response.blob();
+					
+					// Trigger JPG download
+					downloadFile(imageBlob, filename+".jpg");
+					downloadFile(jgwContent, filename+".jgw");
+					// Generate and trigger JGW download					
+				} catch (error) {
+					console.error("Error downloading WMS image:", error);
+				}	
+				changeDivEnabled('downloadImageDataButton', true);
+				document.getElementById('downloadImageDataWarning').style.display='none';				
 			}
 			
 			
+			function generateJGW(bbox, width, height) {
+				const [Xmin, Ymin, Xmax, Ymax] = bbox;
+
+				// Calculate pixel resolution
+				const pixelSizeX = (Xmax - Xmin) / width;
+				const pixelSizeY = (Ymin - Ymax) / height; // Negative for north-up
+
+				// JGW content format
+				const jgwContent = [
+					pixelSizeX.toFixed(10),
+					"0.0000000000", // Rotation X
+					"0.0000000000", // Rotation Y
+					pixelSizeY.toFixed(10), // Negative if north-up
+					Xmin.toFixed(10),
+					Ymax.toFixed(10)
+				].join("\n");
+
+				// Create a Blob and trigger download
+				return new Blob([jgwContent], { type: "text/plain" });
+			}
 			
-			
-			
+			function downloadFile(blob, fileName) {
+				const url = URL.createObjectURL(blob);
+				const link = document.createElement("a");
+				link.href = url;
+				link.download = fileName;
+				document.body.appendChild(link);
+				link.click();
+				document.body.removeChild(link);
+				URL.revokeObjectURL(url);
+			}
+
 			
 			
 			
