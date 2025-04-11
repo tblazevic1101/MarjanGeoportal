@@ -4,7 +4,8 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Geoportal - Park šuma Marjan</title>
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v10.3.1/ol.css">
+		<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v10.3.1/ol.css">-->
+		<link rel="stylesheet" href="ol_v10.3.1/ol.css">
 		<style>
 			body, html { margin: 0; padding: 0; font-family: Garamond, "Times New Roman", serif; color:#666666}
 			#map { position: relative; width: 100%; height: 100vh; }
@@ -71,7 +72,8 @@
 			}
 
 			#basemapMenu {
-				margin-bottom: 15px; /* Add space between the two menus */
+				/* Add space between the two menus */
+				/* margin-bottom: 15px; */
 			}		
 
 			#bottomPanel1 {
@@ -606,10 +608,25 @@
 					<button id="downloadDataPanelCloseButton" class="close-panel-button">✖</button>
 				</div>
 				<div id="downloadImageDataMenu" style="padding-bottom: 5px">
-					<p id="downloadImageDataMenuP" style="color: #666666; margin-bottom: 5px;">Sloj za preuzimanje:</p>
-						<label id="downloadImageDataMenu2024Hillshade2mLabel"><input id="downloadImageDataMenu2024Hillshade2m" type="radio" name="downloadWCS" class="toc-layer" data-layer="Hillshade_jug_2m_2024"><span id="downloadImageDataMenu2024Hillshade2mSpan">Sjenčani teren (2m)</span></label><br>
-						<label id="downloadImageDataMenu2024DSM2mLabel"><input id="downloadImageDataMenu2024DSM2m" type="radio" name="downloadWCS" class="toc-layer" data-layer="DSM_jug_2m_2024"><span id="downloadImageDataMenu2024DSM2mSpan">Model visina Marjan 2024 (2m)</span></label><br>
-						<label id="downloadImageDataMenu2024Ortofoto1cmLabel"><input id="downloadImageDataMenu2024Ortofoto1cm" type="radio" name="downloadWCS" class="toc-layer" data-layer="Orto_jug_2cm_2024" checked><span id="downloadImageDataMenu2024Ortofoto1cmSpan">Ortofoto Marjan jug 2024 (5cm)</span></label><br>
+					<p id="downloadImageDataMenuP" style="color: #666666; margin-bottom: 5px;">Sloj za preuzimanje:</p>					
+						<label id="downloadImageDataMenu2024Hillshade2mLabel"><input id="downloadImageDataMenu2024Hillshade2m" type="radio" name="downloadWCS" class="toc-layer" data-layer="Marjan_hillshade_2024_50cm">
+							<span id="downloadImageDataMenu2024Hillshade2mSpan">Sjenčani DSM 2024. (50cm)</span>
+						</label><br>
+						<label id="downloadImageDataMenu2024DSM2mLabel"><input id="downloadImageDataMenu2024DSM2m" type="radio" name="downloadWCS" class="toc-layer" data-layer="Marjan_DSM_2024_50cm">
+							<span id="downloadImageDataMenu2024DSM2mSpan">DSM 2024. (50cm)</span>
+						</label><br>
+						<label id="downloadImageDataMenu2024Ortofoto1cmLabel"><input id="downloadImageDataMenu2024Ortofoto1cm" type="radio" name="downloadWCS" class="toc-layer" data-layer="Marjan_orto_2024_5cm" checked>
+							<span id="downloadImageDataMenu2024Ortofoto1cmSpan">Ortofoto 2024. (5cm)</span>
+						</label><br><br>
+						<label id="downloadImageDataMenu20251Hillshade2mLabel"><input id="downloadImageDataMenu20251Hillshade2m" type="radio" name="downloadWCS" class="toc-layer" data-layer="Marjan_hillshade_2025_1_50cm">
+							<span id="downloadImageDataMenu20251Hillshade2mSpan">Sjenčani DSM 2025. (50cm)</span>
+						</label><br>
+						<label id="downloadImageDataMenu20251DSM2mLabel"><input id="downloadImageDataMenu20251DSM2m" type="radio" name="downloadWCS" class="toc-layer" data-layer="Marjan_DSM_2025_1_50cm">
+							<span id="downloadImageDataMenu20251DSM2mSpan">DSM 2025. (50cm)</span>
+						</label><br>
+						<label id="downloadImageDataMenu20251Ortofoto1cmLabel"><input id="downloadImageDataMenu20251Ortofoto1cm" type="radio" name="downloadWCS" class="toc-layer" data-layer="Marjan_orto_2025_1_5cm" checked>
+							<span id="downloadImageDataMenu20251Ortofoto1cmSpan">Ortofoto 2025. (5cm)</span>
+						</label><br>
 						<!--<label><input type="radio" name="basemap" class="toc-layer" data-layer="HOK" data-layer-service="WMTS">HOK</label><br>-->
 				</div>
 				<div id="downloadImageDataWarning" style="margin:8px; align-items: center; display: none">
@@ -631,6 +648,78 @@
 				</div>
 				
 				<div id="basemapMenu">
+					<p id="basemapMenuP" style="color: #666666; margin-bottom: 5px; font-weight:bold;">Pozadinski sloj:</p>
+					<!--<div>Pozadinski sloj:
+						<select id="overbasemapMenuSelect" style="color:#666666">
+							<option value="OSM" data-layer-service="WMTS">OpenStreetMap</option>
+							<option value="TK25" data-layer-service="WMTS">TK25</option>
+							<option value="DMR_BW" data-layer-service="WMS">Reljef</option>
+							<option value="HOK" data-layer-service="WMS">HOK</option>
+							<option value="DOF_2011" data-layer-service="WMTS">Ortofoto 2011</option>
+							<option value="DOF_2014_2016" data-layer-service="WMTS">Ortofoto 2014-2016</option>
+							<option value="DOF_2017_2018" data-layer-service="WMTS">Ortofoto 2017-2018</option>
+							<option value="DOF_2019_2020" data-layer-service="WMTS">Ortofoto 2019-2020</option>
+							<option value="DOF_2021_2022" data-layer-service="WMTS">Ortofoto 2021-2022</option>
+							<option value="DOF_Lidar_2023" data-layer-service="WMTS">LiDAR Ortofoto 2023</option>
+							<option value="Marjan_hillshade_2024_2m" data-layer-service="WMTS">Marjan DSM 2024</option>
+							<option value="Marjan_hillshade_2025_2m" data-layer-service="WMTS">Marjan DSM 2025</option>
+						</select>
+					</div>-->
+					<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px 15px; margin-left: 10px">
+						<label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+							<input id="basemapMenuOSM" type="radio" name="basemap" class="toc-layer" data-layer="OSM" data-layer-service="WMTS" style="margin: 0;">
+						<span id="basemapMenuOSMSpan" style="vertical-align: middle;">OpenStreetMap</span>
+						</label>
+						<p id="basemapMenuSourceP1" style="grid-column: 1 / -1; color: #666666; margin-top: 2px; text-align: center;">
+							Izvor: DGU
+						</p>
+						<label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+							<input id="basemapMenuTK25" type="radio" name="basemap" class="toc-layer" data-layer="TK25" data-layer-service="WMTS" style="margin: 0;">
+							<span id="basemapMenuTK25Span">TK25</span>
+						</label>
+						<label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+							<input id="basemapMenuDMRBW" type="radio" name="basemap" class="toc-layer" data-layer="DMR_BW" data-layer-service="WMS" style="margin: 0;">
+							<span id="basemapMenuDMRBWSpan">Sjenčani reljef</span>
+						</label>
+						<label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+							<input id="basemapMenuHOK" type="radio" name="basemap" class="toc-layer" data-layer="HOK" data-layer-service="WMTS" style="margin: 0;">
+							<span id="basemapMenuHOKSpan">HOK</span>
+						</label>
+						<label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+							<input id="basemapMenuOrtofotoDOF2011" type="radio" name="basemap" class="toc-layer" data-layer="DOF_2011" data-layer-service="WMTS" style="margin: 0;">
+							<span id="basemapMenuDOF2011Span">Ortofoto 2011</span>
+						</label>
+						<label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+							<input id="basemapMenuDOF20142016" type="radio" name="basemap" class="toc-layer" data-layer="DOF_2014_2016" data-layer-service="WMTS" style="margin: 0;">
+							<span id="basemapMenuDOF20142016Span">Ortofoto 2014-2016</span>
+						</label>
+						<label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+							<input id="basemapMenuDOF20172018" type="radio" name="basemap" class="toc-layer" data-layer="DOF_2017_2018" data-layer-service="WMTS" style="margin: 0;">
+							<span id="basemapMenuDOF20172018Span">Ortofoto 2017-2018</span>
+						</label>
+						<label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+							<input id="basemapMenuDOF20192020" type="radio" name="basemap" class="toc-layer" data-layer="DOF_2019_2020" data-layer-service="WMTS" style="margin: 0;">
+							<span id="basemapMenuDOF20192020Span">Ortofoto 2019-2020</span>
+						</label>
+						<label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+							<input id="basemapMenuDOF20212022" type="radio" name="basemap" class="toc-layer" data-layer="DOF_2021_2022" data-layer-service="WMTS" style="margin: 0;">
+							<span id="basemapMenuDOF20212022Span">Ortofoto 2021-2022</span>
+						</label>
+						<p id="basemapMenuSourceP2" style="grid-column: 1 / -1; color: #666666; margin-top: 2px; text-align: center;">
+							Izvor: Park šuma Marjan
+						</p>
+						<label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+							<input id="basemapMenuMarjanHillshade20242m" type="radio" name="basemap" class="toc-layer" data-layer="Marjan_hillshade_2024_50cm" data-layer-service="WMS" style="margin: 0;">
+							<span id="basemapMenuMarjanHillshade20242mSpan">Sjenčani DSM 2024.(50cm)</span>
+						</label>
+						<label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+							<input id="basemapMenuMarjanHillshade20252m" type="radio" name="basemap" class="toc-layer" data-layer="Marjan_hillshade_2025_1_50cm" data-layer-service="WMS" style="margin: 0;">
+							<span id="basemapMenuMarjanHillshade20252mSpan">Sjenčani DSM 2025.(50cm)</span>
+						</label>
+					</div>
+				</div>
+				
+				<!--<div id="basemapMenu">
 					<p id="basemapMenuP" style="color: #666666; margin-bottom: 5px;">Pozadinski sloj:</p>
 					<label><input id="basemapMenuOSM" type="radio" name="basemap" class="toc-layer" data-layer="OSM" data-layer-service="WMTS"><span id="basemapMenuOSMSpan">OSM</span></label><br>
 					<label><input id="basemapMenuTK25" type="radio" name="basemap" class="toc-layer" data-layer="TK25" data-layer-service="WMTS"><span id="basemapMenuTK25Span">TK25</span></label><br>
@@ -642,7 +731,49 @@
 					<label><input id="basemapMenuDOF20192020" type="radio" name="basemap" class="toc-layer" data-layer="DOF_2019_2020" data-layer-service="WMTS"><span id="basemapMenuDOF20192020Span">Ortofoto 2019-2020</span></label><br>
 					<label><input id="basemapMenuDOF20212022" type="radio" name="basemap" class="toc-layer" data-layer="DOF_2021_2022" data-layer-service="WMTS"><span id="basemapMenuDOF20212022Span">Ortofoto 2021-2022</span></label><br>
 					<label><input id="basemapMenuMarjanHillshade20242m" type="radio" name="basemap" class="toc-layer" data-layer="Marjan_hillshade_2024_2m" data-layer-service="WMTS"><span id="basemapMenuMarjanHillshade20242mSpan">Marjan DSM 2024</span></label><br>
+					<label><input id="basemapMenuMarjanHillshade20252m" type="radio" name="basemap" class="toc-layer" data-layer="Marjan_hillshade_2025_2m" data-layer-service="WMTS"><span id="basemapMenuMarjanHillshade20252mSpan">Marjan DSM 2025</span></label><br>
+				</div>-->
+				<hr style="border:1px solid #ccc; margin:5px 0px 10px 0px;">
+				<div id="overbasemapMenu">				
+					<div id="overbasemapMenuP" style="display: flex; margin-bottom: 5px; align-items: center; gap:5px">
+						<label>
+							<span id="overbasemapMenuPSpan" style="font-weight:bold;">Dodatni sloj:</span>
+							<!--<select id="overbasemapMenuSelect" style="color:#666666">
+								<option value="DOF_2011" data-layer-service="WMTS">Ortofoto 2011</option>
+								<option value="DOF_2014_2016" data-layer-service="WMTS">Ortofoto 2014-2016</option>
+								<option value="DOF_2017_2018" data-layer-service="WMTS">Ortofoto 2017-2018</option>
+								<option value="DOF_2019_2020" data-layer-service="WMTS">Ortofoto 2019-2020</option>
+								<option value="DOF_2021_2022" data-layer-service="WMTS">Ortofoto 2021-2022</option>
+								<option value="DOF_Lidar_2023" data-layer-service="WMTS">LiDAR Ortofoto 2023</option>
+								<option value="Marjan_jug_orto_2024_5cm" data-layer-service="WMTS">Marjan Ortofoto 2024</option>
+								<option value="Marjan_jug_orto_2025_5cm" data-layer-service="WMTS">Marjan Ortofoto 2025</option>
+							</select>-->
+						</label>
+						<input type="range" id="overbasemapVisibilitySlider" style="margin-left: auto;" min="0" max="1" step="0.1" value="1">
+					</div>
+					<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px 15px; margin-left: 10px">
+						<p id="overbasemapMenuSourceP1" style="grid-column: 1 / -1; color: #666666; margin-top: 2px; text-align: center;">
+							Izvor: DGU
+						</p>
+						<label style="display: flex; align-items: center; gap: 5px; cursor: pointer;"><input style="margin: 0;" id="overbasemapMenuDOF2011" type="radio" name="overbasemap" class="toc-layer" data-layer="DOF_2011" data-layer-service="WMTS"><span id="overbasemapMenuDOF2011Span" >Ortofoto 2011</span></label>
+						<label style="display: flex; align-items: center; gap: 5px; cursor: pointer;"><input style="margin: 0;" id="overbasemapMenuDOF20142016" type="radio" name="overbasemap" class="toc-layer" data-layer="DOF_2014_2016" data-layer-service="WMTS"><span id="overbasemapMenuDOF20142016Span">Ortofoto 2014-2016</span></label>
+						<label style="display: flex; align-items: center; gap: 5px; cursor: pointer;"><input style="margin: 0;" id="overbasemapMenuDOF20172018" type="radio" name="overbasemap" class="toc-layer" data-layer="DOF_2017_2018" data-layer-service="WMTS"><span id="overbasemapMenuDOF20172018Span">Ortofoto 2017-2018</span></label>
+						<label style="display: flex; align-items: center; gap: 5px; cursor: pointer;"><input style="margin: 0;" id="overbasemapMenuDOF20192020" type="radio" name="overbasemap" class="toc-layer" data-layer="DOF_2019_2020" data-layer-service="WMTS"><span id="overbasemapMenuDOF20192020Span">Ortofoto 2019-2020</span></label>
+						<label style="display: flex; align-items: center; gap: 5px; cursor: pointer;"><input style="margin: 0;" id="overbasemapMenuDOF20212022" type="radio" name="overbasemap" class="toc-layer" data-layer="DOF_2021_2022" data-layer-service="WMTS"><span id="overbasemapMenuDOF20212022Span">Ortofoto 2021-2022</span></label>
+						<label style="display: flex; align-items: center; gap: 5px; cursor: pointer;"><input style="margin: 0;" id="overbasemapMenuDOFLidar2023" type="radio" name="overbasemap" class="toc-layer" data-layer="DOF_Lidar_2023" data-layer-service="WMTS"><span id="overbasemapMenuDOFLidar2023Span">LiDAR Ortofoto 2023</span></label>
+						<p id="overbasemapMenuSourceP2" style="grid-column: 1 / -1; color: #666666; margin-top: 2px; text-align: center;">
+							Izvor: Park šuma Marjan
+						</p>
+						<label style="display: flex; align-items: center; gap: 5px; cursor: pointer;"><input style="margin: 0;" id="overbasemapMenuMarjanjugOrto20245cm" type="radio" name="overbasemap" class="toc-layer" data-layer="Marjan_orto_2024_5cm" data-layer-service="WMS">
+							<span id="overbasemapMenuMarjanjugOrto20245cmSpan">Ortofoto 2024. (5cm)</span>
+						</label>
+						<label style="display: flex; align-items: center; gap: 5px; cursor: pointer;"><input style="margin: 0;" id="overbasemapMenuMarjanjugOrto20255cm" type="radio" name="overbasemap" class="toc-layer" data-layer="Marjan_orto_2025_1_5cm" data-layer-service="WMS">
+							<span id="overbasemapMenuMarjanjugOrto20255cmSpan">Ortofoto 2025. (5cm)</span>
+						</label>
+					</div>
 				</div>
+				<hr style="border:1px solid #ccc; margin:5px 0px 10px 0px;">
+				<!--
 				<div id="overbasemapMenu">				
 					<div id="overbasemapMenuP" style="display: flex; margin-bottom: 5px; align-items: center; gap:5px"><label><span id="overbasemapMenuPSpan">Dodatni sloj:</span></label><input type="range" id="overbasemapVisibilitySlider" style="margin-left: auto;" min="0" max="1" step="0.1" value="1"></div>
 					<label><input id="overbasemapMenuDOF2011" type="radio" name="overbasemap" class="toc-layer" data-layer="DOF_2011" data-layer-service="WMTS"><span id="overbasemapMenuDOF2011Span" >Ortofoto 2011</span></label><br>
@@ -651,12 +782,14 @@
 					<label><input id="overbasemapMenuDOF20192020" type="radio" name="overbasemap" class="toc-layer" data-layer="DOF_2019_2020" data-layer-service="WMTS"><span id="overbasemapMenuDOF20192020Span">Ortofoto 2019-2020</span></label><br>
 					<label><input id="overbasemapMenuDOF20212022" type="radio" name="overbasemap" class="toc-layer" data-layer="DOF_2021_2022" data-layer-service="WMTS"><span id="overbasemapMenuDOF20212022Span">Ortofoto 2021-2022</span></label><br>
 					<label><input id="overbasemapMenuDOFLidar2023" type="radio" name="overbasemap" class="toc-layer" data-layer="DOF_Lidar_2023" data-layer-service="WMTS"><span id="overbasemapMenuDOFLidar2023Span">LiDAR Ortofoto 2023</span></label><br>
-					<label><input id="overbasemapMenuMarjanjugOrto20245cm" type="radio" name="overbasemap" class="toc-layer" data-layer="Marjan_jug_orto_2024_5cm" data-layer-service="WMTS"><span id="overbasemapMenuMarjanjugOrto20245cmSpan">Marjan jug Ortofoto 2024</span></label><br>
-				</div>
+					<label><input id="overbasemapMenuMarjanjugOrto20245cm" type="radio" name="overbasemap" class="toc-layer" data-layer="Marjan_jug_orto_2024_5cm" data-layer-service="WMTS"><span id="overbasemapMenuMarjanjugOrto20245cmSpan">Marjan Ortofoto 2024</span></label><br>
+					<label><input id="overbasemapMenuMarjanjugOrto20255cm" type="radio" name="overbasemap" class="toc-layer" data-layer="Marjan_jug_orto_2025_5cm" data-layer-service="WMTS"><span id="overbasemapMenuMarjanjugOrto20255cmSpan">Marjan Ortofoto 2025</span></label><br>
 				<br/>
+				</div>-->
+				
 				<div id="katastarLayerControls" style="display: flex; align-items: center; gap:5px; padding:2px">  
 					<label id="katastarLayerVisibilityLabel" for="katastarLayerVisibilityCheckbox" style="display: flex; align-items: center; gap: 5px">
-						<input type="checkbox" id="katastarLayerVisibilityCheckbox"><span id="katastarLayerVisibilitySpan">Katastarske čestice  </span></label>
+						<input type="checkbox" id="katastarLayerVisibilityCheckbox"><span id="katastarLayerVisibilitySpan" style="font-weight:bold;">Katastarske čestice  </span></label>
 					<input type="range" id="katastarLayerVisibilitySlider" style="margin-left: auto;" min="0" max="1" step="0.1" value="1">
 				</div>
 				<!--<div id="prometLayer-controls" style="display: flex; align-items: center; gap:5px">  
@@ -673,7 +806,7 @@
 				</div>-->
 				<div id="measureLayerControls" style="display: flex; align-items: center; gap:5px; padding:2px">  
 					<label id="measureLayerVisibilityLabel" for="measureLayerVisibilityCheckbox" style="display: flex; align-items: center; gap: 5px">
-						<input type="checkbox" id="measureLayerVisibilityCheckbox" checked><span id="measureLayerVisibilitySpan">Crtanje/Mjerenje  </span></label>
+						<input type="checkbox" id="measureLayerVisibilityCheckbox" checked><span id="measureLayerVisibilitySpan" style="font-weight:bold;">Crtanje/Mjerenje  </span></label>
 					<input type="range" id="measureLayerVisibilitySlider" style="margin-left: auto;" min="0" max="1" step="0.1" value="1">
 					<div class="ol-control ol-unselectable" style="pointer-events: auto; position: relative;">
 						<button id="zoomToExtentGrafikaButton" title="Zumiraj na sloj" style="padding: 2px; width: 1.5em; height: 1.5em; background: white; display: flex; align-items: center; justify-content: center;">
@@ -683,7 +816,7 @@
 				</div>
 				<div id="goToCoordsLayerControls" style="display: flex; align-items: center; gap:5px; padding:2px">  
 					<label id="goToCoordsLayerVisibilityLabel" for="goToCoordsLayerVisibilityCheckbox" style="display: flex; align-items: center; gap: 5px">
-						<input type="checkbox" id="goToCoordsLayerVisibilityCheckbox" checked><span id="goToCoordsLayerVisibilitySpan">Idi na koordinate  </span></label>
+						<input type="checkbox" id="goToCoordsLayerVisibilityCheckbox" checked><span id="goToCoordsLayerVisibilitySpan" style="font-weight:bold;">Idi na koordinate  </span></label>
 					<input type="range" id="goToCoordsLayerVisibilitySlider" style="margin-left: auto;" min="0" max="1" step="0.1" value="1">
 					<div class="ol-control ol-unselectable" style="pointer-events: auto; position: relative;">
 						<button id="zoomToExtentIdiNaKoordinateButton" title="Zumiraj na sloj" style="padding: 2px; width: 1.5em; height: 1.5em; background: white; display: flex; align-items: center; justify-content: center;">
@@ -802,10 +935,11 @@
 				</a>
 			</div>
 		</div>
-		<script src="https://cdn.jsdelivr.net/npm/ol@v10.3.1/dist/ol.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.15.0/proj4.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+		<!--<script src="https://cdn.jsdelivr.net/npm/ol@v10.3.1/dist/ol.js"></script>-->
+		<script src="ol_v10.3.1/ol.js"></script>
+		<script src="proj4js-2.15.0/proj4.js"></script>
+		<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>-->
 		<script>
 		
 			proj4.defs("EPSG:3765","+proj=tmerc +lat_0=0 +lon_0=16.5 +k=0.9999 +x_0=500000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs");
@@ -914,21 +1048,21 @@
 			}
 			
 			// Add event listeners to buttons
-document.getElementById('layerMenuButton').addEventListener('click', function () {
-    switchPanelState('layerMenuButton');
-});
+			document.getElementById('layerMenuButton').addEventListener('click', function () {
+				switchPanelState('layerMenuButton');
+			});
 
-document.getElementById('measureToolsButton').addEventListener('click', function () {
-    switchPanelState('measureToolsButton');
-});
+			document.getElementById('measureToolsButton').addEventListener('click', function () {
+				switchPanelState('measureToolsButton');
+			});
 
-document.getElementById('gotoCoordinatesPanelButton').addEventListener('click', function () {
-    switchPanelState('gotoCoordinatesPanelButton');
-});
+			document.getElementById('gotoCoordinatesPanelButton').addEventListener('click', function () {
+				switchPanelState('gotoCoordinatesPanelButton');
+			});
 
-document.getElementById('downloadDataButton').addEventListener('click', function () {
-    switchPanelState('downloadDataButton');
-});
+			document.getElementById('downloadDataButton').addEventListener('click', function () {
+				switchPanelState('downloadDataButton');
+			});
 			
 			/*document.getElementById('layerMenuButton').addEventListener('click', function () {
 				const layerMenu = document.getElementById('layersPanel');
@@ -1083,7 +1217,7 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 			});
 
 			
-			
+			const marjanGisServerUrl='http://192.168.201.2:8080/';
 		
 		
 			// Create a function to create a WMS layer
@@ -1177,22 +1311,34 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 					layername='TN.RoadTransportNetwork.RoadArea';
 					attrib='<a target="_blank" href="https://dgu.gov.hr/">Državna geodetska uprava</a>; <a target="_blank" href="https://geoportal.dgu.hr/">Geoportal DGU</a>';
 				}
-				if (layerType === "Marjan_jug_orto_2024_5cm")
+				if (layerType === "Marjan_orto_2024_5cm")
 				{
-					url='http://192.168.33.86:8080/geoserver/MarjanOrtofoto2024/wms';
-					layername='MarjanOrtofoto2024:Marjan_jug_ortofoto_5cm';
+					url=marjanGisServerUrl+'geoserver/MarjanOrtofoto2024/wms';
+					layername='MarjanOrtofoto2024:Marjan_2024_ortofoto_5cm';
 					attrib='<a target="_blank" href="https://www.marjan-parksuma.hr/">Marjan park šuma</a>';
 				}
-				if (layerType === "Marjan_jug_orto_2024_10cm")
+				if (layerType === "Marjan_orto_2024_10cm")
 				{
-					url='http://192.168.33.86:8080/geoserver/MarjanOrtofoto2024/wms';
-					layername='MarjanOrtofoto2024:Marjan_jug_ortofoto_10cm';
+					url=marjanGisServerUrl+'geoserver/MarjanOrtofoto2024/wms';
+					layername='MarjanOrtofoto2024:Marjan_2024_ortofoto_10cm';
 					attrib='<a target="_blank" href="https://www.marjan-parksuma.hr/">Marjan park šuma</a>';
 				}
-				if (layerType === "Marjan_hillshade_2024_2m")
+				if (layerType === "Marjan_hillshade_2024_50cm")
 				{
-					url='http://192.168.33.86:8080/geoserver/MarjanOrtofoto2024/wms';
-					layername='MarjanOrtofoto2024:Marjan_jug_DSM_2m_hillshade';
+					url=marjanGisServerUrl+'geoserver/MarjanOrtofoto2024/wms';
+					layername='MarjanOrtofoto2024:Marjan_2024_DSM_50cm_hillshade_combined';
+					attrib='<a target="_blank" href="https://www.marjan-parksuma.hr/">Marjan park šuma</a>';
+				}
+				if (layerType === "Marjan_orto_2025_1_5cm")
+				{
+					url=marjanGisServerUrl+'geoserver/MarjanOrtofoto2025/wms';
+					layername='MarjanOrtofoto2025:Marjan_2025_1_ortofoto_5cm';
+					attrib='<a target="_blank" href="https://www.marjan-parksuma.hr/">Marjan park šuma</a>';
+				}
+				if (layerType === "Marjan_hillshade_2025_1_50cm")
+				{
+					url=marjanGisServerUrl+'geoserver/MarjanOrtofoto2025/wms';
+					layername='MarjanOrtofoto2025:Marjan_2025_1_DSM_50cm_hillshade_combined';
 					attrib='<a target="_blank" href="https://www.marjan-parksuma.hr/">Marjan park šuma</a>';
 				}
 				if (layerType.includes("Marjan")){
@@ -1310,16 +1456,22 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 				}
 				
 				
-				if (layerType === "Marjan_jug_orto_2024_5cm" || layerType === "Marjan_hillshade_2024_2m")
+				if (layerType === "Marjan_orto_2024_5cm" || layerType === "Marjan_hillshade_2024_50cm" || layerType === "Marjan_orto_2025_1_5cm" || layerType === "Marjan_hillshade_2025_1_50cm")
 				{
-					if (layerType === "Marjan_jug_orto_2024_5cm" ){
-						layername='MarjanOrtofoto2024:Marjan_jug_ortofoto_5cm';
+					if (layerType === "Marjan_orto_2024_5cm" ){
+						layername='MarjanOrtofoto2024:Marjan_2024_ortofoto_5cm';
 					}
-					else if (layerType === "Marjan_hillshade_2024_2m"){
-						layername='MarjanOrtofoto2024:Marjan_jug_DSM_2m_hillshade';
+					else if (layerType === "Marjan_hillshade_2024_50cm"){
+						layername='MarjanOrtofoto2024:Marjan_2024_1_DSM_50cm_hillshade_combined';
+					}
+					else if (layerType === "Marjan_orto_2025_1_5cm" ){
+						layername='MarjanOrtofoto2025:Marjan_2025_1_ortofoto_5cm';
+					}
+					else if (layerType === "Marjan_hillshade_2025_1_50cm"){
+						layername='MarjanOrtofoto2025:Marjan_2025_1_DSM_50cm_hillshade_combined';
 					}
 					
-					url='http://192.168.33.86:8080/geoserver/gwc/service/wmts?service=wmts&version=1.1.1';					
+					url=marjanGisServerUrl+'geoserver/gwc/service/wmts?service=wmts&version=1.1.1';					
 					attrib='<a target="_blank" href="https://www.marjan-parksuma.hr/">Marjan park šuma</a>';
 				
 					/*const resolutions = [
@@ -1365,7 +1517,7 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 					// Define WMTS Layer
 					const wmtsLayer = new ol.layer.Tile({
 						source: new ol.source.WMTS({
-							url: 'http://192.168.33.86:8080/geoserver/gwc/service/wmts?',
+							url: marjanGisServerUrl+'geoserver/gwc/service/wmts?',
 							layer: layername,
 							matrixSet: 'EPSG3765:256x256', // Confirmed correct from QGIS
 							format: 'image/png',
@@ -1490,7 +1642,7 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 			
 			let basemapLayer;
 			let overbasemapLayer ;
-			console.log("mreza4");
+			//console.log("mreza4");
 			const mreza=new ol.layer.Graticule({
 				showLabels: true,
 				lonLabelFormatter: (lon) => lon.toFixed(4) + "°",  // Format longitude labels
@@ -2914,6 +3066,7 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 							checkboxLabel.style.overflowWrap = 'break-word'; // Break words as needed
 							checkboxLabel.style.wordWrap = 'break-word'; // Old browsers support
 							checkboxLabel.style.marginLeft='5px';
+							checkboxLabel.style.fontWeight = 'bold';
 							checkboxLabel.appendChild(document.createTextNode(file.name)); // Add file name
 
 							// Append the label to the container
@@ -3339,29 +3492,7 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 
 			
 			
-			//const iframeDiv=document.getElementById('reportProblemPanel');
-			//const iframe=document.getElementById('reportProblemIframe');
-			//const reportProblemButton = document.getElementById('reportProblemButton'); // Replace with your button's ID
 			
-			
-			/*function closeIframe() {
-				iframeDiv.style.display = 'none';
-			}
-			
-			iframe.onload = function() { // Attach onload event handler
-				const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-				if (iframeDoc) { // Check if iframeDoc is available
-					const input = iframeDoc.getElementById('textarea_comp-l6ouy886'); // ID of input in iframe
-					input.focus();
-					if (input) {
-						input.innerHTML = 'UPISITE NEKU VRIJEDNOST';
-					} else {
-						console.error("Input not found");
-					}
-				} else {
-					console.error("Iframe document not accessible");
-				}
-			};*/
 			
 			
 			
@@ -3515,26 +3646,49 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 					//console.log(wcsLayerToDownload);
 					changeDivEnabled('downloadImageDataButton', false);
 					document.getElementById('downloadImageDataWarning').style.display='block';
-					if (wcsLayerToDownload=='Hillshade_jug_2m_2024'){
-						coverageID="MarjanOrtofoto2024:Marjan_jug_DSM_2m_hillshade";
-						width=25;
-						height=25;
-						filename="Marjan_Sjencani_teren_2024"
-						downloadWMSImageAndJGW("http://192.168.33.86:8080/geoserver/MarjanOrtofoto2024/wms", coverageID, extent, height, width, filename);
+					if (wcsLayerToDownload=='Marjan_hillshade_2024_50cm'){
+						coverageID="MarjanOrtofoto2024:Marjan_2024_DSM_50cm_hillshade_combined";
+						width=100;
+						height=100;
+						filename="Marjan_Sjencani_DSM_2024"
+						downloadWMSImageAndJGW(marjanGisServerUrl+'geoserver/MarjanOrtofoto2024/wms', coverageID, extent, height, width, filename);
 					}
-					else if (wcsLayerToDownload=='DSM_jug_2m_2024'){
-						coverageID="MarjanOrtofoto2024:Marjan_jug_DSM_2m";
-						width=25;
-						height=25;
-						filename="Marjan_Model_visina_2024"
-						downloadWMSImageAndJGW("http://192.168.33.86:8080/geoserver/MarjanOrtofoto2024/wms", coverageID, extent, height, width, filename);
+					else if (wcsLayerToDownload=='Marjan_DSM_2024_50cm'){
+						coverageID="MarjanOrtofoto2024:Marjan_2024_DSM_50cm";
+						width=100;
+						height=100;
+						filename="Marjan_DSM_2024"
+						downloadWMSImageAndJGW(marjanGisServerUrl+'geoserver/MarjanOrtofoto2024/wms', coverageID, extent, height, width, filename);
 					}
-					else if (wcsLayerToDownload=='Orto_jug_2cm_2024'){
-						coverageID="MarjanOrtofoto2024_WCS:Marjan_jug_ortofoto";
+					else if (wcsLayerToDownload=='Marjan_orto_2024_5cm'){
+						//coverageID="MarjanOrtofoto2024_WCS:Marjan_jug_ortofoto";
+						coverageID="MarjanOrtofoto2024:Marjan_2024_ortofoto_5cm";
 						width=1000;
 						height=1000;
 						filename="Marjan_Ortofoto_2024"
-						downloadWMSImageAndJGW("http://192.168.33.86:8080/geoserver/MarjanOrtofoto2024_WCS/wms", coverageID, extent, height, width, filename);
+						//downloadWMSImageAndJGW(marjanGisServerUrl+'geoserver/MarjanOrtofoto2024_WCS/wms', coverageID, extent, height, width, filename);
+						downloadWMSImageAndJGW(marjanGisServerUrl+'geoserver/MarjanOrtofoto2024/wms', coverageID, extent, height, width, filename);
+					}
+					else if (wcsLayerToDownload=='Marjan_hillshade_2025_1_50cm'){
+						coverageID="MarjanOrtofoto2025:Marjan_2025_1_DSM_50cm_hillshade_combined";
+						width=100;
+						height=100;
+						filename="Marjan_Sjencani_DSM_2025"
+						downloadWMSImageAndJGW(marjanGisServerUrl+'geoserver/MarjanOrtofoto2025/wms', coverageID, extent, height, width, filename);
+					}
+					else if (wcsLayerToDownload=='Marjan_DSM_2025_1_50cm'){
+						coverageID="MarjanOrtofoto2025:Marjan_2025_1_DSM_50cm";
+						width=100;
+						height=100;
+						filename="Marjan_DSM_2025"
+						downloadWMSImageAndJGW(marjanGisServerUrl+'geoserver/MarjanOrtofoto2025/wms', coverageID, extent, height, width, filename);
+					}
+					else if (wcsLayerToDownload=='Marjan_orto_2025_1_5cm'){
+						coverageID="MarjanOrtofoto2025:Marjan_2025_1_ortofoto_5cm";
+						width=1000;
+						height=1000;
+						filename="Marjan_Ortofoto_2025"
+						downloadWMSImageAndJGW(marjanGisServerUrl+'geoserver/MarjanOrtofoto2025/wms', coverageID, extent, height, width, filename);
 					}
 					
 					
@@ -3579,7 +3733,7 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 			}
 			
 			function buildWCSRequest(coverageId, bbox, width, height, format) {
-				const wcsServer = 'http://192.168.33.86:8080/geoserver/ows'; // Replace with your WCS server URL
+				const wcsServer = marjanGisServerUrl+'geoserver/ows'; // Replace with your WCS server URL
 				const version = '1.0.0'; // Specify the WCS version
 				const request = `GetCoverage`;
 
@@ -3846,12 +4000,41 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 			
 			
 			
+			//const iframeDiv=document.getElementById('reportProblemPanel');
+			//const iframe=document.getElementById('reportProblemIframe');
+			//const reportProblemButton = document.getElementById('reportProblemButton'); // Replace with your button's ID
+			
+			
+			/*function closeIframe() {
+				iframeDiv.style.display = 'none';
+			}
+			
+			iframe.onload = function() { // Attach onload event handler
+				const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+				if (iframeDoc) { // Check if iframeDoc is available
+					const input = iframeDoc.getElementById('textarea_comp-l6ouy886'); // ID of input in iframe
+					input.focus();
+					if (input) {
+						input.innerHTML = 'UPISITE NEKU VRIJEDNOST';
+					} else {
+						console.error("Input not found");
+					}
+				} else {
+					console.error("Iframe document not accessible");
+				}
+			};*/
+			
 			
 			
 			const reportProblemButton = document.getElementById('reportProblemButton'); // Replace with your button's ID
 			
 			
 			reportProblemButton.addEventListener('click', () => {	
+				//Opcija otvaranja web page-a sa sa stranicom park sume u novom tabu
+				window.open('https://www.marjan-parksuma.hr/prijava', '_blank');
+			
+			
+				//Opcija otvaranja web page-a sa sa stranicom park sume u iframeu
 				/*if (iframeDiv.style.display === 'block'){
 					iframeDiv.style.display = 'none'; 			
 				}
@@ -3859,7 +4042,11 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 					iframeDiv.style.display = 'block'; 
 					iframe.src="https://www.marjan-parksuma.hr/prijava";
 				}*/
-				const reportProblemPanel=document.getElementById('reportIssuePanel')
+				
+				
+				
+				//Opcija otvaranja forme za unos prijave
+				/*const reportProblemPanel=document.getElementById('reportIssuePanel')
 				if (reportProblemPanel.style.display === 'block'){
 					reportProblemPanel.style.display = 'none'; 			
 				}
@@ -3893,7 +4080,7 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 						document.getElementById('reportIssuePanelNoLocationRadio').checked=true;										
 					}
 					//iframe.src="https://www.marjan-parksuma.hr/prijava";
-				}
+				}*/
 			});
 			
 			
@@ -3951,37 +4138,37 @@ document.getElementById('downloadDataButton').addEventListener('click', function
 			
 			
 			
-			/*const wfsSource = new ol.source.Vector({
-    format: new ol.format.GeoJSON(),
-    url: function (extent) {
-        return 'https://api.uredjenazemlja.hr/services/inspire/cp/wfs' +
-            '?service=WFS' +
-            '&version=2.0.0' +
-            '&request=GetFeature' +
-            '&typename=cp:CadastralParcel' +  // Layer name from GetCapabilities
-            '&outputFormat=application/json' +
-            '&srsname=EPSG:3765' +  // Coordinate reference system from GetCapabilities
-            '&bbox=' + initialExtent.join(',') + ',EPSG:3765'; // Match projection
-    },
-    strategy: ol.loadingstrategy.bbox, // Loads features dynamically when viewport changes
-});*/
+		/*const wfsSource = new ol.source.Vector({
+			format: new ol.format.GeoJSON(),
+			url: function (extent) {
+				return 'https://api.uredjenazemlja.hr/services/inspire/cp/wfs' +
+					'?service=WFS' +
+					'&version=2.0.0' +
+					'&request=GetFeature' +
+					'&typename=cp:CadastralParcel' +  // Layer name from GetCapabilities
+					'&outputFormat=application/json' +
+					'&srsname=EPSG:3765' +  // Coordinate reference system from GetCapabilities
+					'&bbox=' + initialExtent.join(',') + ',EPSG:3765'; // Match projection
+			},
+			strategy: ol.loadingstrategy.bbox, // Loads features dynamically when viewport changes
+		});*/
 
-// Define the WFS layer
-/*const wfsLayer = new ol.layer.Vector({
-    source: wfsSource,
-    style: new ol.style.Style({
-        stroke: new ol.style.Stroke({
-            color: 'red',
-            width: 2
-        }),
-        fill: new ol.style.Fill({
-            color: 'rgba(255, 0, 0, 0.1)'
-        })
-    })
-});
+		// Define the WFS layer
+		/*const wfsLayer = new ol.layer.Vector({
+			source: wfsSource,
+			style: new ol.style.Style({
+				stroke: new ol.style.Stroke({
+					color: 'red',
+					width: 2
+				}),
+				fill: new ol.style.Fill({
+					color: 'rgba(255, 0, 0, 0.1)'
+				})
+			})
+		});
 
-// Add the WFS layer to the map
-map.addLayer(wfsLayer);*/
+		// Add the WFS layer to the map
+		map.addLayer(wfsLayer);*/
 			
 		</script>
 	</body>
