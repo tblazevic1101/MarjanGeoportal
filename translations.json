@@ -207,6 +207,6 @@
 		"reportIssuePanelSendMessageButtonSpan":{ "innerHTML": "Send report" },
 		"reportIssuePanelLocationLabel":{ "innerHTML": "Location:" },
 		"helpButton":{ "title": "User manual" },
-		"downloadImageDataWarning":{ "innerHTML": "Please wait.<br>The data is being prepared.<br>Preparation and download may take a few minutes. Upon preparation, the data will be downloaded to your device." },
+		"downloadImageDataWarning":{ "innerHTML": "Please wait.<br>The data is being prepared.<br>Preparation and download may take a few minutes. Upon preparation, the data will be downloaded to your device." }
     }
 }
