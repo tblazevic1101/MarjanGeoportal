@@ -159,7 +159,7 @@
         "overbasemapMenuDOF20192020Span": { "innerHTML": "Orthophoto 2019-2020" },
         "overbasemapMenuDOF20212022Span": { "innerHTML": "Orthophoto 2021-2022" },
         "overbasemapMenuDOFLidar2023Span": { "innerHTML": "LiDAR Orthophoto 2023" },
-		"overbasemapMenuSourceP2": { "innerHTML": "Izvor: Park šuma Marjan" },
+		"overbasemapMenuSourceP2": { "innerHTML": "Source: Marjan forest park" },
         "overbasemapMenuMarjanjugOrto20245cmSpan": { "innerHTML": "Orthophoto 2024. (5cm)" },
 		"overbasemapMenuMarjanjugOrto20255cmSpan": { "innerHTML": "Orthophoto 2025. (5cm)" },
         "katastarLayerVisibilitySpan": { "innerHTML": "Cadastral units " },
