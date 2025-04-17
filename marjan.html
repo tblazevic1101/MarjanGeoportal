@@ -709,11 +709,11 @@
 							Izvor: Park šuma Marjan
 						</p>
 						<label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
-							<input id="basemapMenuMarjanHillshade20242m" type="radio" name="basemap" class="toc-layer" data-layer="Marjan_hillshade_2024_50cm" data-layer-service="WMS" style="margin: 0;">
+							<input id="basemapMenuMarjanHillshade20242m" type="radio" name="basemap" class="toc-layer" data-layer="Marjan_hillshade_2024_50cm" data-layer-service="WMTS" style="margin: 0;">
 							<span id="basemapMenuMarjanHillshade20242mSpan">Sjenčani DSM 2024.(50cm)</span>
 						</label>
 						<label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
-							<input id="basemapMenuMarjanHillshade20252m" type="radio" name="basemap" class="toc-layer" data-layer="Marjan_hillshade_2025_1_50cm" data-layer-service="WMS" style="margin: 0;">
+							<input id="basemapMenuMarjanHillshade20252m" type="radio" name="basemap" class="toc-layer" data-layer="Marjan_hillshade_2025_1_50cm" data-layer-service="WMTS" style="margin: 0;">
 							<span id="basemapMenuMarjanHillshade20252mSpan">Sjenčani DSM 2025.(50cm)</span>
 						</label>
 					</div>
@@ -764,10 +764,10 @@
 						<p id="overbasemapMenuSourceP2" style="grid-column: 1 / -1; color: #666666; margin-top: 2px; text-align: center;">
 							Izvor: Park šuma Marjan
 						</p>
-						<label style="display: flex; align-items: center; gap: 5px; cursor: pointer;"><input style="margin: 0;" id="overbasemapMenuMarjanjugOrto20245cm" type="radio" name="overbasemap" class="toc-layer" data-layer="Marjan_orto_2024_5cm" data-layer-service="WMS">
+						<label style="display: flex; align-items: center; gap: 5px; cursor: pointer;"><input style="margin: 0;" id="overbasemapMenuMarjanjugOrto20245cm" type="radio" name="overbasemap" class="toc-layer" data-layer="Marjan_orto_2024_5cm" data-layer-service="WMTS">
 							<span id="overbasemapMenuMarjanjugOrto20245cmSpan">Ortofoto 2024. (5cm)</span>
 						</label>
-						<label style="display: flex; align-items: center; gap: 5px; cursor: pointer;"><input style="margin: 0;" id="overbasemapMenuMarjanjugOrto20255cm" type="radio" name="overbasemap" class="toc-layer" data-layer="Marjan_orto_2025_1_5cm" data-layer-service="WMS">
+						<label style="display: flex; align-items: center; gap: 5px; cursor: pointer;"><input style="margin: 0;" id="overbasemapMenuMarjanjugOrto20255cm" type="radio" name="overbasemap" class="toc-layer" data-layer="Marjan_orto_2025_1_5cm" data-layer-service="WMTS">
 							<span id="overbasemapMenuMarjanjugOrto20255cmSpan">Ortofoto 2025. (5cm)</span>
 						</label>
 					</div>
@@ -1217,7 +1217,8 @@
 			});
 
 			
-			const marjanGisServerUrl='http://192.168.201.2:8080/';
+			//const marjanGisServerUrl='http://192.168.201.2:8080/';
+			const marjanGisServerUrl='http://188.245.172.6:8080/';
 		
 		
 			// Create a function to create a WMS layer
@@ -1326,7 +1327,7 @@
 				if (layerType === "Marjan_hillshade_2024_50cm")
 				{
 					url=marjanGisServerUrl+'geoserver/MarjanOrtofoto2024/wms';
-					layername='MarjanOrtofoto2024:Marjan_2024_DSM_50cm_hillshade_combined';
+					layername='MarjanOrtofoto2024:Marjan_2024_DSM_50cm_hillshade_multidirectional';
 					attrib='<a target="_blank" href="https://www.marjan-parksuma.hr/">Marjan park šuma</a>';
 				}
 				if (layerType === "Marjan_orto_2025_1_5cm")
@@ -1338,7 +1339,7 @@
 				if (layerType === "Marjan_hillshade_2025_1_50cm")
 				{
 					url=marjanGisServerUrl+'geoserver/MarjanOrtofoto2025/wms';
-					layername='MarjanOrtofoto2025:Marjan_2025_1_DSM_50cm_hillshade_combined';
+					layername='MarjanOrtofoto2025:Marjan_2025_1_DSM_50cm_hillshade_multidirectional';
 					attrib='<a target="_blank" href="https://www.marjan-parksuma.hr/">Marjan park šuma</a>';
 				}
 				if (layerType.includes("Marjan")){
@@ -1462,7 +1463,7 @@
 						layername='MarjanOrtofoto2024:Marjan_2024_ortofoto_5cm';
 					}
 					else if (layerType === "Marjan_hillshade_2024_50cm"){
-						layername='MarjanOrtofoto2024:Marjan_2024_1_DSM_50cm_hillshade_combined';
+						layername='MarjanOrtofoto2024:Marjan_2024_DSM_50cm_hillshade_combined';
 					}
 					else if (layerType === "Marjan_orto_2025_1_5cm" ){
 						layername='MarjanOrtofoto2025:Marjan_2025_1_ortofoto_5cm';
@@ -1497,18 +1498,18 @@
 				
 				
 					const resolutions = [
-						1931.333812189312, 965.666906094656, 482.833453047328, 241.416726523664,
-						120.708363261832, 60.354181630916, 30.177090815458, 15.088545407729,
-						7.5442727038645, 3.77213635193225, 1.886068175966125, 0.9430340879830625,
-						0.4715170439915313, 0.2357585219957656, 0.1178792609978828, 0.0589396304989414,
-						0.0294698152494707, 0.0147349076247354, 0.0073674538123677
+						2158.5164062500007, 1079.2582031250004, 539.6291015625002, 269.8145507812501, 
+						134.90727539062505, 67.45363769531252, 33.72681884765626, 16.86340942382813, 
+						8.431704711914065, 4.215852355957033, 2.1079261779785163, 1.0539630889892582, 
+						0.5269815444946291, 0.2634907722473145, 0.1317453861236573, 0.0658726930618286,
+						0.0329363465309143, 0.0164681732654572, 0.0082340866327286
 					]; // Reverse for OpenLayers order
 
-					const matrixIds = resolutions.map((_, i) => `EPSG3765:256x256:${i}`);
+					const matrixIds = resolutions.map((_, i) => `EPSG3765:256:${i}`);
 
 					// Define WMTS TileGrid
 					const tileGrid = new ol.tilegrid.WMTS({
-						origin: [247020.52671340803, 5160175.80631312], // Top-left from GeoServer bounds
+						extent: [208311.05, 4608969.52, 744179.92, 5161549.72], // Top-left from GeoServer bounds
 						resolutions: resolutions,
 						matrixIds: matrixIds,
 						tileSize: [256, 256]
@@ -1519,7 +1520,7 @@
 						source: new ol.source.WMTS({
 							url: marjanGisServerUrl+'geoserver/gwc/service/wmts?',
 							layer: layername,
-							matrixSet: 'EPSG3765:256x256', // Confirmed correct from QGIS
+							matrixSet: 'EPSG3765:256', // Confirmed correct from QGIS
 							format: 'image/png',
 							projection: projection,
 							tileGrid: tileGrid,
